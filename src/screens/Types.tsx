@@ -20,6 +20,7 @@ const Types = () => {
           gap: 12,
           width: "100%",
         }}
+        
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-evenly", columnGap: 12 }}
         data={types}

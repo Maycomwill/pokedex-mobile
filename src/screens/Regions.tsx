@@ -49,6 +49,7 @@ const Regions = () => {
       </Text>
       <FlatList
         className="w-full "
+        showsVerticalScrollIndicator={false}
         data={regions}
         renderItem={({ item }) => <RegionCard region={item} />}
         contentContainerStyle={{

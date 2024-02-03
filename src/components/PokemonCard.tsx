@@ -18,6 +18,7 @@ interface Data extends TouchableOpacityProps {
 const PokemonCard = ({ pokemon }: Data) => {
   return (
     <TouchableOpacity
+    style={{elevation: 6}}
       activeOpacity={0.4}
       key={pokemon.id}
       className={clsx(
