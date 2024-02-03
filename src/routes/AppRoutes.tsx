@@ -8,6 +8,8 @@ import MovesAndAbilities from "../screens/MovesAndAbilities";
 import Favorites from "../screens/Favorites";
 import Type from "../screens/Type";
 import PokeList from "../screens/PokeList";
+import { typesObjColors } from "../utils/typesArray";
+import { shade } from "polished";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -23,6 +25,12 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const AppRoutes = () => {
   function handleWithCapitalizeTitle(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function handleWithTypeColor(type: string) {
+    if (type in typesObjColors && type === typesObjColors[type])
+      console.log("cor", typesObjColors[type]);
+    return shade(0.1, typesObjColors[type]);
   }
 
   return (
@@ -137,7 +145,7 @@ const AppRoutes = () => {
           },
           headerTitleAlign: "center",
           headerStyle: {
-            backgroundColor: `${colors.green[500]}`,
+            backgroundColor: `${handleWithTypeColor(route.params.type)}`,
           },
           headerLeft: () => (
             <Feather

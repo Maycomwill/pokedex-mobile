@@ -1,22 +1,25 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 import { api } from "../lib/axios";
-import { PokemonDataProps, typeProps } from "../interfaces/pokemon";
+import { PokemonDataProps } from "../interfaces/pokemon";
 import axios from "axios";
 
 export interface PokedexContextProps {
   getPokedex: (generation: string) => void;
+  getTypePokedex: (type: string) => void;
   pokeList: PokemonDataProps[];
+  typeList: PokemonDataProps[];
 }
 
 export const PokedexContext = createContext({} as PokedexContextProps);
 
 export function PokedexContextProvider({ children }: { children: ReactNode }) {
   const [pokeList, setPokeList] = useState<PokemonDataProps[]>([]);
+  const [typeList, setTypeList] = useState<PokemonDataProps[]>([]);
   let list: PokemonDataProps[] = [];
 
   async function getPokedex(generation: string) {
     setPokeList([]);
-    list = [];
+
     function handleLimits(generation: string) {
       switch (generation) {
         case "kanto":
@@ -99,10 +102,10 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
       const data = await axios.get(url);
 
       const pokemonData = {
-        name: data.data.name,
+        name: data.data.name.split("-").join(" "),
         id: data.data.id,
         types: data.data.types.map((type: any) => {
-          return {name: type.type.name};
+          return { name: type.type.name };
         }),
         sprites: {
           default: {
@@ -124,8 +127,72 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
 
     setPokeList(payLoadPokemons);
   }
+
+  async function getTypePokedex(type: string) {
+    setTypeList([]);
+
+    async function handleApiSearch(type: string) {
+      const data = await api.get(`type/${type}`);
+
+      return data.data;
+    }
+    const { pokemon } = await handleApiSearch(type);
+
+    type pokemonType = {
+      pokemon: {
+        name: string;
+        url: string;
+      };
+      slot: number;
+    };
+
+    const payLoadPokemons = await Promise.all(
+      pokemon.map(async (pokemon: pokemonType) => {
+        const data = await getPrimaryInfo(pokemon.pokemon.url);
+
+        const { id, name, types, sprites } = data;
+        return {
+          name,
+          id,
+          types,
+          sprites,
+        };
+      })
+    );
+
+    async function getPrimaryInfo(url: string): Promise<PokemonDataProps> {
+      const data = await axios.get(url);
+
+      const pokemonData = {
+        name: data.data.name.split("-").join(" "),
+        id: data.data.id,
+        types: data.data.types.map((type: any) => {
+          return { name: type.type.name };
+        }),
+        sprites: {
+          default: {
+            default: data.data.sprites.front_default,
+            shiny: data.data.sprites.front_shiny,
+          },
+          artwork: {
+            default: data.data.sprites.other["official-artwork"].front_default,
+            shiny: data.data.sprites.other["official-artwork"].front_shiny,
+          },
+          home: {
+            default: data.data.sprites.other.home.front_default,
+            shiny: data.data.sprites.other.home.front_shiny,
+          },
+        },
+      };
+      return pokemonData;
+    }
+
+    setTypeList(payLoadPokemons);
+  }
   return (
-    <PokedexContext.Provider value={{ getPokedex, pokeList }}>
+    <PokedexContext.Provider
+      value={{ getPokedex, getTypePokedex, pokeList, typeList }}
+    >
       {children}
     </PokedexContext.Provider>
   );
