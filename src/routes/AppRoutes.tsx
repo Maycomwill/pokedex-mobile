@@ -10,6 +10,7 @@ import Type from "../screens/Type";
 import PokeList from "../screens/PokeList";
 import { typesObjColors } from "../utils/typesArray";
 import { shade } from "polished";
+import Ability from "../screens/Ability";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -19,12 +20,15 @@ export type RootStackParamList = {
   Favorites: undefined;
   Type: { type: string };
   Pokelist: { region: string };
+  Ability: { ability: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const AppRoutes = () => {
   function handleWithCapitalizeTitle(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    const cap = string.charAt(0).toUpperCase() + string.slice(1);
+    const newName = cap.split("-").join(" ");
+    return newName;
   }
 
   function handleWithTypeColor(type: string) {
@@ -112,6 +116,29 @@ const AppRoutes = () => {
         })}
       />
       <Stack.Screen
+        name="Ability"
+        component={Ability}
+        options={({ route, navigation }) => ({
+          headerTitle: handleWithCapitalizeTitle(route.params.ability),
+          headerTitleStyle: {
+            color: `${colors.zinc[100]}`,
+          },
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: `${colors.sky[500]}`,
+          },
+          headerLeft: () => (
+            <Feather
+              name="chevron-left"
+              size={32}
+              color={colors.zinc[100]}
+              onPress={() => navigation.goBack()}
+            />
+          ),
+          headerShadowVisible: false,
+        })}
+      />
+      <Stack.Screen
         name="Favorites"
         component={Favorites}
         options={({ navigation }) => ({
@@ -139,7 +166,7 @@ const AppRoutes = () => {
         name="Type"
         component={Type}
         options={({ route, navigation }) => ({
-          headerTitle: `Tipo: ${handleWithCapitalizeTitle(route.params.type)}`,
+          headerTitle: `${handleWithCapitalizeTitle(route.params.type)}`,
           headerTitleStyle: {
             color: `${colors.zinc[100]}`,
           },
@@ -162,7 +189,7 @@ const AppRoutes = () => {
         name="Pokelist"
         component={PokeList}
         options={({ route, navigation }) => ({
-          headerTitle: `${handleWithCapitalizeTitle(route.params.region)}`,
+          headerTitle: handleWithCapitalizeTitle(route.params.region),
           headerTitleStyle: {
             color: `${colors.zinc[100]}`,
           },

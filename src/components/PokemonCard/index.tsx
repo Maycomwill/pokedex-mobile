@@ -5,11 +5,11 @@ import {
   TouchableOpacityProps,
 } from "react-native";
 import React from "react";
-import { PokemonDataProps } from "../interfaces/pokemon";
-import Text from "./Text";
+import { PokemonDataProps } from "../../interfaces/PokemonProps";
+import Text from "../Text";
 import clsx from "clsx";
-import Pokeball from "../assets/pokeball.svg";
-import Pattern from "../assets/pattern.svg";
+import Pokeball from "../../assets/pokeball.svg";
+import Pattern from "../../assets/pattern.svg";
 
 interface Data extends TouchableOpacityProps {
   pokemon: PokemonDataProps;
@@ -18,6 +18,7 @@ interface Data extends TouchableOpacityProps {
 const PokemonCard = ({ pokemon }: Data) => {
   return (
     <TouchableOpacity
+      style={{ elevation: 6 }}
       activeOpacity={0.4}
       key={pokemon.id}
       className={clsx(
@@ -88,8 +89,7 @@ const PokemonCard = ({ pokemon }: Data) => {
                 "bg-boxType-rock": pokemon.types[index].name === "rock",
                 "bg-boxType-steel": pokemon.types[index].name === "steel",
                 "bg-boxType-water": pokemon.types[index].name === "water",
-              }
-              )}
+              })}
             >
               <Text color="WHITE" transform="CAP" size="XS">
                 {type.name}

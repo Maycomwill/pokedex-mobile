@@ -1,13 +1,22 @@
 import { ReactNode, createContext, useState } from "react";
 import { api } from "../lib/axios";
-import { PokemonDataProps } from "../interfaces/pokemon";
+import { PokemonDataProps, resultsType } from "../interfaces/PokemonProps";
 import axios from "axios";
+import {
+  AbilityProps,
+  effectEntrie,
+  flavorEntrie,
+} from "../interfaces/AbilityProps";
 
 export interface PokedexContextProps {
   getPokedex: (generation: string) => void;
   getTypePokedex: (type: string) => void;
+  getMoves: () => void;
+  getAbility: (ability: string) => void;
   pokeList: PokemonDataProps[];
   typeList: PokemonDataProps[];
+  movesList: resultsType[];
+  ability: AbilityProps | undefined;
 }
 
 export const PokedexContext = createContext({} as PokedexContextProps);
@@ -15,6 +24,8 @@ export const PokedexContext = createContext({} as PokedexContextProps);
 export function PokedexContextProvider({ children }: { children: ReactNode }) {
   const [pokeList, setPokeList] = useState<PokemonDataProps[]>([]);
   const [typeList, setTypeList] = useState<PokemonDataProps[]>([]);
+  const [movesList, setMovesList] = useState<resultsType[]>([]);
+  const [ability, setAbility] = useState<AbilityProps>();
   let list: PokemonDataProps[] = [];
 
   async function getPokedex(generation: string) {
@@ -189,9 +200,176 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
 
     setTypeList(payLoadPokemons);
   }
+
+  async function getMoves() {
+    setMovesList([]);
+    async function handleSerach() {
+      const data = await api.get("ability?limit=1000&offset=0");
+      return data.data;
+    }
+
+    const { results } = await handleSerach();
+
+    setMovesList(results);
+  }
+
+  async function getAbility(ability: string) {
+    //Reset states
+    setPokeList([]);
+    setAbility({
+      effect: {
+        effect: "",
+        language: {
+          name: "",
+          url: "",
+        },
+        short_effect: "",
+      },
+      flavor: {
+        flavor_text: "",
+        language: {
+          name: "",
+          url: "",
+        },
+      },
+      name: "",
+      pokemon: [
+        {
+          name: "",
+          url: "",
+        },
+      ],
+    });
+
+    async function handleApiResponse(ability: string) {
+      const data = await api.get(`ability/${ability}`);
+      return data.data;
+    }
+
+    const { effect_entries, flavor_text_entries, name, pokemon } =
+      await handleApiResponse(ability);
+
+    function handleWithData(
+      effect_entries: effectEntrie[],
+      flavor_text_entries: flavorEntrie[]
+    ) {
+      const effect: effectEntrie[] = effect_entries
+        .filter((effect: effectEntrie) => {
+          if (effect.language.name === "en") {
+            return effect;
+          }
+        })
+        .slice(0, 1);
+      // console.log(effect[0]);
+
+      const flavor: flavorEntrie[] | void = flavor_text_entries
+        .filter((flavor) => {
+          if (flavor.language.name === "en") {
+            return flavor;
+          }
+        })
+        .slice(0, 1);
+      // console.log(flavor[0]);
+
+      return {
+        flavor: flavor[0],
+        effect: effect[0],
+      };
+    }
+    const data = handleWithData(effect_entries, flavor_text_entries);
+    // console.log(data)
+
+    setAbility({
+      effect: data.effect,
+      flavor: data.flavor,
+      name,
+      pokemon,
+    });
+
+    const arrayPokemon = pokemon.map(
+      (pokemon: {
+        is_hidden: boolean;
+        pokemon: { name: string; url: string };
+        slot: number;
+      }) => {
+        return pokemon;
+      }
+    );
+
+    console.log(
+      arrayPokemon.map(
+        (pokemon: {
+          is_hidden: boolean;
+          pokemon: { name: string; url: string };
+          slot: number;
+        }) => {
+          return pokemon.pokemon.url;
+        }
+      )
+    );
+
+    const payLoadPokemons = await Promise.all(
+      arrayPokemon.map(
+        async (pokemon: {
+          is_hidden: boolean;
+          pokemon: { name: string; url: string };
+          slot: number;
+        }) => {
+          const data = await getPrimaryInfo(pokemon.pokemon.url);
+
+          const { id, name, types, sprites } = data;
+          return {
+            name,
+            id,
+            types,
+            sprites,
+          };
+        }
+      )
+    );
+
+    async function getPrimaryInfo(url: string): Promise<PokemonDataProps> {
+      const data = await axios.get(url);
+
+      console.log("url", url);
+      const pokemonData = {
+        name: data.data.name.split("-").join(" "),
+        id: data.data.id,
+        types: data.data.types.map((type: any) => {
+          return { name: type.type.name };
+        }),
+        sprites: {
+          default: {
+            default: data.data.sprites.front_default,
+            shiny: data.data.sprites.front_shiny,
+          },
+          artwork: {
+            default: data.data.sprites.other["official-artwork"].front_default,
+            shiny: data.data.sprites.other["official-artwork"].front_shiny,
+          },
+          home: {
+            default: data.data.sprites.other.home.front_default,
+            shiny: data.data.sprites.other.home.front_shiny,
+          },
+        },
+      };
+      return pokemonData;
+    }
+
+    setPokeList(payLoadPokemons);
+  }
   return (
     <PokedexContext.Provider
-      value={{ getPokedex, getTypePokedex, pokeList, typeList }}
+      value={{
+        getPokedex,
+        getTypePokedex,
+        getMoves,
+        getAbility,
+        pokeList,
+        typeList,
+        movesList,
+        ability,
+      }}
     >
       {children}
     </PokedexContext.Provider>

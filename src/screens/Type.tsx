@@ -2,11 +2,10 @@ import { View, FlatList } from "react-native";
 import React, { useCallback, useEffect } from "react";
 import { RootStackParamList } from "../routes/AppRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import clsx from "clsx";
 import usePokedex from "../hooks/usePokedex";
-import { PokemonDataProps } from "../interfaces/pokemon";
+import { PokemonDataProps } from "../interfaces/PokemonProps";
 import PokemonCard from "../components/PokemonCard";
-import Loading from "./Loading";
+import Loading from "../components/Loading";
 import Text from "../components/Text";
 import { typesObjColors } from "../utils/typesArray";
 import { shade } from "polished";
@@ -37,9 +36,9 @@ const Type = ({ route }: Props) => {
   return (
     <View
       style={{ backgroundColor: handleWithTypeColor(type) }}
-      className={clsx("items-start justify-center flex-1 px-4 pt-2 ")}
+      className="w-full items-center justify-start flex-1 px-4 pt-2"
     >
-      <Text color="WHITE" align="JUSTIFY">
+      <Text color="WHITE" align="CENTER" className="w-full">
         Aqui estão os pokemon do que possuem o tipo {type}
       </Text>
       <View className="w-full flex-1">
@@ -62,7 +61,7 @@ const Type = ({ route }: Props) => {
             showsVerticalScrollIndicator={false}
           />
         ) : (
-          <Loading />
+          <Loading type={route.params.type} />
         )}
       </View>
     </View>

@@ -13,6 +13,8 @@ import Text from "../Text";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../routes/AppRoutes";
+import { LinearGradient } from "expo-linear-gradient";
+import { rgba } from "polished";
 
 interface RegionCardProps {
   region: { regionName: string; generation: number };
@@ -57,17 +59,23 @@ const RegionCard = (props: RegionCardProps) => {
           region: props.region.regionName,
         })
       }
-      className="w-full h-36 items-center justify-center mb-4 rounded-lg overflow-hidden relative "
+      className="w-full h-36 items-center justify-center mb-4 rounded-2xl overflow-hidden relative "
       style={{
-        elevation: 3,
+        elevation: 5,
       }}
     >
+      <View className="w-full h-full inset-96 right-0 -rotate-90 absolute z-10 -left-28">
+        <LinearGradient
+          colors={[rgba(0, 0, 0, 1), "transparent"]}
+          className="absolute top-0 left-0 h-full w-full flex-1 z-10"
+        />
+      </View>
       <ImageBackground
         source={handleBgImage(props.region.regionName)}
         resizeMode="stretch"
         className="w-full h-full items-start justify-center"
       >
-        <View className="px-4">
+        <View className="px-6 z-10">
           <Text color="WHITE" size="2XL" weight="BOLD" transform="CAP">
             {props.region.regionName}
           </Text>
