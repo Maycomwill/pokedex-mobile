@@ -8,7 +8,7 @@ import {
   Inter_700Bold,
   Inter_800ExtraBold,
 } from "@expo-google-fonts/inter";
-import Loading from "./src/screens/Loading";
+import Loading from "./src/components/Loading";
 import { StatusBarHeight } from "./src/utils/StatusBarHeight";
 import AppProvider from "./src/hooks";
 

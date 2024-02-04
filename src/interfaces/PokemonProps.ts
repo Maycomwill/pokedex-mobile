@@ -21,3 +21,8 @@ export interface PokemonDataProps {
 export interface typeProps {
   name: string;
 }
+
+export type resultsType = {
+  name: string;
+  url: string;
+}; 

@@ -6,7 +6,7 @@ import colors from "tailwindcss/colors";
 interface IButtonProps extends TouchableOpacityProps {
   children: ReactNode;
   backgroundColor?: "PRIMARY" | "SECONDARY" | "GRAY" | "DELETE";
-  className?: string
+  className?: string;
 }
 
 const ButtonRoot = ({
@@ -18,7 +18,7 @@ const ButtonRoot = ({
   return (
     <TouchableOpacity
       className={clsx(
-        " rounded-full w-full py-3 items-start justify-center relative px-8 pr-12",
+        " rounded-full w-full py-3 items-start justify-center relative px-8 ",
         {
           "bg-primary-500": backgroundColor === "PRIMARY",
           "bg-secondary-500": backgroundColor === "SECONDARY",

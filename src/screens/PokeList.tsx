@@ -1,11 +1,11 @@
-import { View, Text, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import React, { useCallback, useEffect } from "react";
 import usePokedex from "../hooks/usePokedex";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../routes/AppRoutes";
 import PokemonCard from "../components/PokemonCard";
-import Loading from "./Loading";
-import { PokemonDataProps } from "../interfaces/pokemon";
+import Loading from "../components/Loading";
+import { PokemonDataProps } from "../interfaces/PokemonProps";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Pokelist">;
 

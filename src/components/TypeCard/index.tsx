@@ -32,41 +32,41 @@ const TypeCard = ({ type }: TypeCardProps) => {
   function handleSvg(type: string) {
     switch (type) {
       case "bug":
-        return <Bug width={72} height={72} />;
+        return <Bug width={64} height={64} />;
       case "dark":
-        return <Dark width={72} height={72} />;
+        return <Dark width={64} height={64} />;
       case "dragon":
-        return <Dragon width={72} height={72} />;
+        return <Dragon width={64} height={64} />;
       case "electric":
-        return <Electric width={72} height={72} />;
+        return <Electric width={64} height={64} />;
       case "fairy":
-        return <Fairy width={72} height={72} />;
+        return <Fairy width={64} height={64} />;
       case "fighting":
-        return <Fighting width={72} height={72} />;
+        return <Fighting width={64} height={64} />;
       case "fire":
-        return <Fire width={72} height={72} />;
+        return <Fire width={64} height={64} />;
       case "flying":
-        return <Flying width={72} height={72} />;
+        return <Flying width={64} height={64} />;
       case "ghost":
-        return <Ghost width={72} height={72} />;
+        return <Ghost width={64} height={64} />;
       case "grass":
-        return <Grass width={72} height={72} />;
+        return <Grass width={64} height={64} />;
       case "ground":
-        return <Ground width={72} height={72} />;
+        return <Ground width={64} height={64} />;
       case "ice":
-        return <Ice width={72} height={72} />;
+        return <Ice width={64} height={64} />;
       case "normal":
-        return <Normal width={72} height={72} />;
+        return <Normal width={64} height={64} />;
       case "poison":
-        return <Poison width={72} height={72} />;
+        return <Poison width={64} height={64} />;
       case "psychic":
-        return <Psychic width={72} height={72} />;
+        return <Psychic width={64} height={64} />;
       case "rock":
-        return <Rock width={72} height={72} />;
+        return <Rock width={64} height={64} />;
       case "steel":
-        return <Steel width={72} height={72} />;
+        return <Steel width={64} height={64} />;
       case "water":
-        return <Water width={72} height={72} />;
+        return <Water width={64} height={64} />;
     }
   }
 
@@ -112,7 +112,7 @@ const TypeCard = ({ type }: TypeCardProps) => {
       <Text color="WHITE" transform="CAP" align="LEFT">
         {type}
       </Text>
-      <View className="absolute right-0 -top-1 opacity-30">
+      <View className="absolute right-0 top-1 opacity-30">
         {handleSvg(type)}
       </View>
     </TouchableOpacity>
