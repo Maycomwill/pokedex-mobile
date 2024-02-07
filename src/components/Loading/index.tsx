@@ -85,7 +85,7 @@ const Loading = ({ type }: LoadingProps) => {
   useEffect(() => {
     defaultOpacity.value = withRepeat(
       withSpring(1, { duration: 1000 }),
-      5,
+      20,
       true
     );
   }, []);

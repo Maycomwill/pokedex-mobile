@@ -1,6 +1,11 @@
 import { ReactNode, createContext, useState } from "react";
 import { api } from "../lib/axios";
-import { PokemonDataProps, resultsType } from "../interfaces/PokemonProps";
+import {
+  PokemonDataProps,
+  UniquePokemonData,
+  resultsType,
+  statsProps,
+} from "../interfaces/PokemonProps";
 import axios from "axios";
 import {
   AbilityProps,
@@ -13,10 +18,12 @@ export interface PokedexContextProps {
   getTypePokedex: (type: string) => void;
   getMoves: () => void;
   getAbility: (ability: string) => void;
+  getUniquePokemon: (pokemon: string) => void;
   pokeList: PokemonDataProps[];
   typeList: PokemonDataProps[];
   movesList: resultsType[];
   ability: AbilityProps | undefined;
+  pokemon: UniquePokemonData | undefined;
 }
 
 export const PokedexContext = createContext({} as PokedexContextProps);
@@ -26,7 +33,7 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
   const [typeList, setTypeList] = useState<PokemonDataProps[]>([]);
   const [movesList, setMovesList] = useState<resultsType[]>([]);
   const [ability, setAbility] = useState<AbilityProps>();
-  let list: PokemonDataProps[] = [];
+  const [pokemon, setPokemon] = useState<UniquePokemonData | undefined>();
 
   async function getPokedex(generation: string) {
     setPokeList([]);
@@ -296,18 +303,6 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    console.log(
-      arrayPokemon.map(
-        (pokemon: {
-          is_hidden: boolean;
-          pokemon: { name: string; url: string };
-          slot: number;
-        }) => {
-          return pokemon.pokemon.url;
-        }
-      )
-    );
-
     const payLoadPokemons = await Promise.all(
       arrayPokemon.map(
         async (pokemon: {
@@ -331,7 +326,6 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
     async function getPrimaryInfo(url: string): Promise<PokemonDataProps> {
       const data = await axios.get(url);
 
-      console.log("url", url);
       const pokemonData = {
         name: data.data.name.split("-").join(" "),
         id: data.data.id,
@@ -358,6 +352,131 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
 
     setPokeList(payLoadPokemons);
   }
+
+  async function getUniquePokemon(pokemon: string) {
+    setPokemon(undefined);
+    async function handleWithApi(pokemon: string) {
+      const name = pokemon.split(" ");
+      const initialData = await api.get(`pokemon/${name.join("-")}`);
+      const extraData = await api.get(`pokemon-species/${name[0]}`);
+      return {
+        initial: initialData.data,
+        extra: extraData.data,
+      };
+    }
+
+    const data = await handleWithApi(pokemon);
+
+    const pokemonData: UniquePokemonData = {
+      height: data.initial.height * 0.1,
+      weight: data.initial.weight * 0.1,
+      id: data.initial.id,
+      name: data.initial.name,
+      sprites: {
+        default: {
+          default: data.initial.sprites.front_default,
+          shiny: data.initial.sprites.front_shiny,
+        },
+        artwork: {
+          default: data.initial.sprites.other["official-artwork"].front_default,
+          shiny: data.initial.sprites.other["official-artwork"].front_shiny,
+        },
+        home: {
+          default: data.initial.sprites.other.home.front_default,
+          shiny: data.initial.sprites.other.home.front_shiny,
+        },
+      },
+      gender: {
+        female: (data.extra.gender_rate * 100) / 8,
+        male: 100 - (data.extra.gender_rate * 100) / 8,
+      },
+      types: data.initial.types.map((type: any) => {
+        return {
+          name: type.type.name,
+        };
+      }),
+      abilities: data.initial.abilities.map((ability: any) => {
+        return ability.ability.name;
+      }),
+      stats: {
+        hp: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "hp") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+        attack: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "attack") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+        defense: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "defense") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+        specialAttack: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "special-attack") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+        specialDefense: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "special-defense") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+        speed: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "speed") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+      },
+      flavor: data.extra.flavor_text_entries
+        .filter((flavor: any) => {
+          if (flavor.language.name === "en") {
+            return flavor.flavor_text;
+          }
+        })
+        .slice(0, 1),
+    };
+
+    setPokemon(pokemonData);
+  }
   return (
     <PokedexContext.Provider
       value={{
@@ -365,10 +484,12 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
         getTypePokedex,
         getMoves,
         getAbility,
+        getUniquePokemon,
         pokeList,
         typeList,
         movesList,
         ability,
+        pokemon,
       }}
     >
       {children}
