@@ -5,6 +5,7 @@ import {
   UniquePokemonData,
   resultsType,
   statsProps,
+  typeDamageRelation,
 } from "../interfaces/PokemonProps";
 import axios from "axios";
 import {
@@ -34,6 +35,7 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
   const [movesList, setMovesList] = useState<resultsType[]>([]);
   const [ability, setAbility] = useState<AbilityProps>();
   const [pokemon, setPokemon] = useState<UniquePokemonData | undefined>();
+  const [damageObj, setDamageObj] = useState<typeDamageRelation[]>([]);
 
   async function getPokedex(generation: string) {
     setPokeList([]);
@@ -354,6 +356,7 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
   }
 
   async function getUniquePokemon(pokemon: string) {
+    setDamageObj([]);
     setPokemon(undefined);
     async function handleWithApi(pokemon: string) {
       const name = pokemon.split(" ");
@@ -365,9 +368,135 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
       };
     }
 
+    async function handleWithTypeRelation(
+      type: string
+    ): Promise<typeDamageRelation> {
+      const typesData = await api.get(`type/${type}`);
+      return {
+        name: typesData.data.name,
+        damage: typesData.data.damage_relations,
+      };
+    }
+
     const data = await handleWithApi(pokemon);
+    const types = data.initial.types.map(
+      (type: { slot: number; type: { name: string; url: string } }) => {
+        return type.type.name;
+      }
+    );
+
+    const typesDamageData: typeDamageRelation[] = await Promise.all(
+      types.map(async (type: string) => {
+        const typeDamage = await handleWithTypeRelation(type);
+
+        const { damage, name } = typeDamage;
+
+        return {
+          name,
+          damage,
+        };
+      })
+    );
+
+    function createDamageRelationObject() {
+      const default_damage_relations = {
+        double_damage_from: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.double_damage_from.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+        double_damage_to: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.double_damage_to.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+        half_damage_from: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.half_damage_from.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+        half_damage_to: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.half_damage_to.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+        no_damage_from: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.no_damage_from.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+        no_damage_to: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.no_damage_to.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+      };
+
+      const damage_relations = {
+        double_damage_from:
+          default_damage_relations.double_damage_from[0].concat(
+            default_damage_relations.double_damage_from[1]
+          ),
+        double_damage_to: default_damage_relations.double_damage_to[0].concat(
+          default_damage_relations.double_damage_to[1]
+        ),
+        half_damage_from: default_damage_relations.half_damage_from[0].concat(
+          default_damage_relations.half_damage_from[1]
+        ),
+        half_damage_to: default_damage_relations.half_damage_to[0].concat(
+          default_damage_relations.half_damage_to[1]
+        ),
+        no_damage_from: default_damage_relations.no_damage_from[0].concat(
+          default_damage_relations.no_damage_from[1]
+        ),
+        no_damage_to: default_damage_relations.no_damage_to[0].concat(
+          default_damage_relations.no_damage_to[1]
+        ),
+      };
+
+      const filtered_damage_objects = {
+        double_damage_from: damage_relations.double_damage_from.filter(
+          (type) => !damage_relations.half_damage_from.includes(type)
+        ),
+        double_damage_to: damage_relations.double_damage_to.filter(
+          (type) => !damage_relations.half_damage_to.includes(type)
+        ),
+        half_damage_from: damage_relations.half_damage_from.filter(
+          (type) => !damage_relations.double_damage_from.includes(type)
+        ),
+        half_damage_to: damage_relations.half_damage_to.filter(
+          (type) => !damage_relations.double_damage_to.includes(type)
+        ),
+        no_damage_from: damage_relations.no_damage_from,
+        no_damage_to: damage_relations.no_damage_to,
+      };
+
+      return filtered_damage_objects;
+    }
+
+    const damage_relations = createDamageRelationObject();
 
     const pokemonData: UniquePokemonData = {
+      damage_relation: {
+        double_damage_from: damage_relations.double_damage_from,
+        double_damage_to: damage_relations.double_damage_to,
+        half_damage_from: damage_relations.half_damage_from,
+        half_damage_to: damage_relations.half_damage_to,
+        no_damage_from: damage_relations.no_damage_from,
+        no_damage_to: damage_relations.no_damage_to,
+      },
       height: data.initial.height * 0.1,
       weight: data.initial.weight * 0.1,
       id: data.initial.id,
