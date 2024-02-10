@@ -11,6 +11,7 @@ import PokeList from "../screens/PokeList";
 import { typesObjColors } from "../utils/typesArray";
 import { shade } from "polished";
 import Ability from "../screens/Ability";
+import Pokemon from "../screens/Pokemon";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   Type: { type: string };
   Pokelist: { region: string };
   Ability: { ability: string };
+  Pokemon: { name: string; type: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -196,6 +198,30 @@ const AppRoutes = () => {
           headerTitleAlign: "center",
           headerStyle: {
             backgroundColor: `${colors.orange[500]}`,
+          },
+          headerLeft: () => (
+            <Feather
+              name="chevron-left"
+              size={32}
+              color={colors.zinc[100]}
+              onPress={() => navigation.goBack()}
+            />
+          ),
+          headerShadowVisible: false,
+        })}
+      />
+
+      <Stack.Screen
+        name="Pokemon"
+        component={Pokemon}
+        options={({ route, navigation }) => ({
+          headerTitle: "",
+          headerTitleStyle: {
+            color: `${colors.zinc[100]}`,
+          },
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: `${handleWithTypeColor(route.params.type)}`,
           },
           headerLeft: () => (
             <Feather
