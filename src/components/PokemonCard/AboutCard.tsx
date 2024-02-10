@@ -41,11 +41,25 @@ const AboutCard = ({ pokemon }: AboutCardProps) => {
           <View className="w-[70%] flex-row items-center">
             <View className="flex-row items-center">
               <MaterialIcons name="female" size={24} color={colors.pink[500]} />
-              <Text>{pokemon.gender.female.toString()}%</Text>
+              <Text>
+                {pokemon.gender.female <= 0
+                  ? "0"
+                  : pokemon.gender.female >= 100
+                  ? "100"
+                  : pokemon.gender.female.toString()}
+                %
+              </Text>
             </View>
             <View className="flex-row items-center ml-4">
               <MaterialIcons name="male" size={24} color={colors.sky[500]} />
-              <Text>{pokemon.gender.male.toString()}%</Text>
+              <Text>
+                {pokemon.gender.male <= 0
+                  ? "0"
+                  : pokemon.gender.male >= 100
+                  ? "100"
+                  : pokemon.gender.male.toString()}
+                %
+              </Text>
             </View>
           </View>
         </View>

@@ -80,8 +80,8 @@ export interface damageRelationsProps {
   half_damage_to: string[];
   no_damage_from: string[];
   no_damage_to: string[];
-  // four_times_damage_from: string[];
-  // four_times_damage_to: string[];
+  four_times_damage_from: string[];
+  four_times_damage_to: string[];
 }
 
 export interface typeDamageRelation {

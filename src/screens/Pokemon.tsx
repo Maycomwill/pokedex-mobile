@@ -9,10 +9,12 @@ import { shade } from "polished";
 import usePokedex from "../hooks/usePokedex";
 import Loading from "../components/Loading";
 import Pokeball from "../assets/pokeball.svg";
+import Pattern from "../assets/pattern.svg";
 import AboutCard from "../components/PokemonCard/AboutCard";
 import StatsCard from "../components/PokemonCard/StatsCard";
 import EvolutionCard from "../components/PokemonCard/EvolutionCard";
 import AbilitiesCard from "../components/PokemonCard/AbilitiesCard";
+import Header from "../components/Header";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Pokemon">;
 
@@ -36,71 +38,78 @@ const Pokemon = ({ route }: Props) => {
     <View
       style={{ backgroundColor: handleWithTypeColor(route.params.type) }}
       className={clsx(
-        "w-full max-w-full flex-1 items-center justify-start pt-2 relative",
+        "w-full flex-1 items-center justify-start pt-2 relative pb-12",
         {}
       )}
     >
+      <Header leftIcon />
       {pokemon ? (
         <View className="w-full h-full">
-          <View className="flex-row px-4 h-[40%] w-full justify-between items-start z-20">
-            <View className="w-1/2">
-              <Text color="WHITE" size="4XL" weight="BOLD" transform="CAP">
-                {pokemon.name}
-              </Text>
-              <View className="flex-row w-1/2 space-x-2">
-                {pokemon.types.map((type) => {
-                  return (
-                    <View
-                      key={type.name}
-                      className={clsx(
-                        "w-full items-center rounded-full space-y-2 mt-2 py-2 ",
-                        {
-                          "bg-backgroundCard-bug": type.name === "bug",
-                          "bg-backgroundCard-dark": type.name === "dark",
-                          "bg-backgroundCard-dragon": type.name === "dragon",
-                          "bg-backgroundCard-electric":
-                            type.name === "electric",
-                          "bg-backgroundCard-fairy": type.name === "fairy",
-                          "bg-backgroundCard-fighting":
-                            type.name === "fighting",
-                          "bg-backgroundCard-fire": type.name === "fire",
-                          "bg-backgroundCard-flying": type.name === "flying",
-                          "bg-backgroundCard-ghost": type.name === "ghost",
-                          "bg-backgroundCard-grass": type.name === "grass",
-                          "bg-backgroundCard-ground": type.name === "ground",
-                          "bg-backgroundCard-ice": type.name === "ice",
-                          "bg-backgroundCard-normal": type.name === "normal",
-                          "bg-backgroundCard-poison": type.name === "poison",
-                          "bg-backgroundCard-psychic": type.name === "psychic",
-                          "bg-backgroundCard-rock": type.name === "rock",
-                          "bg-backgroundCard-steel": type.name === "steel",
-                          "bg-backgroundCard-water": type.name === "water",
-                        }
-                      )}
-                    >
-                      <Text
-                        color="WHITE"
-                        transform="CAP"
-                        size="XS"
-                        weight="SEMIBOLD"
-                      >
-                        {type.name}
-                      </Text>
-                    </View>
-                  );
-                })}
+          <View className="flex-col px-4 h-[40%] w-full justify-start items-start z-20">
+            <View className="w-full flex-row">
+              <View className="w-3/4">
+                <Text color="WHITE" size="4XL" weight="BOLD" transform="CAP">
+                  {pokemon.name.split("-").join(" ")}
+                </Text>
+              </View>
+              <View className="w-1/4 items-end justify-center">
+                <Text weight="BOLD" color="WHITE" size="LG">
+                  #{pokemon.id.toString().padStart(3, "0")}
+                </Text>
               </View>
             </View>
-            <View className="w-1/2 items-end justify-center">
-              <Text weight="BOLD" color="WHITE" size="LG">
-                #{pokemon.id.toString().padStart(3, "0")}
-              </Text>
+            <View className="flex-row w-full space-x-2">
+              {pokemon.types.map((type) => {
+                return (
+                  <View
+                    key={type.name}
+                    className={clsx(
+                      "w-1/4 items-center rounded-full space-y-2 mt-2 py-2 ",
+                      {
+                        "bg-backgroundCard-bug": type.name === "bug",
+                        "bg-backgroundCard-dark": type.name === "dark",
+                        "bg-backgroundCard-dragon": type.name === "dragon",
+                        "bg-backgroundCard-electric": type.name === "electric",
+                        "bg-backgroundCard-fairy": type.name === "fairy",
+                        "bg-backgroundCard-fighting": type.name === "fighting",
+                        "bg-backgroundCard-fire": type.name === "fire",
+                        "bg-backgroundCard-flying": type.name === "flying",
+                        "bg-backgroundCard-ghost": type.name === "ghost",
+                        "bg-backgroundCard-grass": type.name === "grass",
+                        "bg-backgroundCard-ground": type.name === "ground",
+                        "bg-backgroundCard-ice": type.name === "ice",
+                        "bg-backgroundCard-normal": type.name === "normal",
+                        "bg-backgroundCard-poison": type.name === "poison",
+                        "bg-backgroundCard-psychic": type.name === "psychic",
+                        "bg-backgroundCard-rock": type.name === "rock",
+                        "bg-backgroundCard-steel": type.name === "steel",
+                        "bg-backgroundCard-water": type.name === "water",
+                      }
+                    )}
+                  >
+                    <Text
+                      color="WHITE"
+                      transform="CAP"
+                      size="XS"
+                      weight="SEMIBOLD"
+                    >
+                      {type.name}
+                    </Text>
+                  </View>
+                );
+              })}
             </View>
           </View>
-          <View className="w-full absolute items-end justify-center bottom-[332px] right-0 z-0">
+          <View className="w-full absolute items-end justify-center bottom-96 right-0 z-0">
             <Pokeball width={300} height={300} opacity={0.2} rotation={45} />
           </View>
-          <View className="w-full absolute items-center justify-center bottom-[364px] z-10">
+          <View className="w-full absolute items-end justify-center -top-10 -right-10 z-0">
+            <Pokeball width={120} height={120} opacity={0.1} rotation={-70} />
+          </View>
+          <View className="w-full absolute items-start justify-center -top-10 left-0 z-0">
+            <Pattern width={120} height={120} opacity={0.2} />
+          </View>
+          <View className="w-full absolute items-center justify-center top-32 z-10">
             {pokemon.sprites.artwork.default ? (
               <Image
                 width={256}

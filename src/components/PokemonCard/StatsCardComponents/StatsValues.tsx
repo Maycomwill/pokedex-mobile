@@ -17,10 +17,10 @@ function handleWidth(stat: number) {
 const StatsValues = ({ name, value }: StatsValuesProps) => {
   return (
     <View className="w-full flex-row items-center justify-start mb-2">
-      <View className="w-[35%]">
+      <View className="w-[28%]">
         <Text color="BLACK">{name}</Text>
       </View>
-      <View className="flex-row items-center justify-between space-x-2 w-[65%]">
+      <View className="flex-row items-center justify-between space-x-2 w-[72%]">
         <Text color="BLACK" weight="BOLD">
           {value.toString()}
         </Text>
@@ -28,7 +28,7 @@ const StatsValues = ({ name, value }: StatsValuesProps) => {
           <View
             style={{ width: `${handleWidth(value)}%` }}
             className={clsx(
-              "absolute w-1/2 h-4 rounded bg-green-400 left-0 top-0 bottom-0",
+              "absolute w-1/2 h-4 rounded-full bg-green-400 left-0 top-0 bottom-0",
               {
                 "bg-red-400": name === "Defesa",
               },

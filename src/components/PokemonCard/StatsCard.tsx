@@ -42,22 +42,32 @@ const StatsCard = ({ pokemon }: StatsCardProps) => {
         </Text>
         <View className="pt-2">
           <Text>Forças:</Text>
-          <View className="pt-1">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingEnd: 16 }}
+            className="pt-1"
+          >
             <View className="w-full flex-row">
               {pokemon.damage_relation.double_damage_to.map((type) => {
                 return <SymbolTypeCard key={type} type={type} />;
               })}
             </View>
-          </View>
+          </ScrollView>
         </View>
         <View className="pt-2">
           <Text>Fraquezas:</Text>
           <View className="pt-1">
-            <View className="w-full flex-row">
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingEnd: 16 }}
+              className="w-full flex-row"
+            >
               {pokemon.damage_relation.double_damage_from.map((type) => {
                 return <SymbolTypeCard key={type} type={type} />;
               })}
-            </View>
+            </ScrollView>
           </View>
         </View>
       </View>

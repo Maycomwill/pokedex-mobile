@@ -1,3 +1,13 @@
 import { StatusBar } from "react-native";
 
-export const StatusBarHeight = StatusBar.currentHeight;
+const height = StatusBar.currentHeight;
+
+function handleWithStatusBarHeight(height: number | undefined) {
+  if (height !== undefined) {
+    return StatusBar.currentHeight;
+  } else {
+    return 64;
+  }
+}
+
+export const StatusBarHeight = handleWithStatusBarHeight(height);

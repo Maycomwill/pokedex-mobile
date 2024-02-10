@@ -215,23 +215,7 @@ const AppRoutes = () => {
         name="Pokemon"
         component={Pokemon}
         options={({ route, navigation }) => ({
-          headerTitle: "",
-          headerTitleStyle: {
-            color: `${colors.zinc[100]}`,
-          },
-          headerTitleAlign: "center",
-          headerStyle: {
-            backgroundColor: `${handleWithTypeColor(route.params.type)}`,
-          },
-          headerLeft: () => (
-            <Feather
-              name="chevron-left"
-              size={32}
-              color={colors.zinc[100]}
-              onPress={() => navigation.goBack()}
-            />
-          ),
-          headerShadowVisible: false,
+          headerShown: false,
         })}
       />
     </Stack.Navigator>

@@ -464,15 +464,34 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
         no_damage_to: default_damage_relations.no_damage_to[0].concat(
           default_damage_relations.no_damage_to[1]
         ),
+        four_times_damage_from:
+          default_damage_relations.double_damage_from[0].concat(
+            default_damage_relations.double_damage_from[1]
+          ),
+        four_times_damage_to:
+          default_damage_relations.double_damage_to[0].concat(
+            default_damage_relations.double_damage_to[1]
+          ),
       };
 
       const filtered_damage_objects = {
-        double_damage_from: damage_relations.double_damage_from.filter(
-          (type) => !damage_relations.half_damage_from.includes(type)
-        ),
-        double_damage_to: damage_relations.double_damage_to.filter(
-          (type) => !damage_relations.half_damage_to.includes(type)
-        ),
+        double_damage_from: damage_relations.double_damage_from
+          .filter(
+            (type, index) => !damage_relations.half_damage_from.includes(type)
+          )
+          .filter(
+            (type, index) =>
+              damage_relations.double_damage_from.indexOf(type) === index
+          ),
+
+        double_damage_to: damage_relations.double_damage_to
+          .filter(
+            (type, index) => !damage_relations.half_damage_to.includes(type)
+          )
+          .filter(
+            (type, index) =>
+              damage_relations.double_damage_to.indexOf(type) === index
+          ),
         half_damage_from: damage_relations.half_damage_from.filter(
           (type) => !damage_relations.double_damage_from.includes(type)
         ),
@@ -481,8 +500,20 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
         ),
         no_damage_from: damage_relations.no_damage_from,
         no_damage_to: damage_relations.no_damage_to,
+        four_times_damage_from: damage_relations.double_damage_from.filter(
+          (element, index) => {
+            return (
+              damage_relations.double_damage_from.indexOf(element) !== index
+            );
+          }
+        ),
+        four_times_damage_to: damage_relations.double_damage_to.filter(
+          (element, index) => {
+            return damage_relations.double_damage_to.indexOf(element) !== index;
+          }
+        ),
       };
-
+      console.log("here:", filtered_damage_objects.double_damage_from);
       return filtered_damage_objects;
     }
 
@@ -496,6 +527,8 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
         half_damage_to: damage_relations.half_damage_to,
         no_damage_from: damage_relations.no_damage_from,
         no_damage_to: damage_relations.no_damage_to,
+        four_times_damage_from: damage_relations.four_times_damage_from,
+        four_times_damage_to: damage_relations.four_times_damage_to,
       },
       height: data.initial.height * 0.1,
       weight: data.initial.weight * 0.1,
