@@ -25,10 +25,11 @@ const PokeList = ({ route }: Props) => {
         key={item.id}
         pokemon={item}
         onPress={() => {
-          naviagation.navigate("Pokemon", {
-            name: item.name,
-            type: item.types[0].name,
-          });
+          console.log("item.id", item.id),
+            naviagation.navigate("Pokemon", {
+              ref: item.id,
+              type: item.types[0].name,
+            });
         }}
       />
     ),
@@ -62,7 +63,7 @@ const PokeList = ({ route }: Props) => {
           showsVerticalScrollIndicator={false}
           data={pokeList}
           renderItem={renderItem}
-          keyExtractor={(item) => `${item.id.toString()}-${item.name}`}
+          keyExtractor={(item) => `${item.id}-${item.name}`}
         />
       ) : (
         <Loading />

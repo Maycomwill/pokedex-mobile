@@ -22,7 +22,7 @@ export type RootStackParamList = {
   Type: { type: string };
   Pokelist: { region: string };
   Ability: { ability: string };
-  Pokemon: { name: string; type: string };
+  Pokemon: { ref: string | number; type: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

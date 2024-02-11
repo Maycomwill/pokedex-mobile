@@ -28,7 +28,7 @@ const Header = ({ leftIcon, title, rightIcon }: HeaderProps) => {
         onPress={() => {
           naviagation.goBack();
         }}
-        className="w-1/4 min-h-1 items-center justify-center"
+        className="w-1/4 min-h-1 items-start justify-center"
       >
         {leftIcon ? (
           <Feather name="chevron-left" size={32} color={colors.zinc[100]} />

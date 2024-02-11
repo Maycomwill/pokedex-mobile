@@ -23,7 +23,7 @@ const Type = ({ route }: Props) => {
       <PokemonCard
         onPress={() => {
           navigation.navigate("Pokemon", {
-            name: item.name,
+            ref: item.id,
             type: item.types[0].name,
           });
         }}

@@ -19,7 +19,7 @@ export interface PokedexContextProps {
   getTypePokedex: (type: string) => void;
   getMoves: () => void;
   getAbility: (ability: string) => void;
-  getUniquePokemon: (pokemon: string) => void;
+  getUniquePokemon: (pokemon: string | number) => void;
   pokeList: PokemonDataProps[];
   typeList: PokemonDataProps[];
   movesList: resultsType[];
@@ -355,13 +355,14 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
     setPokeList(payLoadPokemons);
   }
 
-  async function getUniquePokemon(pokemon: string) {
+  async function getUniquePokemon(pokemon: string | number) {
     setDamageObj([]);
     setPokemon(undefined);
-    async function handleWithApi(pokemon: string) {
-      const name = pokemon.split(" ");
-      const initialData = await api.get(`pokemon/${name.join("-")}`);
-      const extraData = await api.get(`pokemon-species/${name[0]}`);
+    async function handleWithApi(pokemon: number) {
+      const id = pokemon;
+      const initialData = await api.get(`pokemon/${id}`);
+      const { species } = initialData.data;
+      const extraData = await axios.get(`${species.url}`);
       return {
         initial: initialData.data,
         extra: extraData.data,
@@ -378,7 +379,7 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
       };
     }
 
-    const data = await handleWithApi(pokemon);
+    const data = await handleWithApi(Number(pokemon));
     const types = data.initial.types.map(
       (type: { slot: number; type: { name: string; url: string } }) => {
         return type.type.name;
@@ -513,7 +514,6 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
           }
         ),
       };
-      console.log("here:", filtered_damage_objects.double_damage_from);
       return filtered_damage_objects;
     }
 

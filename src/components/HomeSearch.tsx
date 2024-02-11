@@ -19,7 +19,7 @@ const HomeSearch = () => {
   function handleSubmit() {
     setSearch("")
     naviagation.navigate("Pokemon", {
-      name: search,
+      ref: search,
       type: "grass",
     });
   }
