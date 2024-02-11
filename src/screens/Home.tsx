@@ -1,11 +1,5 @@
-import {
-  View,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  KeyboardAvoidingView,
-} from "react-native";
-import React, { useState } from "react";
+import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../routes/AppRoutes";

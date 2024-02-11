@@ -1,21 +1,37 @@
 import { View, FlatList } from "react-native";
 import React, { useCallback, useEffect } from "react";
 import usePokedex from "../hooks/usePokedex";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../routes/AppRoutes";
 import PokemonCard from "../components/PokemonCard";
 import Loading from "../components/Loading";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
+import { useNavigation } from "@react-navigation/native";
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
 
+type RoutesProps = NativeStackNavigationProp<RootStackParamList, "Pokelist">;
 type Props = NativeStackScreenProps<RootStackParamList, "Pokelist">;
 
 const PokeList = ({ route }: Props) => {
+  const naviagation = useNavigation<RoutesProps>();
   const { getPokedex, pokeList } = usePokedex();
 
   const regionName = route.params.region;
   const renderItem = useCallback(
     ({ item }: { item: PokemonDataProps }) => (
-      <PokemonCard key={item.id} pokemon={item} />
+      <PokemonCard
+        key={item.id}
+        pokemon={item}
+        onPress={() => {
+          console.log("item.id", item.id),
+            naviagation.navigate("Pokemon", {
+              ref: item.id,
+              type: item.types[0].name,
+            });
+        }}
+      />
     ),
     []
   );
@@ -47,7 +63,7 @@ const PokeList = ({ route }: Props) => {
           showsVerticalScrollIndicator={false}
           data={pokeList}
           renderItem={renderItem}
-          keyExtractor={(item) => `${item.id.toString()}-${item.name}`}
+          keyExtractor={(item) => `${item.id}-${item.name}`}
         />
       ) : (
         <Loading />

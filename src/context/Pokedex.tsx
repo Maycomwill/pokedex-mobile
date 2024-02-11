@@ -1,8 +1,15 @@
 import { ReactNode, createContext, useState } from "react";
 import { api } from "../lib/axios";
-import { PokemonDataProps, resultsType } from "../interfaces/PokemonProps";
+import {
+  PokemonDataProps,
+  UniquePokemonData,
+  resultsType,
+  statsProps,
+  typeDamageRelation,
+} from "../interfaces/PokemonProps";
 import axios from "axios";
 import {
+  AbilityPokemonProp,
   AbilityProps,
   effectEntrie,
   flavorEntrie,
@@ -13,10 +20,12 @@ export interface PokedexContextProps {
   getTypePokedex: (type: string) => void;
   getMoves: () => void;
   getAbility: (ability: string) => void;
+  getUniquePokemon: (pokemon: string | number) => void;
   pokeList: PokemonDataProps[];
   typeList: PokemonDataProps[];
   movesList: resultsType[];
   ability: AbilityProps | undefined;
+  pokemon: UniquePokemonData | undefined;
 }
 
 export const PokedexContext = createContext({} as PokedexContextProps);
@@ -26,7 +35,8 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
   const [typeList, setTypeList] = useState<PokemonDataProps[]>([]);
   const [movesList, setMovesList] = useState<resultsType[]>([]);
   const [ability, setAbility] = useState<AbilityProps>();
-  let list: PokemonDataProps[] = [];
+  const [pokemon, setPokemon] = useState<UniquePokemonData | undefined>();
+  const [damageObj, setDamageObj] = useState<typeDamageRelation[]>([]);
 
   async function getPokedex(generation: string) {
     setPokeList([]);
@@ -296,18 +306,6 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    console.log(
-      arrayPokemon.map(
-        (pokemon: {
-          is_hidden: boolean;
-          pokemon: { name: string; url: string };
-          slot: number;
-        }) => {
-          return pokemon.pokemon.url;
-        }
-      )
-    );
-
     const payLoadPokemons = await Promise.all(
       arrayPokemon.map(
         async (pokemon: {
@@ -331,7 +329,6 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
     async function getPrimaryInfo(url: string): Promise<PokemonDataProps> {
       const data = await axios.get(url);
 
-      console.log("url", url);
       const pokemonData = {
         name: data.data.name.split("-").join(" "),
         id: data.data.id,
@@ -358,6 +355,295 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
 
     setPokeList(payLoadPokemons);
   }
+
+  async function getUniquePokemon(pokemon: string | number) {
+    setDamageObj([]);
+    setPokemon(undefined);
+    async function handleWithApi(pokemon: number) {
+      const id = pokemon;
+      const initialData = await api.get(`pokemon/${id}`);
+      const { species } = initialData.data;
+      const extraData = await axios.get(`${species.url}`);
+      return {
+        initial: initialData.data,
+        extra: extraData.data,
+      };
+    }
+
+    async function handleWithTypeRelation(
+      type: string
+    ): Promise<typeDamageRelation> {
+      const typesData = await api.get(`type/${type}`);
+      return {
+        name: typesData.data.name,
+        damage: typesData.data.damage_relations,
+      };
+    }
+
+    const data = await handleWithApi(Number(pokemon));
+    const types = data.initial.types.map(
+      (type: { slot: number; type: { name: string; url: string } }) => {
+        return type.type.name;
+      }
+    );
+
+    const typesDamageData: typeDamageRelation[] = await Promise.all(
+      types.map(async (type: string) => {
+        const typeDamage = await handleWithTypeRelation(type);
+
+        const { damage, name } = typeDamage;
+
+        return {
+          name,
+          damage,
+        };
+      })
+    );
+
+    function createDamageRelationObject() {
+      const default_damage_relations = {
+        double_damage_from: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.double_damage_from.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+        double_damage_to: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.double_damage_to.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+        half_damage_from: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.half_damage_from.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+        half_damage_to: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.half_damage_to.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+        no_damage_from: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.no_damage_from.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+        no_damage_to: typesDamageData.map((type: typeDamageRelation) => {
+          return type.damage.no_damage_to.map(
+            (type: { name: string; url: string }) => {
+              return type.name;
+            }
+          );
+        }),
+      };
+
+      const damage_relations = {
+        double_damage_from:
+          default_damage_relations.double_damage_from[0].concat(
+            default_damage_relations.double_damage_from[1]
+          ),
+        double_damage_to: default_damage_relations.double_damage_to[0].concat(
+          default_damage_relations.double_damage_to[1]
+        ),
+        half_damage_from: default_damage_relations.half_damage_from[0].concat(
+          default_damage_relations.half_damage_from[1]
+        ),
+        half_damage_to: default_damage_relations.half_damage_to[0].concat(
+          default_damage_relations.half_damage_to[1]
+        ),
+        no_damage_from: default_damage_relations.no_damage_from[0].concat(
+          default_damage_relations.no_damage_from[1]
+        ),
+        no_damage_to: default_damage_relations.no_damage_to[0].concat(
+          default_damage_relations.no_damage_to[1]
+        ),
+        four_times_damage_from:
+          default_damage_relations.double_damage_from[0].concat(
+            default_damage_relations.double_damage_from[1]
+          ),
+        four_times_damage_to:
+          default_damage_relations.double_damage_to[0].concat(
+            default_damage_relations.double_damage_to[1]
+          ),
+      };
+
+      const filtered_damage_objects = {
+        double_damage_from: damage_relations.double_damage_from
+          .filter(
+            (type, index) => !damage_relations.half_damage_from.includes(type)
+          )
+          .filter(
+            (type, index) =>
+              damage_relations.double_damage_from.indexOf(type) === index
+          ),
+
+        double_damage_to: damage_relations.double_damage_to
+          .filter(
+            (type, index) => !damage_relations.half_damage_to.includes(type)
+          )
+          .filter(
+            (type, index) =>
+              damage_relations.double_damage_to.indexOf(type) === index
+          ),
+        half_damage_from: damage_relations.half_damage_from.filter(
+          (type) => !damage_relations.double_damage_from.includes(type)
+        ),
+        half_damage_to: damage_relations.half_damage_to.filter(
+          (type) => !damage_relations.double_damage_to.includes(type)
+        ),
+        no_damage_from: damage_relations.no_damage_from,
+        no_damage_to: damage_relations.no_damage_to,
+        four_times_damage_from: damage_relations.double_damage_from.filter(
+          (element, index) => {
+            return (
+              damage_relations.double_damage_from.indexOf(element) !== index
+            );
+          }
+        ),
+        four_times_damage_to: damage_relations.double_damage_to.filter(
+          (element, index) => {
+            return damage_relations.double_damage_to.indexOf(element) !== index;
+          }
+        ),
+      };
+      return filtered_damage_objects;
+    }
+
+    const damage_relations = createDamageRelationObject();
+
+    const pokemonData: UniquePokemonData = {
+      damage_relation: {
+        double_damage_from: damage_relations.double_damage_from,
+        double_damage_to: damage_relations.double_damage_to,
+        half_damage_from: damage_relations.half_damage_from,
+        half_damage_to: damage_relations.half_damage_to,
+        no_damage_from: damage_relations.no_damage_from,
+        no_damage_to: damage_relations.no_damage_to,
+        four_times_damage_from: damage_relations.four_times_damage_from,
+        four_times_damage_to: damage_relations.four_times_damage_to,
+      },
+      height: data.initial.height * 0.1,
+      weight: data.initial.weight * 0.1,
+      id: data.initial.id,
+      name: data.initial.name,
+      sprites: {
+        default: {
+          default: data.initial.sprites.front_default,
+          shiny: data.initial.sprites.front_shiny,
+        },
+        artwork: {
+          default: data.initial.sprites.other["official-artwork"].front_default,
+          shiny: data.initial.sprites.other["official-artwork"].front_shiny,
+        },
+        home: {
+          default: data.initial.sprites.other.home.front_default,
+          shiny: data.initial.sprites.other.home.front_shiny,
+        },
+      },
+      gender: {
+        female: (data.extra.gender_rate * 100) / 8,
+        male: 100 - (data.extra.gender_rate * 100) / 8,
+      },
+      types: data.initial.types.map((type: any) => {
+        return {
+          name: type.type.name,
+        };
+      }),
+      abilities: data.initial.abilities.map((ability: AbilityPokemonProp) => {
+        return {
+          is_hidden: ability.is_hidden,
+          slot: ability.slot,
+          ability: ability.ability,
+        };
+      }),
+      stats: {
+        hp: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "hp") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+        attack: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "attack") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+        defense: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "defense") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+        specialAttack: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "special-attack") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+        specialDefense: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "special-defense") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+        speed: data.initial.stats.find((stat: statsProps) => {
+          if (stat.stat.name === "speed") {
+            return {
+              base_stat: stat.base_stat,
+              effort: stat.effort,
+              stat: {
+                name: stat.stat.name,
+              },
+            };
+          }
+        }),
+      },
+      flavor: data.extra.flavor_text_entries
+        .filter((flavor: any) => {
+          if (flavor.language.name === "en") {
+            return flavor.flavor_text;
+          }
+        })
+        .slice(0, 1),
+    };
+
+    setPokemon(pokemonData);
+  }
   return (
     <PokedexContext.Provider
       value={{
@@ -365,10 +651,12 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
         getTypePokedex,
         getMoves,
         getAbility,
+        getUniquePokemon,
         pokeList,
         typeList,
         movesList,
         ability,
+        pokemon,
       }}
     >
       {children}

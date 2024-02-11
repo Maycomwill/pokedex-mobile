@@ -15,7 +15,7 @@ interface Data extends TouchableOpacityProps {
   pokemon: PokemonDataProps;
 }
 
-const PokemonCard = ({ pokemon }: Data) => {
+const PokemonCard = ({ pokemon, ...rest }: Data) => {
   return (
     <TouchableOpacity
       style={{ elevation: 6 }}
@@ -44,6 +44,7 @@ const PokemonCard = ({ pokemon }: Data) => {
           "bg-backgroundCard-water": pokemon.types[0].name === "water",
         }
       )}
+      {...rest}
     >
       <View className="absolute -right-5 -bottom-2 items-center justify-center z-0 opacity-10 -rotate-45">
         <Pokeball width={102} height={102} />
@@ -65,7 +66,7 @@ const PokemonCard = ({ pokemon }: Data) => {
             size="BASE"
             className="mb-2"
           >
-            {pokemon.name}
+            {pokemon.name.split("-").join(" ")}
           </Text>
           {pokemon.types.map((type, index) => (
             <View
@@ -97,7 +98,7 @@ const PokemonCard = ({ pokemon }: Data) => {
             </View>
           ))}
         </View>
-        <View className="absolute -right-4 top-0 bottom-0 items-center justify-center z-0">
+        <View className="absolute -right-4 -top-0 bottom-0 items-center justify-center z-0">
           <Image
             source={{ uri: pokemon.sprites.artwork.default }}
             width={86}

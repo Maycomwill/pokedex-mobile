@@ -2,20 +2,35 @@ import { FlatList, View } from "react-native";
 import React, { useCallback, useEffect } from "react";
 import Text from "../components/Text";
 import usePokedex from "../hooks/usePokedex";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
 import { RootStackParamList } from "../routes/AppRoutes";
 import Loading from "../components/Loading";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
 import PokemonCard from "../components/PokemonCard";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Ability">;
+type RouteProps = NativeStackNavigationProp<RootStackParamList, "Ability">;
 
 const Ability = ({ route }: Props) => {
   const { getAbility, ability, pokeList } = usePokedex();
+  const navigation = useNavigation<RouteProps>();
 
   const renderItem = useCallback(
     ({ item }: { item: PokemonDataProps }) => (
-      <PokemonCard key={item.id} pokemon={item} />
+      <PokemonCard
+        key={item.id}
+        pokemon={item}
+        onPress={() => {
+          navigation.navigate("Pokemon", {
+            ref: item.id,
+            type: item.types[0].name,
+          });
+        }}
+      />
     ),
     []
   );
@@ -29,9 +44,13 @@ const Ability = ({ route }: Props) => {
       {ability?.flavor.flavor_text !== "" ? (
         <View className="flex-1 w-full items-center justify-start px-4 pt-2">
           {ability && ability.flavor ? (
-            <View className="w-full items-center justify-center ">
+            <View className="w-full items-center justify-center">
               <Text weight="BOLD" size="LG" align="JUSTIFY" color="WHITE">
                 {ability.flavor.flavor_text.split("\n").join(" ")}
+              </Text>
+
+              <Text className="pt-2" size="SM" align="JUSTIFY" color="WHITE">
+                {ability.effect.effect}
               </Text>
             </View>
           ) : (

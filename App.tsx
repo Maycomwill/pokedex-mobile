@@ -24,7 +24,7 @@ export default function App() {
     return <Loading />;
   } else {
     return (
-      <SafeAreaView className="flex-1">
+      <SafeAreaView className="flex-1 w-full">
         <AppProvider>
           <Routes />
           <StatusBar style="light" translucent backgroundColor="transparent" />

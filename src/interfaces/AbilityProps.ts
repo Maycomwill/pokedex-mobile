@@ -1,3 +1,12 @@
+export type AbilityPokemonProp = {
+  slot: number;
+  is_hidden: boolean;
+  ability: {
+    name: string;
+    url: string;
+  };
+};
+
 export type AbilityProps = {
   flavor: flavorEntrie;
   effect: effectEntrie;
