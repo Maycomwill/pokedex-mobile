@@ -9,6 +9,7 @@ import {
 } from "../interfaces/PokemonProps";
 import axios from "axios";
 import {
+  AbilityPokemonProp,
   AbilityProps,
   effectEntrie,
   flavorEntrie,
@@ -557,8 +558,12 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
           name: type.type.name,
         };
       }),
-      abilities: data.initial.abilities.map((ability: any) => {
-        return ability.ability.name;
+      abilities: data.initial.abilities.map((ability: AbilityPokemonProp) => {
+        return {
+          is_hidden: ability.is_hidden,
+          slot: ability.slot,
+          ability: ability.ability,
+        };
       }),
       stats: {
         hp: data.initial.stats.find((stat: statsProps) => {

@@ -26,7 +26,9 @@ const AboutCard = ({ pokemon }: AboutCardProps) => {
             {pokemon.weight.toFixed(2).toString()}kg
           </Text>
           <Text className="mb-4" color="BLACK" transform="CAP">
-            {pokemon.abilities.join(", ")}
+            {pokemon.abilities.map((ability) => {
+              return ability.ability.name;
+            }).join(", ")}
           </Text>
         </View>
       </View>

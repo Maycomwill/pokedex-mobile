@@ -26,7 +26,7 @@ const Ability = ({ route }: Props) => {
         pokemon={item}
         onPress={() => {
           navigation.navigate("Pokemon", {
-            name: item.name,
+            ref: item.id,
             type: item.types[0].name,
           });
         }}
@@ -44,9 +44,13 @@ const Ability = ({ route }: Props) => {
       {ability?.flavor.flavor_text !== "" ? (
         <View className="flex-1 w-full items-center justify-start px-4 pt-2">
           {ability && ability.flavor ? (
-            <View className="w-full items-center justify-center ">
+            <View className="w-full items-center justify-center">
               <Text weight="BOLD" size="LG" align="JUSTIFY" color="WHITE">
                 {ability.flavor.flavor_text.split("\n").join(" ")}
+              </Text>
+
+              <Text className="pt-2" size="SM" align="JUSTIFY" color="WHITE">
+                {ability.effect.effect}
               </Text>
             </View>
           ) : (

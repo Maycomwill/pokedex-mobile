@@ -4,12 +4,18 @@ import Text from "../Text";
 import { UniquePokemonData } from "../../interfaces/PokemonProps";
 import StatsValues from "./StatsCardComponents/StatsValues";
 import SymbolTypeCard from "../TypeCard/SymbolTypeCard";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../routes/AppRoutes";
 
 interface StatsCardProps {
   pokemon: UniquePokemonData;
 }
 
+type RouteProps = NativeStackNavigationProp<RootStackParamList, "Pokemon">;
+
 const StatsCard = ({ pokemon }: StatsCardProps) => {
+  const navigation = useNavigation<RouteProps>();
   return (
     <ScrollView
       contentContainerStyle={{ paddingBottom: 32 }}
@@ -50,7 +56,17 @@ const StatsCard = ({ pokemon }: StatsCardProps) => {
           >
             <View className="w-full flex-row">
               {pokemon.damage_relation.double_damage_to.map((type) => {
-                return <SymbolTypeCard key={type} type={type} />;
+                return (
+                  <SymbolTypeCard
+                    onPress={() =>
+                      navigation.navigate("Type", {
+                        type,
+                      })
+                    }
+                    key={type}
+                    type={type}
+                  />
+                );
               })}
             </View>
           </ScrollView>
@@ -65,7 +81,17 @@ const StatsCard = ({ pokemon }: StatsCardProps) => {
               className="w-full flex-row"
             >
               {pokemon.damage_relation.double_damage_from.map((type) => {
-                return <SymbolTypeCard key={type} type={type} />;
+                return (
+                  <SymbolTypeCard
+                    onPress={() =>
+                      navigation.navigate("Type", {
+                        type,
+                      })
+                    }
+                    key={type}
+                    type={type}
+                  />
+                );
               })}
             </ScrollView>
           </View>

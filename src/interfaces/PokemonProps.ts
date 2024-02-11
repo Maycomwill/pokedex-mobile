@@ -1,3 +1,5 @@
+import { AbilityPokemonProp } from "./AbilityProps";
+
 export interface PokemonDataProps {
   name: string;
   id: number;
@@ -55,7 +57,7 @@ export interface UniquePokemonData {
     specialDefense: statsProps;
     speed: statsProps;
   };
-  abilities: string[];
+  abilities: AbilityPokemonProp[];
   flavor: string;
   // evolution_chain: evolutionProps[];
   damage_relation: damageRelationsProps;

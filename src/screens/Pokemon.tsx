@@ -45,7 +45,11 @@ const Pokemon = ({ route }: Props) => {
 
   return (
     <View
-      style={{ backgroundColor: handleWithTypeColor(route.params.type) }}
+      style={{
+        backgroundColor: `${
+          pokemon ? handleWithTypeColor(pokemon.types[0].name) : null
+        }`,
+      }}
       className={clsx(
         "w-full flex-1 items-center justify-start pt-2 relative pb-12",
         {}
