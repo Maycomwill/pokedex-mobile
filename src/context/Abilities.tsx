@@ -31,7 +31,6 @@ export function AbilityContextProvider({ children }: { children: ReactNode }) {
     );
     setAbilitiesPayload(abilityPayload);
   }
-  console.log("novo:", abilityData);
 
   async function getAbilityInfo(ability: string) {
     const data = await api.get(`ability/${ability}`);
@@ -47,9 +46,7 @@ export function AbilityContextProvider({ children }: { children: ReactNode }) {
           }
         }
       )
-      .slice(0, 1)[0]
-      ;
-
+      .slice(0, 1)[0];
     const flavor: flavorEntrie = data.data.flavor_text_entries
       .filter(
         (flavor: {
@@ -64,7 +61,7 @@ export function AbilityContextProvider({ children }: { children: ReactNode }) {
           }
         }
       )
-      .slice(0, 1)[0]
+      .slice(0, 1)[0];
 
     const abilityData: AbilityProps = {
       name: data.data.name,

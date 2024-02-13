@@ -20,15 +20,27 @@ const AboutCard = ({ pokemon }: AboutCardProps) => {
         </View>
         <View className="w-[70%] items-start justify-start pl-2">
           <Text className="mb-4" color="BLACK">
-            {pokemon.height.toFixed(2).toString()}m
+            {pokemon.height.toLocaleString("pt-BR", {
+              style: "decimal",
+              maximumFractionDigits: 3,
+              minimumFractionDigits: 2,
+            })}
+            m
           </Text>
           <Text className="mb-4" color="BLACK">
-            {pokemon.weight.toFixed(2).toString()}kg
+            {pokemon.weight.toLocaleString("pt-BR", {
+              style: "decimal",
+              maximumFractionDigits: 3,
+              minimumFractionDigits: 2,
+            })}
+            kg
           </Text>
           <Text className="mb-4" color="BLACK" transform="CAP">
-            {pokemon.abilities.map((ability) => {
-              return ability.ability.name;
-            }).join(", ")}
+            {pokemon.abilities
+              .map((ability) => {
+                return ability.ability.name;
+              })
+              .join(", ")}
           </Text>
         </View>
       </View>
@@ -48,7 +60,11 @@ const AboutCard = ({ pokemon }: AboutCardProps) => {
                   ? "0"
                   : pokemon.gender.female >= 100
                   ? "100"
-                  : pokemon.gender.female.toString()}
+                  : pokemon.gender.female.toLocaleString("pt-BR", {
+                      style: "decimal",
+                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 1,
+                    })}
                 %
               </Text>
             </View>
@@ -59,7 +75,11 @@ const AboutCard = ({ pokemon }: AboutCardProps) => {
                   ? "0"
                   : pokemon.gender.male >= 100
                   ? "100"
-                  : pokemon.gender.male.toString()}
+                  : pokemon.gender.male.toLocaleString("pt-BR", {
+                      style: "decimal",
+                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 1,
+                    })}
                 %
               </Text>
             </View>
