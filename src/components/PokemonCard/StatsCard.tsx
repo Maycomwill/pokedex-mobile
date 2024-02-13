@@ -82,15 +82,17 @@ const StatsCard = ({ pokemon }: StatsCardProps) => {
             >
               {pokemon.damage_relation.double_damage_from.map((type) => {
                 return (
-                  <SymbolTypeCard
-                    onPress={() =>
-                      navigation.navigate("Type", {
-                        type,
-                      })
-                    }
+               
+                    <SymbolTypeCard
                     key={type}
-                    type={type}
-                  />
+                      onPress={() =>
+                        navigation.navigate("Type", {
+                          type,
+                        })
+                      }
+                      type={type}
+                    />
+                  
                 );
               })}
             </ScrollView>

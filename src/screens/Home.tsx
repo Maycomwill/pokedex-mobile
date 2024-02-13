@@ -1,5 +1,5 @@
 import { View, TouchableWithoutFeedback, Keyboard } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../routes/AppRoutes";
@@ -15,8 +15,12 @@ type HomeScreenNavigationProps = NativeStackNavigationProp<
 
 const Home = () => {
   const navigation = useNavigation<HomeScreenNavigationProps>();
+
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View
         style={{ paddingTop: Number(StatusBarHeight) + 32 }}
         className="flex-1 relative z-10 items-center justify-start bg-red-500 pt-2"
@@ -25,6 +29,7 @@ const Home = () => {
           <Pokeball width={300} height={300} opacity={0.2} rotation={-45} />
         </View>
         <HomeSearch />
+
         <View className="flex-1 items-center justify-center rounded-t-3xl bg-zinc-100 w-full px-12 space-y-8">
           <Button.Root
             className="bg-green-400"

@@ -14,6 +14,7 @@ import {
   effectEntrie,
   flavorEntrie,
 } from "../interfaces/AbilityProps";
+import { EvolutionProps } from "../interfaces/EvolutionChainProps";
 
 export interface PokedexContextProps {
   getPokedex: (generation: string) => void;
@@ -359,9 +360,17 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
   async function getUniquePokemon(pokemon: string | number) {
     setDamageObj([]);
     setPokemon(undefined);
-    async function handleWithApi(pokemon: number) {
-      const id = pokemon;
-      const initialData = await api.get(`pokemon/${id}`);
+    async function handleWithApi(pokemon: number | string) {
+      console.log("chegou aqui", pokemon);
+      let ref: string | number = "";
+      if (typeof pokemon === "string") {
+        let newRef = pokemon.toLowerCase();
+        console.log(newRef);
+        ref = newRef;
+      } else {
+        ref = pokemon;
+      }
+      const initialData = await api.get(`pokemon/${ref}`);
       const { species } = initialData.data;
       const extraData = await axios.get(`${species.url}`);
       return {
@@ -380,7 +389,7 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
       };
     }
 
-    const data = await handleWithApi(Number(pokemon));
+    const data = await handleWithApi(pokemon);
     const types = data.initial.types.map(
       (type: { slot: number; type: { name: string; url: string } }) => {
         return type.type.name;
@@ -477,23 +486,23 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
       };
 
       const filtered_damage_objects = {
-        double_damage_from: damage_relations.double_damage_from
-          .filter(
-            (type, index) => !damage_relations.half_damage_from.includes(type)
-          )
-          .filter(
-            (type, index) =>
-              damage_relations.double_damage_from.indexOf(type) === index
+        double_damage_from: [
+          ...new Set(
+            damage_relations.double_damage_from
+              .filter(
+                (type) => !damage_relations.half_damage_from.includes(type)
+              )
+              .filter((type) => !damage_relations.no_damage_from.includes(type))
           ),
+        ],
 
-        double_damage_to: damage_relations.double_damage_to
-          .filter(
-            (type, index) => !damage_relations.half_damage_to.includes(type)
-          )
-          .filter(
-            (type, index) =>
-              damage_relations.double_damage_to.indexOf(type) === index
+        double_damage_to: [
+          ...new Set(
+            damage_relations.double_damage_to
+              .filter((type) => !damage_relations.half_damage_to.includes(type))
+              .filter((type) => !damage_relations.no_damage_to.includes(type))
           ),
+        ],
         half_damage_from: damage_relations.half_damage_from.filter(
           (type) => !damage_relations.double_damage_from.includes(type)
         ),
@@ -515,8 +524,99 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
           }
         ),
       };
+      console.log(filtered_damage_objects.double_damage_to);
       return filtered_damage_objects;
     }
+
+    async function handleWithEvolutionData() {
+      const evolution_chain = await axios.get(data.extra.evolution_chain.url);
+
+      const first_evolution: string | undefined =
+        evolution_chain.data.chain.species.name;
+      const second_evolution: string | undefined =
+        evolution_chain.data.chain.evolves_to[0]?.species.name;
+      const third_evolution: string | undefined =
+        evolution_chain.data.chain.evolves_to[0]?.evolves_to[0]?.species.name;
+      console.log(first_evolution, second_evolution, third_evolution);
+      if (first_evolution && second_evolution && third_evolution) {
+        const firstData = await api.get(`pokemon/${first_evolution}`);
+        const secondData = await api.get(`pokemon/${second_evolution}`);
+        const thirdData = await api.get(`pokemon/${third_evolution}`);
+        const first: EvolutionProps = {
+          id: firstData.data.id,
+          name: first_evolution,
+          url: evolution_chain.data.chain.species.url,
+          sprite: {
+            default: firstData.data.sprites.front_default,
+            shiny: firstData.data.sprites.front_shiny,
+          },
+        };
+
+        const second: EvolutionProps = {
+          name: second_evolution,
+          id: secondData.data.id,
+          sprite: {
+            default: secondData.data.sprites.front_default,
+            shiny: secondData.data.sprites.front_shiny,
+          },
+
+          url: evolution_chain.data.chain.evolves_to[0].species.url,
+        };
+
+        const third: EvolutionProps = {
+          id: thirdData.data.id,
+          name: third_evolution,
+          sprite: {
+            default: thirdData.data.sprites.front_default,
+            shiny: thirdData.data.sprites.front_shiny,
+          },
+          url: evolution_chain.data.chain.evolves_to[0].evolves_to[0].species
+            .url,
+        };
+
+        return [first, second, third];
+      } else if (first_evolution && second_evolution) {
+        const firstData = await api.get(`pokemon/${first_evolution}`);
+        const secondData = await api.get(`pokemon/${second_evolution}`);
+        const first: EvolutionProps = {
+          id: firstData.data.id,
+          name: first_evolution,
+          url: evolution_chain.data.chain.species.url,
+          sprite: {
+            default: firstData.data.sprites.front_default,
+            shiny: firstData.data.sprites.front_shiny,
+          },
+        };
+
+        const second: EvolutionProps = {
+          id: secondData.data.id,
+          name: second_evolution,
+          sprite: {
+            default: secondData.data.sprites.front_default,
+            shiny: secondData.data.sprites.front_shiny,
+          },
+
+          url: evolution_chain.data.chain.evolves_to[0].species.url,
+        };
+        return [first, second];
+      } else if (first_evolution !== undefined) {
+        const firstData = await api.get(`pokemon/${first_evolution}`);
+        const first: EvolutionProps = {
+          id: firstData.data.id,
+          name: first_evolution,
+          url: evolution_chain.data.chain.species.url,
+          sprite: {
+            default: firstData.data.sprites.front_default,
+            shiny: firstData.data.sprites.front_shiny,
+          },
+        };
+        return [first];
+      } else {
+        return [];
+      }
+    }
+
+    const evolution_data = await handleWithEvolutionData();
 
     const damage_relations = createDamageRelationObject();
 
@@ -531,6 +631,7 @@ export function PokedexContextProvider({ children }: { children: ReactNode }) {
         four_times_damage_from: damage_relations.four_times_damage_from,
         four_times_damage_to: damage_relations.four_times_damage_to,
       },
+      evolution_chain: evolution_data,
       height: data.initial.height * 0.1,
       weight: data.initial.weight * 0.1,
       id: data.initial.id,

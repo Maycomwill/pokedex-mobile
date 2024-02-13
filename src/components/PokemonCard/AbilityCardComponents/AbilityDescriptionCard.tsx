@@ -18,9 +18,20 @@ const AbilityDescriptionCard = ({
 }: AbilityDescriptionCardProps) => {
   function handleWithStringSize(text: string) {
     if (text.length >= 150) {
+      const padrao = /(\d+)\.(\d+)/g;
+
       const newText = text.split(".");
-      return newText.slice(0, 2).join(".").concat("...");
+
+      const textoFormatado = text
+        .split(".")
+        .slice(0, 2)
+        .join(".")
+        .concat("...")
+        .replace(padrao, "$1,$2");
+      return textoFormatado;
     } else {
+      const padrao = /(\d+)\.(\d+)/g;
+      return text.replace(padrao, "$1,$2");
       return text;
     }
   }
