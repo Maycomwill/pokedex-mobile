@@ -1,21 +1,37 @@
-import { View, Text, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import React, { useCallback, useEffect } from "react";
 import usePokedex from "../hooks/usePokedex";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../routes/AppRoutes";
 import PokemonCard from "../components/PokemonCard";
-import Loading from "./Loading";
-import { PokemonDataProps } from "../interfaces/pokemon";
+import Loading from "../components/Loading";
+import { PokemonDataProps } from "../interfaces/PokemonProps";
+import { useNavigation } from "@react-navigation/native";
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
 
+type RoutesProps = NativeStackNavigationProp<RootStackParamList, "Pokelist">;
 type Props = NativeStackScreenProps<RootStackParamList, "Pokelist">;
 
 const PokeList = ({ route }: Props) => {
+  const naviagation = useNavigation<RoutesProps>();
   const { getPokedex, pokeList } = usePokedex();
 
   const regionName = route.params.region;
   const renderItem = useCallback(
     ({ item }: { item: PokemonDataProps }) => (
-      <PokemonCard key={item.id} pokemon={item} />
+      <PokemonCard
+        key={item.id}
+        pokemon={item}
+        onPress={() => {
+          console.log("item.id", item.id),
+            naviagation.navigate("Pokemon", {
+              ref: item.id,
+              type: item.types[0].name,
+            });
+        }}
+      />
     ),
     []
   );
@@ -24,11 +40,9 @@ const PokeList = ({ route }: Props) => {
     getPokedex(regionName);
   }, []);
 
-  if (pokeList.length === 0) {
-    return <Loading />;
-  } else {
-    return (
-      <View className="w-full">
+  return (
+    <View className="w-full bg-orange-500 items-center flex-1 justify-center">
+      {pokeList && pokeList.length !== 0 ? (
         <FlatList
           windowSize={21}
           maxToRenderPerBatch={80}
@@ -41,17 +55,21 @@ const PokeList = ({ route }: Props) => {
             columnGap: 4,
             rowGap: 2,
           }}
+          contentContainerStyle={{
+            paddingBottom: 64,
+            gap: 12,
+            width: "100%",
+          }}
+          showsVerticalScrollIndicator={false}
           data={pokeList}
           renderItem={renderItem}
-          keyExtractor={(item) => `${item.id.toString()}-${item.name}`}
+          keyExtractor={(item) => `${item.id}-${item.name}`}
         />
-        {/* <FlatList
-          data={pokeList}
-          renderItem={({ item }) => <Text>{item.name}</Text>}
-        /> */}
-      </View>
-    );
-  }
+      ) : (
+        <Loading />
+      )}
+    </View>
+  );
 };
 
 export default PokeList;
