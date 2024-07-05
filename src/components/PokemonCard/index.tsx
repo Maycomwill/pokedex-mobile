@@ -100,7 +100,11 @@ const PokemonCard = ({ pokemon, ...rest }: Data) => {
         </View>
         <View className="absolute -right-4 -top-0 bottom-0 items-center justify-center z-0">
           <Image
-            source={{ uri: pokemon.sprites.artwork.default }}
+            source={{
+              uri: pokemon.sprites.artwork.default
+                ? pokemon.sprites.artwork.default
+                : pokemon.sprites.default.default,
+            }}
             width={86}
             height={86}
           />

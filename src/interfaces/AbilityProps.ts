@@ -1,35 +1,25 @@
+import { NamedAPIResource } from "./apiInterfaces";
+
 export type AbilityPokemonProp = {
   slot: number;
   is_hidden: boolean;
-  ability: {
-    name: string;
-    url: string;
-  };
+  ability: NamedAPIResource
 };
 
 export type AbilityProps = {
   flavor: flavorEntrie;
   effect: effectEntrie;
   name: string;
-  pokemon: {
-    name: string;
-    url: string;
-  }[];
+  pokemon: NamedAPIResource[];
 };
 
 export type effectEntrie = {
   effect: string;
   short_effect: string;
-  language: {
-    name: string;
-    url: string;
-  };
+  language: NamedAPIResource;
 };
 
 export type flavorEntrie = {
   flavor_text: string;
-  language: {
-    name: string;
-    url: string;
-  };
+  language: NamedAPIResource;
 };

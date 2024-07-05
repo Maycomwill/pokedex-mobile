@@ -10,13 +10,14 @@ import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
+import useGeneration from "../hooks/useGeneration";
 
 type RoutesProps = NativeStackNavigationProp<RootStackParamList, "Pokelist">;
 type Props = NativeStackScreenProps<RootStackParamList, "Pokelist">;
 
 const PokeList = ({ route }: Props) => {
   const naviagation = useNavigation<RoutesProps>();
-  const { getPokedex, pokeList } = usePokedex();
+  const { getGenerationFromUserChoice, pokemonData } = useGeneration();
 
   const regionName = route.params.region;
   const renderItem = useCallback(
@@ -37,12 +38,12 @@ const PokeList = ({ route }: Props) => {
   );
 
   useEffect(() => {
-    getPokedex(regionName);
+    getGenerationFromUserChoice(regionName);
   }, []);
 
   return (
     <View className="w-full bg-orange-500 items-center flex-1 justify-center">
-      {pokeList && pokeList.length !== 0 ? (
+      {pokemonData && pokemonData.length !== 0 ? (
         <FlatList
           windowSize={21}
           maxToRenderPerBatch={80}
@@ -61,7 +62,7 @@ const PokeList = ({ route }: Props) => {
             width: "100%",
           }}
           showsVerticalScrollIndicator={false}
-          data={pokeList}
+          data={pokemonData}
           renderItem={renderItem}
           keyExtractor={(item) => `${item.id}-${item.name}`}
         />

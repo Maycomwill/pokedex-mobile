@@ -1,5 +1,5 @@
 import { AbilityPokemonProp } from "./AbilityProps";
-import { EvolutionProps } from "./EvolutionChainProps";
+import { evolutionProps } from "./pokemonInterfaces";
 
 export interface PokemonDataProps {
   name: string;
@@ -60,7 +60,7 @@ export interface UniquePokemonData {
   };
   abilities: AbilityPokemonProp[];
   flavor: string;
-  evolution_chain: EvolutionProps[];
+  evolution_chain: evolutionProps[];
   damage_relation: damageRelationsProps;
   gender: {
     female: number;

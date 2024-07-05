@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import React from "react";
-import { UniquePokemonData } from "../../interfaces/PokemonProps";
+import { UniquePokemonData } from "../../interfaces/pokemonInterfaces";
 import Text from "../Text";
 import { MaterialIcons } from "@expo/vector-icons";
 import colors from "tailwindcss/colors";

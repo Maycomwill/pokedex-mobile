@@ -10,7 +10,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 const MovesAndAbilities = () => {
   type MovesScreenNavigationProps = NativeStackNavigationProp<
     RootStackParamList,
-    "MovesAndAbilities"
+    "Moves"
   >;
   const { getMoves, movesList } = usePokedex();
   const navigation = useNavigation<MovesScreenNavigationProps>();
@@ -21,7 +21,7 @@ const MovesAndAbilities = () => {
   return (
     <View className="flex-1 px-4 items-start justify-start bg-sky-500 space-y-2">
       <Text color="WHITE" weight="BOLD">
-        Aqui estão todos os golpes e habilidades dos Pokémon
+        Aqui estão todos os golpes dos Pokémon
       </Text>
       <View className="w-full flex-1 items-center justify-center">
         {movesList && movesList.length !== 0 ? (

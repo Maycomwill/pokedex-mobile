@@ -1,7 +1,7 @@
 import { ScrollView, View } from "react-native";
 import React from "react";
 import Text from "../Text";
-import { UniquePokemonData } from "../../interfaces/PokemonProps";
+import { UniquePokemonData } from "../../interfaces/pokemonInterfaces";
 import StatsValues from "./StatsCardComponents/StatsValues";
 import SymbolTypeCard from "../TypeCard/SymbolTypeCard";
 import { useNavigation } from "@react-navigation/native";
@@ -26,18 +26,15 @@ const StatsCard = ({ pokemon }: StatsCardProps) => {
         <Text size="LG" weight="BOLD" className="pb-2">
           Status básicos
         </Text>
-        <StatsValues name="HP" value={pokemon.stats.hp.base_stat} />
-        <StatsValues name="Ataque" value={pokemon.stats.attack.base_stat} />
-        <StatsValues name="Defesa" value={pokemon.stats.defense.base_stat} />
-        <StatsValues
-          name="Ataque sp."
-          value={pokemon.stats.specialAttack.base_stat}
-        />
-        <StatsValues
-          name="Defesa sp."
-          value={pokemon.stats.specialDefense.base_stat}
-        />
-        <StatsValues name="Speed" value={pokemon.stats.speed.base_stat} />
+        {pokemon.stats.map((stat) => {
+          return (
+            <StatsValues
+              key={stat.stat.name}
+              name={stat.stat.name}
+              value={stat.base_stat}
+            />
+          );
+        })}
       </View>
 
       <View className="h-px w-full bg-slate-900 my-4" />
@@ -82,17 +79,15 @@ const StatsCard = ({ pokemon }: StatsCardProps) => {
             >
               {pokemon.damage_relation.double_damage_from.map((type) => {
                 return (
-               
-                    <SymbolTypeCard
+                  <SymbolTypeCard
                     key={type}
-                      onPress={() =>
-                        navigation.navigate("Type", {
-                          type,
-                        })
-                      }
-                      type={type}
-                    />
-                  
+                    onPress={() =>
+                      navigation.navigate("Type", {
+                        type,
+                      })
+                    }
+                    type={type}
+                  />
                 );
               })}
             </ScrollView>

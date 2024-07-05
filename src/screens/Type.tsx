@@ -10,13 +10,14 @@ import Text from "../components/Text";
 import { typesObjColors } from "../utils/typesArray";
 import { shade } from "polished";
 import { useNavigation } from "@react-navigation/native";
+import useTypes from "../hooks/useTypes";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Type">;
 type RouteProps = NativeStackNavigationProp<RootStackParamList, "Type">;
 
 const Type = ({ route }: Props) => {
   const type = route.params.type;
-  const { getTypePokedex, typeList } = usePokedex();
+  const { getTypeData, commonTypesPokemon } = useTypes();
   const navigation = useNavigation<RouteProps>();
   const renderItem = useCallback(
     ({ item }: { item: PokemonDataProps }) => (
@@ -42,7 +43,7 @@ const Type = ({ route }: Props) => {
   }
 
   useEffect(() => {
-    getTypePokedex(type);
+    getTypeData(type);
   }, []);
 
   return (
@@ -54,7 +55,7 @@ const Type = ({ route }: Props) => {
         Aqui estão os pokemon do que possuem o tipo {type}
       </Text>
       <View className="w-full flex-1">
-        {typeList && typeList.length !== 0 ? (
+        {commonTypesPokemon && commonTypesPokemon.length !== 0 ? (
           <FlatList
             windowSize={21}
             maxToRenderPerBatch={80}
@@ -67,7 +68,7 @@ const Type = ({ route }: Props) => {
               columnGap: 4,
               rowGap: 2,
             }}
-            data={typeList}
+            data={commonTypesPokemon}
             renderItem={renderItem}
             keyExtractor={(item) => `${item.id.toString()}-${item.name}`}
             showsVerticalScrollIndicator={false}

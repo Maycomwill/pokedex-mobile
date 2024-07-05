@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { PokedexContext, PokedexContextProps } from "../context/Pokedex";
+import { PokedexContext, PokedexContextDataProps } from "../context/PokedexContext";
 
-export default function usePokedex(): PokedexContextProps {
+export default function usePokedex(): PokedexContextDataProps {
   const context = useContext(PokedexContext);
   return context;
 }

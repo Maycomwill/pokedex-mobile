@@ -4,7 +4,7 @@ import Text from "../Text";
 import { UniquePokemonData } from "../../interfaces/PokemonProps";
 import { Image } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { EvolutionProps } from "../../interfaces/EvolutionChainProps";
+import { EvolutionProps } from "../../interfaces/evolutionInterface";
 import colors from "tailwindcss/colors";
 
 interface EvolutionCardProps {
