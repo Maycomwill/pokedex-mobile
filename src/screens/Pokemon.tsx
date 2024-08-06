@@ -1,10 +1,4 @@
-import {
-  View,
-  Image,
-  Pressable,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { View, Image, Pressable, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import Text from "../components/Text";
 import { RootStackParamList } from "../routes/AppRoutes";
@@ -34,9 +28,9 @@ const Pokemon = ({ route }: Props) => {
     const color = shade(0.1, typesObjColors[type]);
     return color;
   }
-  const { getUniquePokemon, pokemon } = usePokedex();
+  const { getPokemonData, uniquePokemonData } = usePokedex();
   useEffect(() => {
-    getUniquePokemon(route.params.ref);
+    getPokemonData(String(route.params.ref));
   }, []);
 
   const [headerOption, setHeaderOption] = useState<
@@ -47,7 +41,9 @@ const Pokemon = ({ route }: Props) => {
     <View
       style={{
         backgroundColor: `${
-          pokemon ? handleWithTypeColor(pokemon.types[0].name) : null
+          uniquePokemonData
+            ? handleWithTypeColor(uniquePokemonData.types[0].type)
+            : null
         }`,
       }}
       className={clsx(
@@ -56,43 +52,43 @@ const Pokemon = ({ route }: Props) => {
       )}
     >
       <Header leftIcon />
-      {pokemon ? (
+      {uniquePokemonData ? (
         <View className="w-full h-full">
           <View className="flex-row px-4 h-[40%] w-full justify-between items-start z-20">
             <View className="w-3/4 flex-col">
               <View className="w-full">
                 <Text color="WHITE" size="4XL" weight="BOLD" transform="CAP">
-                  {pokemon.name.split("-").join(" ")}
+                  {uniquePokemonData.name.split("-").join(" ")}
                 </Text>
               </View>
               <View className="flex-row w-full space-x-2">
-                {pokemon.types.map((type) => {
+                {uniquePokemonData.types.map((type) => {
                   return (
                     <View
-                      key={type.name}
+                      key={type.type}
                       className={clsx(
                         "w-1/3 items-center rounded-full space-y-2 mt-2 py-2 ",
                         {
-                          "bg-backgroundCard-bug": type.name === "bug",
-                          "bg-backgroundCard-dark": type.name === "dark",
-                          "bg-backgroundCard-dragon": type.name === "dragon",
+                          "bg-backgroundCard-bug": type.type === "bug",
+                          "bg-backgroundCard-dark": type.type === "dark",
+                          "bg-backgroundCard-dragon": type.type === "dragon",
                           "bg-backgroundCard-electric":
-                            type.name === "electric",
-                          "bg-backgroundCard-fairy": type.name === "fairy",
+                            type.type === "electric",
+                          "bg-backgroundCard-fairy": type.type === "fairy",
                           "bg-backgroundCard-fighting":
-                            type.name === "fighting",
-                          "bg-backgroundCard-fire": type.name === "fire",
-                          "bg-backgroundCard-flying": type.name === "flying",
-                          "bg-backgroundCard-ghost": type.name === "ghost",
-                          "bg-backgroundCard-grass": type.name === "grass",
-                          "bg-backgroundCard-ground": type.name === "ground",
-                          "bg-backgroundCard-ice": type.name === "ice",
-                          "bg-backgroundCard-normal": type.name === "normal",
-                          "bg-backgroundCard-poison": type.name === "poison",
-                          "bg-backgroundCard-psychic": type.name === "psychic",
-                          "bg-backgroundCard-rock": type.name === "rock",
-                          "bg-backgroundCard-steel": type.name === "steel",
-                          "bg-backgroundCard-water": type.name === "water",
+                            type.type === "fighting",
+                          "bg-backgroundCard-fire": type.type === "fire",
+                          "bg-backgroundCard-flying": type.type === "flying",
+                          "bg-backgroundCard-ghost": type.type === "ghost",
+                          "bg-backgroundCard-grass": type.type === "grass",
+                          "bg-backgroundCard-ground": type.type === "ground",
+                          "bg-backgroundCard-ice": type.type === "ice",
+                          "bg-backgroundCard-normal": type.type === "normal",
+                          "bg-backgroundCard-poison": type.type === "poison",
+                          "bg-backgroundCard-psychic": type.type === "psychic",
+                          "bg-backgroundCard-rock": type.type === "rock",
+                          "bg-backgroundCard-steel": type.type === "steel",
+                          "bg-backgroundCard-water": type.type === "water",
                         }
                       )}
                     >
@@ -102,7 +98,7 @@ const Pokemon = ({ route }: Props) => {
                         size="XS"
                         weight="SEMIBOLD"
                       >
-                        {type.name}
+                        {type.type}
                       </Text>
                     </View>
                   );
@@ -113,44 +109,49 @@ const Pokemon = ({ route }: Props) => {
               <View className="w-full items-end justify-center flex-col space-y-4">
                 <View>
                   <Text weight="BOLD" color="WHITE" size="LG">
-                    #{pokemon.id.toString().padStart(3, "0")}
+                    #{uniquePokemonData.id.toString().padStart(3, "0")}
                   </Text>
                 </View>
                 <TouchableOpacity
                   activeOpacity={0.2}
                   onPress={() => setShiny(!shiny)}
                   className={clsx(" text-zinc-100 p-2 rounded-full", {
-                    "bg-backgroundCard-bug": pokemon.types[0].name === "bug",
-                    "bg-backgroundCard-dark": pokemon.types[0].name === "dark",
+                    "bg-backgroundCard-bug":
+                      uniquePokemonData.types[0].type === "bug",
+                    "bg-backgroundCard-dark":
+                      uniquePokemonData.types[0].type === "dark",
                     "bg-backgroundCard-dragon":
-                      pokemon.types[0].name === "dragon",
+                      uniquePokemonData.types[0].type === "dragon",
                     "bg-backgroundCard-electric":
-                      pokemon.types[0].name === "electric",
+                      uniquePokemonData.types[0].type === "electric",
                     "bg-backgroundCard-fairy":
-                      pokemon.types[0].name === "fairy",
+                      uniquePokemonData.types[0].type === "fairy",
                     "bg-backgroundCard-fighting":
-                      pokemon.types[0].name === "fighting",
-                    "bg-backgroundCard-fire": pokemon.types[0].name === "fire",
+                      uniquePokemonData.types[0].type === "fighting",
+                    "bg-backgroundCard-fire":
+                      uniquePokemonData.types[0].type === "fire",
                     "bg-backgroundCard-flying":
-                      pokemon.types[0].name === "flying",
+                      uniquePokemonData.types[0].type === "flying",
                     "bg-backgroundCard-ghost":
-                      pokemon.types[0].name === "ghost",
+                      uniquePokemonData.types[0].type === "ghost",
                     "bg-backgroundCard-grass":
-                      pokemon.types[0].name === "grass",
+                      uniquePokemonData.types[0].type === "grass",
                     "bg-backgroundCard-ground":
-                      pokemon.types[0].name === "ground",
-                    "bg-backgroundCard-ice": pokemon.types[0].name === "ice",
+                      uniquePokemonData.types[0].type === "ground",
+                    "bg-backgroundCard-ice":
+                      uniquePokemonData.types[0].type === "ice",
                     "bg-backgroundCard-normal":
-                      pokemon.types[0].name === "normal",
+                      uniquePokemonData.types[0].type === "normal",
                     "bg-backgroundCard-poison":
-                      pokemon.types[0].name === "poison",
+                      uniquePokemonData.types[0].type === "poison",
                     "bg-backgroundCard-psychic":
-                      pokemon.types[0].name === "psychic",
-                    "bg-backgroundCard-rock": pokemon.types[0].name === "rock",
+                      uniquePokemonData.types[0].type === "psychic",
+                    "bg-backgroundCard-rock":
+                      uniquePokemonData.types[0].type === "rock",
                     "bg-backgroundCard-steel":
-                      pokemon.types[0].name === "steel",
+                      uniquePokemonData.types[0].type === "steel",
                     "bg-backgroundCard-water":
-                      pokemon.types[0].name === "water",
+                      uniquePokemonData.types[0].type === "water",
                   })}
                 >
                   <Ionicons
@@ -172,7 +173,7 @@ const Pokemon = ({ route }: Props) => {
             <Pattern width={120} height={120} opacity={0.2} />
           </View>
           <View className="w-full absolute items-center justify-center top-20  z-10 pointer-events-none">
-            {pokemon.sprites.artwork.default ? (
+            {uniquePokemonData.sprites.artwork ? (
               <Image
                 className="pointer-events-none"
                 width={256}
@@ -180,8 +181,8 @@ const Pokemon = ({ route }: Props) => {
                 source={{
                   uri: `${
                     shiny
-                      ? pokemon.sprites.artwork.shiny
-                      : pokemon.sprites.artwork.default
+                      ? uniquePokemonData.sprites.artwork.shiny
+                      : uniquePokemonData.sprites.artwork.default
                   }`,
                 }}
               />
@@ -193,8 +194,8 @@ const Pokemon = ({ route }: Props) => {
                 source={{
                   uri: `${
                     shiny
-                      ? pokemon.sprites.home.shiny
-                      : pokemon.sprites.home.default
+                      ? uniquePokemonData.sprites.home.shiny
+                      : uniquePokemonData.sprites.home.default
                   }`,
                 }}
               />
@@ -267,14 +268,20 @@ const Pokemon = ({ route }: Props) => {
                 </Text>
               </Pressable>
             </View>
-            {headerOption === "ABOUT" ? <AboutCard pokemon={pokemon} /> : null}
-            {headerOption === "STATS" ? <StatsCard pokemon={pokemon} /> : null}
+            {headerOption === "ABOUT" ? (
+              <AboutCard pokemon={uniquePokemonData} />
+            ) : null}
+            {headerOption === "STATS" ? (
+              <StatsCard pokemon={uniquePokemonData} />
+            ) : null}
             {headerOption === "EVOLUTION" ? (
-              <EvolutionCard pokemon={pokemon} />
-            ) : null}
+              <EvolutionCard shiny={shiny} pokemon={uniquePokemonData} />
+            ) : 
+            null}
             {headerOption === "MOVES" ? (
-              <AbilitiesCard pokemon={pokemon} />
-            ) : null}
+              <AbilitiesCard pokemon={uniquePokemonData} />
+            ) :
+            null}
           </View>
         </View>
       ) : (

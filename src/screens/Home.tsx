@@ -47,12 +47,12 @@ const Home = () => {
           </Button.Root>
           <Button.Root
             className="bg-sky-400"
-            onPress={() => navigation.navigate("MovesAndAbilities")}
+            onPress={() => navigation.navigate("Moves")}
           >
             <Button.Content
               size="XL"
               transform="CAP"
-              children="Golpes e Habilidades"
+              children="Golpes"
             />
             <Button.Icon icon={"star"} />
           </Button.Root>

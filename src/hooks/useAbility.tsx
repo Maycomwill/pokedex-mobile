@@ -1,7 +1,10 @@
 import { useContext } from "react";
-import { AbilityContext } from "../context/Abilities";
+import {
+  AbilityContext,
+  AbilityContextProps,
+} from "../context/AbilitiesContext";
 
-export function useAbility() {
+export default function useAbility(): AbilityContextProps {
   const context = useContext(AbilityContext);
   return context;
 }

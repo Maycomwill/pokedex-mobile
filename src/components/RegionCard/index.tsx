@@ -64,10 +64,10 @@ const RegionCard = (props: RegionCardProps) => {
         elevation: 5,
       }}
     >
-      <View className="w-full h-full inset-96 right-0 -rotate-90 absolute z-10 -left-28">
+      <View className="w-full h-full inset-96 right-0 -rotate-90 absolute z-10 -left-36">
         <LinearGradient
           colors={[rgba(0, 0, 0, 1), "transparent"]}
-          className="absolute top-0 left-0 h-full w-full flex-1 z-10"
+          className="absolute top-0 h-full w-full z-10"
         />
       </View>
       <ImageBackground

@@ -17,7 +17,7 @@ export type RootStackParamList = {
   Home: undefined;
   Regions: undefined;
   Types: undefined;
-  MovesAndAbilities: undefined;
+  Moves: undefined;
   Favorites: undefined;
   Type: { type: string };
   Pokelist: { region: string };
@@ -95,7 +95,7 @@ const AppRoutes = () => {
         })}
       />
       <Stack.Screen
-        name="MovesAndAbilities"
+        name="Moves"
         component={MovesAndAbilities}
         options={({ navigation }) => ({
           headerTitle: "Golpes e Habilidades",
