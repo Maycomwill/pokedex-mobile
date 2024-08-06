@@ -275,8 +275,8 @@ const Pokemon = ({ route }: Props) => {
               <StatsCard pokemon={uniquePokemonData} />
             ) : null}
             {headerOption === "EVOLUTION" ? (
-              <View />
-            ) : // <EvolutionCard pokemon={uniquePokemonData} />
+              <EvolutionCard shiny={shiny} pokemon={uniquePokemonData} />
+            ) : 
             null}
             {headerOption === "MOVES" ? (
               <AbilitiesCard pokemon={uniquePokemonData} />
