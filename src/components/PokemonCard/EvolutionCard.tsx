@@ -1,13 +1,13 @@
 import { View, ScrollView } from "react-native";
 import React, { useCallback } from "react";
 import Text from "../Text";
-import {
-  evolutionProps,
-  UniquePokemonData,
-} from "../../interfaces/pokemonInterfaces";
+import { UniquePokemonData } from "../../interfaces/pokemonInterfaces";
 import { Image } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { Evolution } from "../../interfaces/evolutionInterface";
+import {
+  Evolution,
+  EvolutionDetail,
+} from "../../interfaces/evolutionInterface";
 import useEvolution from "../../hooks/useEvolution";
 
 interface EvolutionCardProps {
@@ -38,29 +38,67 @@ const EvolutionCard = ({ pokemon, shiny = false }: EvolutionCardProps) => {
     [shiny]
   );
 
+  function handleTrigger(details: EvolutionDetail) {
+    switch (details.trigger.name) {
+      case "level-up":
+        return (
+          <View className="flex items-center justify-center flex-row">
+            <Feather name="chevron-up" size={18} color="black" />
+            <Text size="XS">
+              {details.min_level && details.min_level.toString()}
+            </Text>
+          </View>
+        );
+
+      default:
+        return null;
+    }
+  }
+
   function handleWithRenderEvolutionChain(evolution: Evolution[]) {
     return evolution.map((e) => {
       return (
-        <View>
-          <Image
-          width={120}
-          height={120}
+        <View
+          className="flex flex-1 flex-row items-center justify-center space-x-4"
           key={e.name}
-          source={{
-            uri: `${shiny ? e.sprites.shiny : e.sprites.default}`,
-          }}
-        />
+        >
+          {evolution[0].details[0] !== undefined && (
+            <View className="flex items-center justify-center flex-col space-y-2">
+              {handleTrigger(evolution[0].details[0])}
+              <Feather name="chevrons-right" size={24} color="black" />
+            </View>
+          )}
+          <View className="flex flex-col items-center justify-center">
+            <Image
+              width={240}
+              height={240}
+              key={e.name}
+              source={{
+                uri: `${shiny ? e.sprites.shiny : e.sprites.default}`,
+              }}
+            />
+            <Text className="capitalize">{e.name}</Text>
+          </View>
         </View>
       );
     });
   }
 
   return (
-    <View className="flex-1 flex-row px-4 pb-4 items-start justify-center">
+    <ScrollView
+      contentContainerStyle={{
+        justifyContent: "center",
+        alignItems: "flex-start",
+        paddingHorizontal: 48,
+      }}
+      horizontal
+    >
       {firstEvolution && handleWithRenderEvolutionChain(firstEvolution)}
-      <ScrollView horizontal >{secondEvolution && handleWithRenderEvolutionChain(secondEvolution)}</ScrollView>
+      <ScrollView horizontal>
+        {secondEvolution && handleWithRenderEvolutionChain(secondEvolution)}
+      </ScrollView>
       {thirdEvolution && handleWithRenderEvolutionChain(thirdEvolution)}
-    </View>
+    </ScrollView>
   );
 };
 

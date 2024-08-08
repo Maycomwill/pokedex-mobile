@@ -16,38 +16,32 @@ type RoutesProps = NativeStackNavigationProp<RootStackParamList, "Pokelist">;
 type Props = NativeStackScreenProps<RootStackParamList, "Pokelist">;
 
 const PokeList = ({ route }: Props) => {
-  const naviagation = useNavigation<RoutesProps>();
+  const navigation = useNavigation<RoutesProps>();
   const { getGenerationFromUserChoice, pokemonData } = useGeneration();
-
+  // console.log("Comprimento:", pokemonData.length);
   const regionName = route.params.region;
   const renderItem = useCallback(
-    ({ item }: { item: PokemonDataProps }) => (
-      <PokemonCard
-        key={item.id}
-        pokemon={item}
-        onPress={() => {
-          console.log("item.id", item.id),
-            naviagation.navigate("Pokemon", {
-              ref: item.id,
-              type: item.types[0].name,
-            });
-        }}
-      />
-    ),
-    []
+    ({ item }: { item: PokemonDataProps }) => {
+      const handlePress = () => {
+        // console.log("item.id", item.id);
+        navigation.navigate("Pokemon", {
+          ref: item.id,
+          type: item.types[0].name,
+        });
+      };
+      return <PokemonCard pokemon={item} onPress={handlePress} />;
+    },
+    [navigation]
   );
 
   useEffect(() => {
     getGenerationFromUserChoice(regionName);
-  }, []);
+  }, [regionName]);
 
   return (
     <View className="w-full bg-orange-500 items-center flex-1 justify-center">
       {pokemonData && pokemonData.length !== 0 ? (
         <FlatList
-          windowSize={21}
-          maxToRenderPerBatch={80}
-          initialNumToRender={20}
           className="w-full space-y-2"
           numColumns={2}
           columnWrapperStyle={{
@@ -64,7 +58,7 @@ const PokeList = ({ route }: Props) => {
           showsVerticalScrollIndicator={false}
           data={pokemonData}
           renderItem={renderItem}
-          keyExtractor={(item) => `${item.id}-${item.name}`}
+          keyExtractor={(item) => `${item.id}-${item.id}`}
         />
       ) : (
         <Loading />

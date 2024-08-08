@@ -11,57 +11,53 @@ import Loading from "../components/Loading";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
 import PokemonCard from "../components/PokemonCard";
 import { useNavigation } from "@react-navigation/native";
+import useAbility from "../hooks/useAbility";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Ability">;
 type RouteProps = NativeStackNavigationProp<RootStackParamList, "Ability">;
 
 const Ability = ({ route }: Props) => {
-  const { getAbility, ability, pokeList } = usePokedex();
+  const { getAbilityInfo, commonAbilityPokemon, abilityInfo } = useAbility();
   const navigation = useNavigation<RouteProps>();
-
+  const abilityName = route.params.ability;
   const renderItem = useCallback(
-    ({ item }: { item: PokemonDataProps }) => (
-      <PokemonCard
-        key={item.id}
-        pokemon={item}
-        onPress={() => {
-          navigation.navigate("Pokemon", {
-            ref: item.id,
-            type: item.types[0].name,
-          });
-        }}
-      />
-    ),
-    []
+    ({ item }: { item: PokemonDataProps }) => {
+      const handlePress = () => {
+        // console.log("item.id", item.id);
+        navigation.navigate("Pokemon", {
+          ref: item.id,
+          type: item.types[0].name,
+        });
+      };
+      return <PokemonCard pokemon={item} onPress={handlePress} />;
+    },
+    [navigation]
   );
 
   useEffect(() => {
-    getAbility(route.params.ability);
-  }, []);
+    getAbilityInfo(abilityName);
+  }, [abilityName]);
 
   return (
     <View className="w-full flex-1 bg-sky-500">
-      {ability?.flavor.flavor_text !== "" ? (
+      {abilityInfo?.flavor.flavor_text !== "" ? (
         <View className="flex-1 w-full items-center justify-start px-4 pt-2">
-          {ability && ability.flavor ? (
+          {abilityInfo && abilityInfo.flavor ? (
             <View className="w-full items-center justify-center">
               <Text weight="BOLD" size="LG" align="JUSTIFY" color="WHITE">
-                {ability.flavor.flavor_text.split("\n").join(" ")}
+                {abilityInfo.flavor.flavor_text.split("\n").join(" ")}
               </Text>
 
               <Text className="pt-2" size="SM" align="JUSTIFY" color="WHITE">
-                {ability.effect.effect}
+                {abilityInfo.effect.effect}
               </Text>
             </View>
           ) : (
             <Loading />
           )}
           <View className="w-full flex-1 pt-4">
-            {pokeList.length !== 0 ? (
+            {commonAbilityPokemon && commonAbilityPokemon.length !== 0 ? (
               <FlatList
-                windowSize={21}
-                maxToRenderPerBatch={80}
-                initialNumToRender={20}
                 className="w-full space-y-2"
                 numColumns={2}
                 columnWrapperStyle={{
@@ -76,9 +72,9 @@ const Ability = ({ route }: Props) => {
                   width: "100%",
                 }}
                 showsVerticalScrollIndicator={false}
-                data={pokeList}
+                data={commonAbilityPokemon}
                 renderItem={renderItem}
-                keyExtractor={(item) => `${item.id.toString()}-${item.name}`}
+                keyExtractor={(item) => item.id.toString()}
               />
             ) : (
               <Loading />

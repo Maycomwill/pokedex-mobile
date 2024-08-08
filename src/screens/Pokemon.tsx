@@ -115,7 +115,7 @@ const Pokemon = ({ route }: Props) => {
                 <TouchableOpacity
                   activeOpacity={0.2}
                   onPress={() => setShiny(!shiny)}
-                  className={clsx(" text-zinc-100 p-2 rounded-full", {
+                  className={clsx("text-zinc-100 p-2 rounded-full", {
                     "bg-backgroundCard-bug":
                       uniquePokemonData.types[0].type === "bug",
                     "bg-backgroundCard-dark":
