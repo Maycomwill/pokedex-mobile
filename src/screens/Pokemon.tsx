@@ -8,8 +8,8 @@ import { typesObjColors } from "../utils/typesArray";
 import { shade } from "polished";
 import usePokedex from "../hooks/usePokedex";
 import Loading from "../components/Loading";
-import Pokeball from "../assets/pokeball.svg";
-import Pattern from "../assets/pattern.svg";
+import Pokeball from "../assets/Pokeball";
+import Pattern from "../assets/Pattern";
 import AboutCard from "../components/PokemonCard/AboutCard";
 import StatsCard from "../components/PokemonCard/StatsCard";
 import EvolutionCard from "../components/PokemonCard/EvolutionCard";
@@ -172,7 +172,7 @@ const Pokemon = ({ route }: Props) => {
           <View className="w-full absolute items-start justify-center -top-10 left-0 z-0">
             <Pattern width={120} height={120} opacity={0.2} />
           </View>
-          <View className="w-full absolute items-center justify-center top-20  z-10 pointer-events-none">
+          <View className="w-full absolute items-center justify-center top-20 z-50 pointer-events-none">
             {uniquePokemonData.sprites.artwork ? (
               <Image
                 className="pointer-events-none"
@@ -201,8 +201,26 @@ const Pokemon = ({ route }: Props) => {
               />
             )}
           </View>
-          <View className="bg-white flex-1 rounded-t-3xl p-4 pt-12">
-            <View className="z-10 w-full flex-row items-center justify-between px-2 mb-2">
+          <View className="relative z-40 bg-white flex-1 rounded-t-3xl p-4 pt-12">
+            <View className="w-full absolute -bottom-40 left-0 z-0">
+              <Pokeball
+                color={"#000"}
+                width={420}
+                height={420}
+                opacity={0.05}
+                rotation={-45}
+              />
+            </View>
+            <View className="w-full absolute items-center justify-center bottom-72 -right-40 z-0">
+              <Pattern
+                color={"#000"}
+                width={120}
+                height={120}
+                opacity={0.05}
+                // rotation={90}
+              />
+            </View>
+            <View className=" w-full flex-row items-center justify-between px-2 mb-2">
               <Pressable
                 className="w-container p-2"
                 onPress={() => {
@@ -214,7 +232,7 @@ const Pokemon = ({ route }: Props) => {
                     "border-primary-500": headerOption === "ABOUT",
                   })}
                   size="SM"
-                  weight={headerOption === "ABOUT" ? "BOLD" : "REGULAR"}
+                  weight="REGULAR"
                 >
                   Sobre
                 </Text>
@@ -227,7 +245,7 @@ const Pokemon = ({ route }: Props) => {
               >
                 <Text
                   size="SM"
-                  weight={headerOption === "STATS" ? "BOLD" : "REGULAR"}
+                  weight="REGULAR"
                   className={clsx("border-b-2 border-transparent", {
                     "border-primary-500": headerOption === "STATS",
                   })}
@@ -243,7 +261,7 @@ const Pokemon = ({ route }: Props) => {
               >
                 <Text
                   size="SM"
-                  weight={headerOption === "EVOLUTION" ? "BOLD" : "REGULAR"}
+                  weight="REGULAR"
                   className={clsx("border-b-2 border-transparent", {
                     "border-primary-500": headerOption === "EVOLUTION",
                   })}
@@ -262,7 +280,7 @@ const Pokemon = ({ route }: Props) => {
                     "border-primary-500": headerOption === "MOVES",
                   })}
                   size="SM"
-                  weight={headerOption === "MOVES" ? "BOLD" : "REGULAR"}
+                  weight="REGULAR"
                 >
                   Habilidades
                 </Text>
@@ -276,12 +294,10 @@ const Pokemon = ({ route }: Props) => {
             ) : null}
             {headerOption === "EVOLUTION" ? (
               <EvolutionCard shiny={shiny} pokemon={uniquePokemonData} />
-            ) : 
-            null}
+            ) : null}
             {headerOption === "MOVES" ? (
               <AbilitiesCard pokemon={uniquePokemonData} />
-            ) :
-            null}
+            ) : null}
           </View>
         </View>
       ) : (
