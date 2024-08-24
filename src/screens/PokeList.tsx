@@ -58,7 +58,7 @@ const PokeList = ({ route }: Props) => {
           showsVerticalScrollIndicator={false}
           data={pokemonData}
           renderItem={renderItem}
-          keyExtractor={(item) => `${item.id}-${item.id}`}
+          keyExtractor={(item) => `${item.id}`}
         />
       ) : (
         <Loading />

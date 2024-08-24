@@ -1,7 +1,10 @@
 import { View, FlatList } from "react-native";
 import React, { useCallback, useEffect } from "react";
 import { RootStackParamList } from "../routes/AppRoutes";
-import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack";
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
 import usePokedex from "../hooks/usePokedex";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
 import PokemonCard from "../components/PokemonCard";
@@ -20,19 +23,17 @@ const Type = ({ route }: Props) => {
   const { getTypeData, commonTypesPokemon } = useTypes();
   const navigation = useNavigation<RouteProps>();
   const renderItem = useCallback(
-    ({ item }: { item: PokemonDataProps }) => (
-      <PokemonCard
-        onPress={() => {
-          navigation.navigate("Pokemon", {
-            ref: item.id,
-            type: item.types[0].name,
-          });
-        }}
-        key={item.id}
-        pokemon={item}
-      />
-    ),
-    []
+    ({ item }: { item: PokemonDataProps }) => {
+      const handlePress = () => {
+        // console.log("item.id", item.id);
+        navigation.navigate("Pokemon", {
+          ref: item.id,
+          type: item.types[0].name,
+        });
+      };
+      return <PokemonCard pokemon={item} onPress={handlePress} />;
+    },
+    [navigation]
   );
 
   function handleWithTypeColor(type: string) {
@@ -44,7 +45,7 @@ const Type = ({ route }: Props) => {
 
   useEffect(() => {
     getTypeData(type);
-  }, []);
+  }, [type]);
 
   return (
     <View
@@ -57,9 +58,6 @@ const Type = ({ route }: Props) => {
       <View className="w-full flex-1">
         {commonTypesPokemon && commonTypesPokemon.length !== 0 ? (
           <FlatList
-            windowSize={21}
-            maxToRenderPerBatch={80}
-            initialNumToRender={20}
             className="w-full space-y-2"
             numColumns={2}
             columnWrapperStyle={{
@@ -70,7 +68,7 @@ const Type = ({ route }: Props) => {
             }}
             data={commonTypesPokemon}
             renderItem={renderItem}
-            keyExtractor={(item) => `${item.id.toString()}-${item.name}`}
+            keyExtractor={(item) => `${item.id}`}
             showsVerticalScrollIndicator={false}
           />
         ) : (

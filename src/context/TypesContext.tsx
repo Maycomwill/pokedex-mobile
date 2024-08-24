@@ -39,13 +39,12 @@ export function TypesContextProvider({ children }: { children: ReactNode }) {
     );
 
     waitingPromises(newPokemonTypeArray).then((response) => {
+      setCommonTypesPokemon([]);
       let newArray = response.sort((a, b) => {
         return a.id - b.id;
       });
-      setCommonTypesPokemon([]);
-      newArray.map((pokemon: PokemonDataProps) =>
-        storagePokemonInformation(pokemon, setCommonTypesPokemon)
-      );
+      // console.log("TypesContext: ", newArray[0]);
+      setCommonTypesPokemon(newArray);
     });
 
     setMoves(data.moves);

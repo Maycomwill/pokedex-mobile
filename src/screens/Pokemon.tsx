@@ -12,7 +12,7 @@ import Pokeball from "../assets/Pokeball";
 import Pattern from "../assets/Pattern";
 import AboutCard from "../components/PokemonCard/AboutCard";
 import StatsCard from "../components/PokemonCard/StatsCard";
-import EvolutionCard from "../components/PokemonCard/EvolutionCard";
+import EvolutionContainer from "../components/PokemonCard/EvolutionContainer";
 import AbilitiesCard from "../components/PokemonCard/AbilitiesCard";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../components/Header";
@@ -293,7 +293,7 @@ const Pokemon = ({ route }: Props) => {
               <StatsCard pokemon={uniquePokemonData} />
             ) : null}
             {headerOption === "EVOLUTION" ? (
-              <EvolutionCard shiny={shiny} pokemon={uniquePokemonData} />
+              <EvolutionContainer shiny={shiny} pokemon={uniquePokemonData} />
             ) : null}
             {headerOption === "MOVES" ? (
               <AbilitiesCard pokemon={uniquePokemonData} />

@@ -60,7 +60,7 @@ export async function getPokemonInformation(pokemonUrl: string) {
       },
       types: response.data.types.map((type: any) => {
         return {
-          type: type.type.name,
+          name: type.type.name,
         };
       }),
     });
