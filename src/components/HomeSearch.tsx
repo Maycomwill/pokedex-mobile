@@ -20,7 +20,7 @@ const HomeSearch = () => {
     });
   }
 
-  console.log(search);
+  // console.log(search);
 
   return (
     <View className="flex-1 items-start justify-start w-full px-4">
@@ -36,15 +36,15 @@ const HomeSearch = () => {
             Pesquise por seu pokemon favorito
           </Text>
         </View>
-        {/* <TextInput.Root>
+        <TextInput.Root>
           <TextInput.Content
             value={search}
             onSubmitEditing={handleSubmit}
             onChangeText={(text) => setSearch(text)}
-            placeholder="Ex: Pikachu"
+            placeholder="Ex: Pikachu ou 25"
           />
           <TextInput.Icon icon="search" />
-        </TextInput.Root> */}
+        </TextInput.Root>
       </View>
     </View>
   );

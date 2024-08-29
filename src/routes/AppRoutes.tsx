@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import colors from "tailwindcss/colors";
+import colors, { transparent } from "tailwindcss/colors";
 import { Feather } from "@expo/vector-icons";
 import Home from "../screens/Home";
 import Regions from "../screens/Regions";
@@ -9,7 +9,7 @@ import Favorites from "../screens/Favorites";
 import Type from "../screens/Type";
 import PokeList from "../screens/PokeList";
 import { typesObjColors } from "../utils/typesArray";
-import { shade } from "polished";
+import { shade, transparentize } from "polished";
 import Ability from "../screens/Ability";
 import Pokemon from "../screens/Pokemon";
 

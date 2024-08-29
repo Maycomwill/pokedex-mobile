@@ -46,14 +46,11 @@ const Home = () => {
             <Button.Icon icon={"map-marker"} />
           </Button.Root>
           <Button.Root
+            disabled
             className="bg-sky-400"
             onPress={() => navigation.navigate("Moves")}
           >
-            <Button.Content
-              size="XL"
-              transform="CAP"
-              children="Golpes"
-            />
+            <Button.Content size="XL" transform="CAP" children="Golpes" />
             <Button.Icon icon={"star"} />
           </Button.Root>
           <Button.Root
