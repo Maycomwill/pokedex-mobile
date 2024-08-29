@@ -81,10 +81,11 @@ export function GenerationContextProvider({
     );
 
     const response = await waitingPromises(data.results);
-
+    console.log("GenerationContext: ", response[0]);
     const processedData = response
       .sort((a, b) => a.id - b.id)
       .map((pokemon) => processPokemonData(pokemon));
+    // console.log("GenerationCOntext: ", processedData[0]);
     setPokemonData(processedData);
   }
   return (

@@ -41,6 +41,8 @@ const PokeList = ({ route }: Props) => {
   return (
     <View className="w-full bg-orange-500 items-center flex-1 justify-center">
       {pokemonData && pokemonData.length !== 0 ? (
+        // (console.log(pokemonData[0]),
+        // (
         <FlatList
           className="w-full space-y-2"
           numColumns={2}

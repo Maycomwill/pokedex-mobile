@@ -20,7 +20,7 @@ export function processPokemonData(pokemon: any): PokemonDataProps {
     },
     types: pokemon.types.map((type: any) => {
       return {
-        name: type.type,
+        name: type.name,
       };
     }),
   };
