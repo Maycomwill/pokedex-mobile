@@ -85,10 +85,10 @@ export function EvolutionContextProvider({
 
     if (chain.species.name === "leafeon" || chain.species.name === "glaceon") {
       let item_name = chain.evolution_details;
-      console.log(
-        "evolution context: ",
-        chain.evolution_details[3].trigger.name
-      );
+      // console.log(
+      //   "evolution context: ",
+      //   chain.evolution_details[3].trigger.name
+      // );
       let item_sprite = await getItemSprite(
         chain.evolution_details[3].item.name
       );

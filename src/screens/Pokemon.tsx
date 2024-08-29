@@ -14,21 +14,25 @@ import AboutCard from "../components/PokemonCard/AboutCard";
 import StatsCard from "../components/PokemonCard/StatsCard";
 import EvolutionContainer from "../components/PokemonCard/EvolutionContainer";
 import AbilitiesCard from "../components/PokemonCard/AbilitiesCard";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Header from "../components/Header";
 import colors from "tailwindcss/colors";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Pokemon">;
 
 const Pokemon = ({ route }: Props) => {
+  const navigation = useNavigation();
   const [shiny, setShiny] = useState(false);
+  const [isHide, setIsHide] = useState(true);
   function handleWithTypeColor(type: string) {
-    if (type in typesObjColors && type === typesObjColors[type])
-      console.log("cor", typesObjColors[type]);
-    const color = shade(0.1, typesObjColors[type]);
-    return color;
+    if (type in typesObjColors) {
+      // console.log("cor", typesObjColors[type]);
+      const color = shade(0.1, typesObjColors[type]);
+      return color;
+    }
   }
-  const { getPokemonData, uniquePokemonData } = usePokedex();
+  const { getPokemonData, uniquePokemonData, isLoading } = usePokedex();
   useEffect(() => {
     getPokemonData(String(route.params.ref));
   }, []);
@@ -36,14 +40,43 @@ const Pokemon = ({ route }: Props) => {
   const [headerOption, setHeaderOption] = useState<
     "STATS" | "ABOUT" | "EVOLUTION" | "MOVES"
   >("ABOUT");
-
+  setTimeout(() => {
+    setIsHide(false);
+  }, 2000);
+  // console.log("Pokemonpage: ", uniquePokemonData);
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          backgroundColor: `${
+            uniquePokemonData
+              ? handleWithTypeColor(uniquePokemonData.types[0].name)
+              : null
+          }`,
+        }}
+        className={clsx(
+          "w-full flex-1 items-center justify-center pt-2 relative pb-12",
+          {}
+        )}
+      >
+        <Loading />
+        {isHide ? null : (
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            className="flex items-center justify-center"
+          >
+            <Ionicons name="chevron-back" size={48} color="black" />
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  }
   return (
     <View
       style={{
         backgroundColor: `${
-          uniquePokemonData
-            ? handleWithTypeColor(uniquePokemonData.types[0].type)
-            : null
+          uniquePokemonData &&
+          handleWithTypeColor(uniquePokemonData.types[0].name)
         }`,
       }}
       className={clsx(
@@ -65,30 +98,30 @@ const Pokemon = ({ route }: Props) => {
                 {uniquePokemonData.types.map((type) => {
                   return (
                     <View
-                      key={type.type}
+                      key={type.name}
                       className={clsx(
                         "w-1/3 items-center rounded-full space-y-2 mt-2 py-2 ",
                         {
-                          "bg-backgroundCard-bug": type.type === "bug",
-                          "bg-backgroundCard-dark": type.type === "dark",
-                          "bg-backgroundCard-dragon": type.type === "dragon",
+                          "bg-backgroundCard-bug": type.name === "bug",
+                          "bg-backgroundCard-dark": type.name === "dark",
+                          "bg-backgroundCard-dragon": type.name === "dragon",
                           "bg-backgroundCard-electric":
-                            type.type === "electric",
-                          "bg-backgroundCard-fairy": type.type === "fairy",
+                            type.name === "electric",
+                          "bg-backgroundCard-fairy": type.name === "fairy",
                           "bg-backgroundCard-fighting":
-                            type.type === "fighting",
-                          "bg-backgroundCard-fire": type.type === "fire",
-                          "bg-backgroundCard-flying": type.type === "flying",
-                          "bg-backgroundCard-ghost": type.type === "ghost",
-                          "bg-backgroundCard-grass": type.type === "grass",
-                          "bg-backgroundCard-ground": type.type === "ground",
-                          "bg-backgroundCard-ice": type.type === "ice",
-                          "bg-backgroundCard-normal": type.type === "normal",
-                          "bg-backgroundCard-poison": type.type === "poison",
-                          "bg-backgroundCard-psychic": type.type === "psychic",
-                          "bg-backgroundCard-rock": type.type === "rock",
-                          "bg-backgroundCard-steel": type.type === "steel",
-                          "bg-backgroundCard-water": type.type === "water",
+                            type.name === "fighting",
+                          "bg-backgroundCard-fire": type.name === "fire",
+                          "bg-backgroundCard-flying": type.name === "flying",
+                          "bg-backgroundCard-ghost": type.name === "ghost",
+                          "bg-backgroundCard-grass": type.name === "grass",
+                          "bg-backgroundCard-ground": type.name === "ground",
+                          "bg-backgroundCard-ice": type.name === "ice",
+                          "bg-backgroundCard-normal": type.name === "normal",
+                          "bg-backgroundCard-poison": type.name === "poison",
+                          "bg-backgroundCard-psychic": type.name === "psychic",
+                          "bg-backgroundCard-rock": type.name === "rock",
+                          "bg-backgroundCard-steel": type.name === "steel",
+                          "bg-backgroundCard-water": type.name === "water",
                         }
                       )}
                     >
@@ -98,7 +131,7 @@ const Pokemon = ({ route }: Props) => {
                         size="XS"
                         weight="SEMIBOLD"
                       >
-                        {type.type}
+                        {type.name}
                       </Text>
                     </View>
                   );
@@ -117,41 +150,41 @@ const Pokemon = ({ route }: Props) => {
                   onPress={() => setShiny(!shiny)}
                   className={clsx("text-zinc-100 p-2 rounded-full", {
                     "bg-backgroundCard-bug":
-                      uniquePokemonData.types[0].type === "bug",
+                      uniquePokemonData.types[0].name === "bug",
                     "bg-backgroundCard-dark":
-                      uniquePokemonData.types[0].type === "dark",
+                      uniquePokemonData.types[0].name === "dark",
                     "bg-backgroundCard-dragon":
-                      uniquePokemonData.types[0].type === "dragon",
+                      uniquePokemonData.types[0].name === "dragon",
                     "bg-backgroundCard-electric":
-                      uniquePokemonData.types[0].type === "electric",
+                      uniquePokemonData.types[0].name === "electric",
                     "bg-backgroundCard-fairy":
-                      uniquePokemonData.types[0].type === "fairy",
+                      uniquePokemonData.types[0].name === "fairy",
                     "bg-backgroundCard-fighting":
-                      uniquePokemonData.types[0].type === "fighting",
+                      uniquePokemonData.types[0].name === "fighting",
                     "bg-backgroundCard-fire":
-                      uniquePokemonData.types[0].type === "fire",
+                      uniquePokemonData.types[0].name === "fire",
                     "bg-backgroundCard-flying":
-                      uniquePokemonData.types[0].type === "flying",
+                      uniquePokemonData.types[0].name === "flying",
                     "bg-backgroundCard-ghost":
-                      uniquePokemonData.types[0].type === "ghost",
+                      uniquePokemonData.types[0].name === "ghost",
                     "bg-backgroundCard-grass":
-                      uniquePokemonData.types[0].type === "grass",
+                      uniquePokemonData.types[0].name === "grass",
                     "bg-backgroundCard-ground":
-                      uniquePokemonData.types[0].type === "ground",
+                      uniquePokemonData.types[0].name === "ground",
                     "bg-backgroundCard-ice":
-                      uniquePokemonData.types[0].type === "ice",
+                      uniquePokemonData.types[0].name === "ice",
                     "bg-backgroundCard-normal":
-                      uniquePokemonData.types[0].type === "normal",
+                      uniquePokemonData.types[0].name === "normal",
                     "bg-backgroundCard-poison":
-                      uniquePokemonData.types[0].type === "poison",
+                      uniquePokemonData.types[0].name === "poison",
                     "bg-backgroundCard-psychic":
-                      uniquePokemonData.types[0].type === "psychic",
+                      uniquePokemonData.types[0].name === "psychic",
                     "bg-backgroundCard-rock":
-                      uniquePokemonData.types[0].type === "rock",
+                      uniquePokemonData.types[0].name === "rock",
                     "bg-backgroundCard-steel":
-                      uniquePokemonData.types[0].type === "steel",
+                      uniquePokemonData.types[0].name === "steel",
                     "bg-backgroundCard-water":
-                      uniquePokemonData.types[0].type === "water",
+                      uniquePokemonData.types[0].name === "water",
                   })}
                 >
                   <Ionicons

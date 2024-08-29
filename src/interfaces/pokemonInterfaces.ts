@@ -6,7 +6,7 @@ export interface PokedexDataProps {
 }
 
 export interface typeProps {
-  type: string;
+  name: string;
 }
 
 export interface PokedexProviderProps {

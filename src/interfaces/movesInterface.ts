@@ -1,5 +1,5 @@
 import { NamedAPIResource } from "./apiInterfaces";
-import { PokemonDataProps } from "./pokemonInterfaces";
+// import { PokemonDataProps } from "./pokemonInterfaces";
 
 export interface MoveProps {
   accuracy: number;

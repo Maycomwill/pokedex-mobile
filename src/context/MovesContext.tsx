@@ -9,6 +9,7 @@ import { PokemonDataProps } from "../interfaces/PokemonProps";
 
 export interface MovesContextProps {
   getMovesData: (move: string) => void;
+  getAllMoves: () => void;
   move: MoveProps | undefined;
   moveCommonPokemon: PokemonDataProps[];
   isLoading: boolean;
@@ -18,6 +19,7 @@ export const MovesContext = createContext({} as MovesContextProps);
 
 export function MovesContextProvider({ children }: { children: ReactNode }) {
   const [move, setMove] = useState<MoveProps>();
+  const [movesList, setMovesList] = useState<MoveProps[]>();
   const [isLoading, setIsLoading] = useState(false);
   const [moveCommonPokemon, setCommonPokemon] = useState<PokemonDataProps[]>(
     []
@@ -81,9 +83,22 @@ export function MovesContextProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  async function getAllMoves() {
+    setMovesList([]);
+    setIsLoading(true);
+    try {
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setIsLoading(false);
+        setMovesList([]);
+        console.error(error.message);
+      }
+    }
+  }
+
   return (
     <MovesContext.Provider
-      value={{ getMovesData, move, moveCommonPokemon, isLoading }}
+      value={{ getMovesData, getAllMoves, move, moveCommonPokemon, isLoading }}
     >
       {children}
     </MovesContext.Provider>

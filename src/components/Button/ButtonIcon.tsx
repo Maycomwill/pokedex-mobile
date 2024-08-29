@@ -4,7 +4,7 @@ import { View } from "react-native";
 import colors from "tailwindcss/colors";
 
 interface ButtonIconProps {
-  icon: "heart" | "map-marker" | "star" | "pokeball";
+  icon: "heart" | "map-marker" | "star" | "pokeball" | "chevron-left";
   color?: "WHITE" | "BLACK";
 }
 
