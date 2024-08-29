@@ -15,10 +15,30 @@ function handleWidth(stat: number) {
 }
 
 const StatsValues = ({ name, value }: StatsValuesProps) => {
+  const handleName = (name: string) => {
+    switch (name) {
+      case "hp":
+        return "HP";
+      case "attack":
+        return "Ataque";
+      case "defense":
+        return "Defesa";
+      case "special-attack":
+        return "Ataque sp.";
+      case "special-defense":
+        return "Defesa sp.";
+      case "speed":
+        return "Velocidade";
+      default:
+        return name;
+    }
+  };
   return (
     <View className="w-full flex-row items-center justify-start mb-2">
       <View className="w-[28%]">
-        <Text color="BLACK">{name}</Text>
+        <Text color="BLACK" size="SM" transform="CAP">
+          {handleName(name)}
+        </Text>
       </View>
       <View className="flex-row items-center justify-between space-x-2 w-[72%]">
         <Text color="BLACK" weight="BOLD">

@@ -3,6 +3,7 @@ import { pokeapi } from "../lib/axios";
 import { waitingPromises } from "../utils/awaitPromises";
 import { storagePokemonInformation } from "../utils/storagePokemonInfo";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
+import { processPokemonData } from "../utils/processPokemonData";
 
 export interface GenerationContextProps {
   getGenerationFromUserChoice: (generation: string) => void;
@@ -31,64 +32,61 @@ export function GenerationContextProvider({
     let offsetURL = "0";
 
     switch (generation) {
-      case "1":
+      case "kanto":
         limitURL = "151";
         offsetURL = "0";
         break;
 
-      case "2":
+      case "johto":
         limitURL = "100";
         offsetURL = "151";
         break;
 
-      case "3":
+      case "hoenn":
         limitURL = "135";
         offsetURL = "251";
         break;
 
-      case "4":
+      case "sinnoh":
         limitURL = "108";
         offsetURL = "386";
         break;
 
-      case "5":
+      case "unova":
         limitURL = "155";
         offsetURL = "494";
         break;
 
-      case "6":
+      case "kalos":
         limitURL = "72";
         offsetURL = "649";
         break;
 
-      case "7":
+      case "alola":
         limitURL = "88";
         offsetURL = "721";
         break;
 
-      case "8":
+      case "galar":
         limitURL = "96";
         offsetURL = "809";
         break;
 
-      case "9":
+      case "paldea":
         limitURL = "105";
         offsetURL = "905";
     }
     const { data } = await pokeapi.get(
       `pokemon?limit=${limitURL}&offset=${offsetURL}`
     );
-    const result = data.results;
 
-    waitingPromises(result).then((response) => {
-      let newArray = response.sort((a, b) => {
-        return a.id - b.id;
-      });
-      // console.log(newArray);
-      newArray.map((pokemon) =>
-        storagePokemonInformation(pokemon, setPokemonData)
-      );
-    });
+    const response = await waitingPromises(data.results);
+    console.log("GenerationContext: ", response[0]);
+    const processedData = response
+      .sort((a, b) => a.id - b.id)
+      .map((pokemon) => processPokemonData(pokemon));
+    // console.log("GenerationCOntext: ", processedData[0]);
+    setPokemonData(processedData);
   }
   return (
     <GenerationContext.Provider

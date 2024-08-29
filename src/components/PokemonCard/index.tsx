@@ -15,10 +15,10 @@ interface Data extends TouchableOpacityProps {
   pokemon: PokemonDataProps;
 }
 
-const PokemonCard = ({ pokemon, ...rest }: Data) => {
+const PokemonCard: React.FC<Data> = React.memo(({ pokemon, ...rest }: Data) => {
   return (
     <TouchableOpacity
-      style={{ elevation: 6 }}
+      style={{ elevation: 4 }}
       activeOpacity={0.4}
       key={pokemon.id}
       className={clsx(
@@ -42,6 +42,7 @@ const PokemonCard = ({ pokemon, ...rest }: Data) => {
           "bg-backgroundCard-rock": pokemon.types[0].name === "rock",
           "bg-backgroundCard-steel": pokemon.types[0].name === "steel",
           "bg-backgroundCard-water": pokemon.types[0].name === "water",
+          "bg-slate-950": pokemon.types[0].name === undefined,
         }
       )}
       {...rest}
@@ -112,6 +113,6 @@ const PokemonCard = ({ pokemon, ...rest }: Data) => {
       </View>
     </TouchableOpacity>
   );
-};
+});
 
 export default PokemonCard;

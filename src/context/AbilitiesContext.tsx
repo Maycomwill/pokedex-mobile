@@ -12,6 +12,7 @@ import {
   flavorEntrie,
   effectEntrie,
 } from "../interfaces/AbilityProps";
+import { processPokemonData } from "../utils/processPokemonData";
 
 export interface AbilityContextProps {
   getPokemonAbilities: (abilities: string[]) => void;
@@ -45,10 +46,6 @@ export function AbilityContextProvider({ children }: { children: ReactNode }) {
     setCommonAbilityPokemon([]);
     rawPokemonData = [];
     const { data } = await pokeapi.get(`ability/${ability}`);
-    let response = data.pokemon.map((pokemon: any) => {
-      return { name: pokemon.pokemon.name, url: pokemon.pokemon.url };
-    });
-    rawPokemonData = await waitingPromises(response);
 
     let description = data.effect_entries.find(
       (effect_element: {
@@ -63,16 +60,16 @@ export function AbilityContextProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    rawPokemonData
-      .sort((a, b) => {
-        if (a.id < b.id) {
-          return -1;
-        }
-        return 1;
-      })
-      .map((pokemon) => {
-        storagePokemonInformation(pokemon, setCommonAbilityPokemon);
-      });
+    let response = data.pokemon.map((pokemon: any) => {
+      return pokemon.pokemon;
+    });
+
+    const pokemon_list = await waitingPromises(response);
+
+    const processedData = pokemon_list
+      .sort((a, b) => a.id - b.id)
+      .map((pokemon) => processPokemonData(pokemon));
+    setCommonAbilityPokemon(processedData);
 
     setAbilityInfo({
       name: data.name,
