@@ -73,9 +73,10 @@ const colors = {
 
 interface LoadingProps {
   type?: string;
+  color?: "primary" | "secondary";
 }
 
-const Loading = ({ type }: LoadingProps) => {
+const Loading = ({ type, color = "secondary" }: LoadingProps) => {
   const defaultOpacity = useSharedValue(0.5);
   const reanimatedStyle = useAnimatedStyle(() => {
     return {
@@ -100,7 +101,7 @@ const Loading = ({ type }: LoadingProps) => {
           {handleSvg(type)}
         </Animated.View>
       ) : (
-        <ActivityIndicator size={128} color={colors.secondary} />
+        <ActivityIndicator size={128} color={color} />
       )}
     </View>
   );
