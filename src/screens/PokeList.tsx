@@ -17,7 +17,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "Pokelist">;
 
 const PokeList = ({ route }: Props) => {
   const navigation = useNavigation<RoutesProps>();
-  const { getGenerationFromUserChoice, pokemonData } = useGeneration();
+  const { getGenerationFromUserChoice, pokemonData, isLoading } =
+    useGeneration();
   // console.log("Comprimento:", pokemonData.length);
   const regionName = route.params.region;
   const renderItem = useCallback(
@@ -38,6 +39,13 @@ const PokeList = ({ route }: Props) => {
     getGenerationFromUserChoice(regionName);
   }, [regionName]);
 
+  if (isLoading) {
+    return (
+      <View className="w-full bg-orange-500 items-center flex-1 justify-center">
+        <Loading />
+      </View>
+    );
+  }
   return (
     <View className="w-full bg-orange-500 items-center flex-1 justify-center">
       {pokemonData && pokemonData.length !== 0 ? (

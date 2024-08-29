@@ -5,11 +5,12 @@ import { pokeapi } from "../lib/axios";
 import { waitingPromises } from "../utils/awaitPromises";
 import { storagePokemonInformation } from "../utils/storagePokemonInfo";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
+import { AxiosError } from "axios";
 
 export interface TypesContextProps {
-  types: typeProps[] | undefined;
   commonTypesPokemon: PokemonDataProps[];
   moves: NamedAPIResource[];
+  isLoading: boolean;
   getTypeData: (type: string) => void;
 }
 
@@ -20,39 +21,49 @@ export function TypesContextProvider({ children }: { children: ReactNode }) {
   const [commonTypesPokemon, setCommonTypesPokemon] = useState<
     PokemonDataProps[]
   >([]);
-  const [types, setTypes] = useState<typeProps[]>();
+  const [isLoading, setIsLoading] = useState(false);
   const [moves, setMoves] = useState<NamedAPIResource[]>([]);
 
   //Esta função busca na api os dados de um tipo e armazena os dados dos pokemon que possuem o mesmo tipo
   async function getTypeData(type: string) {
-    const { data } = await pokeapi.get(`/type/${type}`);
-    const pokemonTypeCommon: { pokemon: PokedexDataProps; slot: number }[] =
-      data.pokemon;
-    let newPokemonTypeArray: PokedexDataProps[] = [];
-    pokemonTypeCommon.map(
-      (pokemon: { pokemon: PokedexDataProps; slot: number }) => {
-        newPokemonTypeArray.push({
-          name: pokemon.pokemon.name,
-          url: pokemon.pokemon.url,
+    setIsLoading(true);
+    setCommonTypesPokemon([]);
+    try {
+      const { data } = await pokeapi.get(`/type/${type}`);
+      const pokemonTypeCommon: { pokemon: PokedexDataProps; slot: number }[] =
+        data.pokemon;
+      let newPokemonTypeArray: PokedexDataProps[] = [];
+      pokemonTypeCommon.map(
+        (pokemon: { pokemon: PokedexDataProps; slot: number }) => {
+          newPokemonTypeArray.push({
+            name: pokemon.pokemon.name,
+            url: pokemon.pokemon.url,
+          });
+        }
+      );
+
+      waitingPromises(newPokemonTypeArray).then((response) => {
+        setCommonTypesPokemon([]);
+        let newArray = response.sort((a, b) => {
+          return a.id - b.id;
         });
-      }
-    );
-
-    waitingPromises(newPokemonTypeArray).then((response) => {
-      setCommonTypesPokemon([]);
-      let newArray = response.sort((a, b) => {
-        return a.id - b.id;
+        // console.log("TypesContext: ", newArray[0]);
+        setCommonTypesPokemon(newArray);
       });
-      // console.log("TypesContext: ", newArray[0]);
-      setCommonTypesPokemon(newArray);
-    });
-
-    setMoves(data.moves);
+      setMoves(data.moves);
+      setIsLoading(false);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setIsLoading(false);
+        setCommonTypesPokemon([]);
+        console.error(error.message);
+      }
+    }
   }
 
   return (
     <TypesContext.Provider
-      value={{ moves, commonTypesPokemon, types, getTypeData }}
+      value={{ moves, isLoading, commonTypesPokemon, getTypeData }}
     >
       {children}
     </TypesContext.Provider>

@@ -20,7 +20,7 @@ type RouteProps = NativeStackNavigationProp<RootStackParamList, "Type">;
 
 const Type = ({ route }: Props) => {
   const type = route.params.type;
-  const { getTypeData, commonTypesPokemon } = useTypes();
+  const { getTypeData, commonTypesPokemon, isLoading } = useTypes();
   const navigation = useNavigation<RouteProps>();
   const renderItem = useCallback(
     ({ item }: { item: PokemonDataProps }) => {
@@ -47,6 +47,16 @@ const Type = ({ route }: Props) => {
     getTypeData(type);
   }, [type]);
 
+  if (isLoading) {
+    return (
+      <View
+        style={{ backgroundColor: handleWithTypeColor(type) }}
+        className="w-full items-center justify-start flex-1 px-4 pt-2"
+      >
+        <Loading />
+      </View>
+    );
+  }
   return (
     <View
       style={{ backgroundColor: handleWithTypeColor(type) }}
@@ -72,7 +82,7 @@ const Type = ({ route }: Props) => {
             showsVerticalScrollIndicator={false}
           />
         ) : (
-          <Loading type={route.params.type} />
+          <Loading />
         )}
       </View>
     </View>
