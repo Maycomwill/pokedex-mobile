@@ -20,7 +20,7 @@ const AboutCard = ({ pokemon }: AboutCardProps) => {
         </View>
         <View className="w-[70%] items-start justify-start pl-2">
           <Text className="mb-4" color="BLACK">
-            {pokemon.height.toLocaleString("pt-BR", {
+            {(pokemon.height * 0.1).toLocaleString("pt-BR", {
               style: "decimal",
               maximumFractionDigits: 3,
               minimumFractionDigits: 2,
@@ -28,7 +28,7 @@ const AboutCard = ({ pokemon }: AboutCardProps) => {
             m
           </Text>
           <Text className="mb-4" color="BLACK">
-            {pokemon.weight.toLocaleString("pt-BR", {
+            {(pokemon.weight * 0.1).toLocaleString("pt-BR", {
               style: "decimal",
               maximumFractionDigits: 3,
               minimumFractionDigits: 2,
