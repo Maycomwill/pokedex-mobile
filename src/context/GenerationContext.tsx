@@ -5,6 +5,7 @@ import { storagePokemonInformation } from "../utils/storagePokemonInfo";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
 import { processPokemonData } from "../utils/processPokemonData";
 import { AxiosError } from "axios";
+import { useToast } from "../components/Toast";
 
 export interface GenerationContextProps {
   getGenerationFromUserChoice: (generation: string) => void;
@@ -19,6 +20,7 @@ export function GenerationContextProvider({
 }: {
   children: ReactNode;
 }) {
+  const { toast } = useToast();
   const [pokemonData, setPokemonData] = useState<PokemonDataProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   //Função que recebe do front-end a escolha inicial do usuário
@@ -96,7 +98,7 @@ export function GenerationContextProvider({
       if (error instanceof AxiosError) {
         setIsLoading(false);
         setPokemonData([]);
-        console.error(error.message);
+        toast(error.message, "destructive", 5000, "bottom");
       }
     }
   }
