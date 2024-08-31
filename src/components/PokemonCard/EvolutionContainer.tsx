@@ -154,8 +154,9 @@ const EvolutionContainer = ({
       contentContainerStyle={{
         justifyContent: "center",
         alignItems: "center",
-        paddingLeft: ScreenWidth * 0.2,
+        paddingStart: ScreenWidth * 0.2,
         paddingEnd: ScreenWidth * 0.15,
+        marginTop: -48,
       }}
       horizontal
     >

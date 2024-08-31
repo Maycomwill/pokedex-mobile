@@ -82,7 +82,7 @@ const Type = ({ route }: Props) => {
             showsVerticalScrollIndicator={false}
           />
         ) : (
-          <Loading />
+          <Loading type={type} />
         )}
       </View>
     </View>
