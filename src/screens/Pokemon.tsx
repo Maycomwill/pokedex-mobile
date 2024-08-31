@@ -14,7 +14,7 @@ import AboutCard from "../components/PokemonCard/AboutCard";
 import StatsCard from "../components/PokemonCard/StatsCard";
 import EvolutionContainer from "../components/PokemonCard/EvolutionContainer";
 import AbilitiesCard from "../components/PokemonCard/AbilitiesCard";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import Header from "../components/Header";
 import colors from "tailwindcss/colors";
 import { useNavigation } from "@react-navigation/native";

@@ -11,6 +11,7 @@ import {
 import Loading from "./src/components/Loading";
 import { StatusBarHeight } from "./src/utils/StatusBarHeight";
 import AppProvider from "./src/hooks";
+import { ToastProvider } from "./src/components/Toast";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,10 +26,16 @@ export default function App() {
   } else {
     return (
       <SafeAreaView className="flex-1 w-full">
-        <AppProvider>
-          <Routes />
-          <StatusBar style="light" translucent backgroundColor="transparent" />
-        </AppProvider>
+        <ToastProvider position="bottom">
+          <AppProvider>
+            <Routes />
+            <StatusBar
+              style="light"
+              translucent
+              backgroundColor="transparent"
+            />
+          </AppProvider>
+        </ToastProvider>
       </SafeAreaView>
     );
   }

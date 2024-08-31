@@ -6,6 +6,7 @@ import { waitingPromises } from "../utils/awaitPromises";
 import { storagePokemonInformation } from "../utils/storagePokemonInfo";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
 import { AxiosError } from "axios";
+import { useToast } from "../components/Toast";
 
 export interface TypesContextProps {
   commonTypesPokemon: PokemonDataProps[];
@@ -18,6 +19,7 @@ export const TypesContext = createContext({} as TypesContextProps);
 
 export function TypesContextProvider({ children }: { children: ReactNode }) {
   let rawPokemonData: PokemonDataProps[] = [];
+  const { toast } = useToast();
   const [commonTypesPokemon, setCommonTypesPokemon] = useState<
     PokemonDataProps[]
   >([]);
@@ -55,6 +57,7 @@ export function TypesContextProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       if (error instanceof AxiosError) {
         setIsLoading(false);
+        toast(error.message, "destructive", 5000, "bottom");
         setCommonTypesPokemon([]);
         console.error(error.message);
       }

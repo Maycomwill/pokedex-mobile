@@ -7,6 +7,7 @@ import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { Evolution } from "../../interfaces/evolutionInterface";
 import useEvolution from "../../hooks/useEvolution";
 import EvolutionCard from "./EvolutionCard";
+import { ScreenWidth } from "../../utils/StatusBarHeight";
 
 interface EvolutionContainerProps {
   pokemon: UniquePokemonData;
@@ -152,13 +153,17 @@ const EvolutionContainer = ({
     <ScrollView
       contentContainerStyle={{
         justifyContent: "center",
-        alignItems: "flex-start",
-        paddingHorizontal: 48,
+        alignItems: "center",
+        paddingLeft: ScreenWidth * 0.2,
+        paddingEnd: ScreenWidth * 0.15,
       }}
       horizontal
     >
       {firstEvolution && handleWithRenderEvolutionChain(firstEvolution)}
-      <ScrollView style={{ marginBottom: 76 }}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 86, paddingTop: 86 }}
+        showsVerticalScrollIndicator={false}
+      >
         {secondEvolution && handleWithRenderEvolutionChain(secondEvolution)}
       </ScrollView>
       {thirdEvolution && handleWithRenderEvolutionChain(thirdEvolution)}

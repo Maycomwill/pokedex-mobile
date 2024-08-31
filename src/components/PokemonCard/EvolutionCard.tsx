@@ -13,7 +13,6 @@ const EvolutionCard = ({ data, shiny }: EvolutionCardProps) => {
       <Text weight="BOLD" size="BASE" transform="CAP">
         {data.name}
       </Text>
-      {/* <Text size="XS">#{item.id.toString().padStart(3, "0")}</Text> */}
       <Image
         width={200}
         height={200}

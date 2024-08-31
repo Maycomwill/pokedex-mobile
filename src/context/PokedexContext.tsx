@@ -12,6 +12,7 @@ import useEvolution from "../hooks/useEvolution";
 import { NamedAPIResource } from "../interfaces/apiInterfaces";
 import { pokeapi } from "../lib/axios";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
+import { useToast } from "../components/Toast";
 
 //Interface do Provedor
 export interface PokedexContextDataProps {
@@ -28,6 +29,7 @@ export const PokedexContext = createContext({} as PokedexContextDataProps);
 
 //Criação do provedor do contexto, que será utilizado na criação do hook
 export function PokedexContextProvider({ children }: PokedexProviderProps) {
+  const { toast } = useToast();
   let firstSprite: AxiosResponse;
 
   let rawPokemonData: PokemonDataProps[] = [];
@@ -367,7 +369,8 @@ export function PokedexContextProvider({ children }: PokedexProviderProps) {
       );
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.error(error.message);
+        // console.error(error.message);
+        toast("Pokemon not found", "destructive", 5000, "bottom", false);
         setUniquePokemonData(undefined);
       }
     }
