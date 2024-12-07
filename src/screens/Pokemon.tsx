@@ -5,7 +5,7 @@ import { RootStackParamList } from "../routes/AppRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import clsx from "clsx";
 import { typesObjColors } from "../utils/typesArray";
-import { shade } from "polished";
+import { shade, lighten, darken } from "polished";
 import usePokedex from "../hooks/usePokedex";
 import Loading from "../components/Loading";
 import Pokeball from "../assets/Pokeball";
@@ -28,7 +28,7 @@ const Pokemon = ({ route }: Props) => {
   function handleWithTypeColor(type: string) {
     if (type in typesObjColors) {
       // console.log("cor", typesObjColors[type]);
-      const color = shade(0.1, typesObjColors[type]);
+      const color = shade(0.2, typesObjColors[type]);
       return color;
     }
   }
@@ -102,26 +102,26 @@ const Pokemon = ({ route }: Props) => {
                       className={clsx(
                         "w-1/3 items-center rounded-full space-y-2 mt-2 py-2 ",
                         {
-                          "bg-backgroundCard-bug": type.name === "bug",
-                          "bg-backgroundCard-dark": type.name === "dark",
-                          "bg-backgroundCard-dragon": type.name === "dragon",
-                          "bg-backgroundCard-electric":
+                          "bg-boxType-bug-default": type.name === "bug",
+                          "bg-boxType-dark-default": type.name === "dark",
+                          "bg-boxType-dragon-default": type.name === "dragon",
+                          "bg-boxType-electric-default":
                             type.name === "electric",
-                          "bg-backgroundCard-fairy": type.name === "fairy",
-                          "bg-backgroundCard-fighting":
+                          "bg-boxType-fairy-default": type.name === "fairy",
+                          "bg-boxType-fighting-default":
                             type.name === "fighting",
-                          "bg-backgroundCard-fire": type.name === "fire",
-                          "bg-backgroundCard-flying": type.name === "flying",
-                          "bg-backgroundCard-ghost": type.name === "ghost",
-                          "bg-backgroundCard-grass": type.name === "grass",
-                          "bg-backgroundCard-ground": type.name === "ground",
-                          "bg-backgroundCard-ice": type.name === "ice",
-                          "bg-backgroundCard-normal": type.name === "normal",
-                          "bg-backgroundCard-poison": type.name === "poison",
-                          "bg-backgroundCard-psychic": type.name === "psychic",
-                          "bg-backgroundCard-rock": type.name === "rock",
-                          "bg-backgroundCard-steel": type.name === "steel",
-                          "bg-backgroundCard-water": type.name === "water",
+                          "bg-boxType-fire-default": type.name === "fire",
+                          "bg-boxType-flying-default": type.name === "flying",
+                          "bg-boxType-ghost-default": type.name === "ghost",
+                          "bg-boxType-grass-default": type.name === "grass",
+                          "bg-boxType-ground-default": type.name === "ground",
+                          "bg-boxType-ice-default": type.name === "ice",
+                          "bg-boxType-normal-default": type.name === "normal",
+                          "bg-boxType-poison-default": type.name === "poison",
+                          "bg-boxType-psychic-default": type.name === "psychic",
+                          "bg-boxType-rock-default": type.name === "rock",
+                          "bg-boxType-steel-default": type.name === "steel",
+                          "bg-boxType-water-default": type.name === "water",
                         }
                       )}
                     >
@@ -149,41 +149,41 @@ const Pokemon = ({ route }: Props) => {
                   activeOpacity={0.2}
                   onPress={() => setShiny(!shiny)}
                   className={clsx("text-zinc-100 p-2 rounded-full", {
-                    "bg-backgroundCard-bug":
+                    "bg-boxType-bug-default":
                       uniquePokemonData.types[0].name === "bug",
-                    "bg-backgroundCard-dark":
+                    "bg-boxType-dark-default":
                       uniquePokemonData.types[0].name === "dark",
-                    "bg-backgroundCard-dragon":
+                    "bg-boxType-dragon-default":
                       uniquePokemonData.types[0].name === "dragon",
-                    "bg-backgroundCard-electric":
+                    "bg-boxType-electric-default":
                       uniquePokemonData.types[0].name === "electric",
-                    "bg-backgroundCard-fairy":
+                    "bg-boxType-fairy-default":
                       uniquePokemonData.types[0].name === "fairy",
-                    "bg-backgroundCard-fighting":
+                    "bg-boxType-fighting-default":
                       uniquePokemonData.types[0].name === "fighting",
-                    "bg-backgroundCard-fire":
+                    "bg-boxType-fire-default":
                       uniquePokemonData.types[0].name === "fire",
-                    "bg-backgroundCard-flying":
+                    "bg-boxType-flying-default":
                       uniquePokemonData.types[0].name === "flying",
-                    "bg-backgroundCard-ghost":
+                    "bg-boxType-ghost-default":
                       uniquePokemonData.types[0].name === "ghost",
-                    "bg-backgroundCard-grass":
+                    "bg-boxType-grass-default":
                       uniquePokemonData.types[0].name === "grass",
-                    "bg-backgroundCard-ground":
+                    "bg-boxType-ground-default":
                       uniquePokemonData.types[0].name === "ground",
-                    "bg-backgroundCard-ice":
+                    "bg-boxType-ice-default":
                       uniquePokemonData.types[0].name === "ice",
-                    "bg-backgroundCard-normal":
+                    "bg-boxType-normal-default":
                       uniquePokemonData.types[0].name === "normal",
-                    "bg-backgroundCard-poison":
+                    "bg-boxType-poison-default":
                       uniquePokemonData.types[0].name === "poison",
-                    "bg-backgroundCard-psychic":
+                    "bg-boxType-psychic-default":
                       uniquePokemonData.types[0].name === "psychic",
-                    "bg-backgroundCard-rock":
+                    "bg-boxType-rock-default":
                       uniquePokemonData.types[0].name === "rock",
-                    "bg-backgroundCard-steel":
+                    "bg-boxType-steel-default":
                       uniquePokemonData.types[0].name === "steel",
-                    "bg-backgroundCard-water":
+                    "bg-boxType-water-default":
                       uniquePokemonData.types[0].name === "water",
                   })}
                 >

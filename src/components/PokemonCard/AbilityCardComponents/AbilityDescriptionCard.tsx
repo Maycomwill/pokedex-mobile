@@ -16,11 +16,10 @@ const AbilityDescriptionCard = ({
   pokemonInfo,
   ...rest
 }: AbilityDescriptionCardProps) => {
+  console.log(ability);
   function handleWithStringSize(text: string) {
     if (text.length >= 150) {
       const padrao = /(\d+)\.(\d+)/g;
-
-      const newText = text.split(".");
 
       const textoFormatado = text
         .split(".")
@@ -32,7 +31,6 @@ const AbilityDescriptionCard = ({
     } else {
       const padrao = /(\d+)\.(\d+)/g;
       return text.replace(padrao, "$1,$2");
-      return text;
     }
   }
   return (
@@ -67,18 +65,20 @@ const AbilityDescriptionCard = ({
           </Text>
         </View>
       </View>
-      <View className="flex-row w-full items-start justify-center py-1">
-        <View className="w-1/4">
-          <Text>Efeito:</Text>
+      {ability.effect && (
+        <View className="flex-row w-full items-start justify-center py-1">
+          <View className="w-1/4">
+            <Text>Efeito:</Text>
+          </View>
+          <View className="w-3/4 pl-1">
+            <Text align="JUSTIFY">
+              {handleWithStringSize(
+                ability.effect.short_effect.split("\n").join(" ")
+              )}
+            </Text>
+          </View>
         </View>
-        <View className="w-3/4 pl-1">
-          <Text align="JUSTIFY">
-            {handleWithStringSize(
-              ability.effect.short_effect.split("\n").join(" ")
-            )}
-          </Text>
-        </View>
-      </View>
+      )}
       {pokemonInfo ? (
         <View className="flex-row w-full items-start justify-center py-1">
           <View className="w-1/4">

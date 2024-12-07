@@ -8,14 +8,14 @@ interface EvolutionCardProps {
   shiny: boolean;
 }
 const EvolutionCard = ({ data, shiny }: EvolutionCardProps) => {
+  // console.log(data.name);
   return (
     <View key={data.name} className="items-center flex-1 justify-center">
       <Text weight="BOLD" size="BASE" transform="CAP">
         {data.name}
       </Text>
       <Image
-        width={200}
-        height={200}
+        className="h-10 w-10"
         source={{
           uri: shiny ? data.sprites.shiny : data.sprites.default,
         }}

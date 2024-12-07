@@ -18,7 +18,7 @@ const StatsCard = ({ pokemon }: StatsCardProps) => {
   const navigation = useNavigation<RouteProps>();
   return (
     <ScrollView
-      contentContainerStyle={{ paddingBottom: 32 }}
+      contentContainerStyle={{ paddingBottom: 52 }}
       showsVerticalScrollIndicator={false}
       className="flex-1 px-4 flex-col"
     >

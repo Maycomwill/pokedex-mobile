@@ -20,7 +20,7 @@ const AbilitiesCard = ({ pokemon }: AbilitiesCardProps) => {
   const abilities_names = pokemon.abilities.map((ability) => {
     return ability.ability.name;
   });
-const { getPokemonAbilities, abilities } = useAbility();
+  const { getPokemonAbilities, abilities } = useAbility();
   useEffect(() => {
     getPokemonAbilities(abilities_names);
   }, []);
@@ -33,23 +33,20 @@ const { getPokemonAbilities, abilities } = useAbility();
           className="flex-1 mb-12 w-full flex flex-col"
         >
           {abilities.map((ability: AbilityProps) => {
-            if (ability !== undefined) {
-              return (
-                <AbilityDescriptionCard
-                  onPress={() =>
-                    navigation.navigate("Ability", {
-                      ability: ability.name,
-                    })
-                  }
-                  ability={ability}
-                  pokemonInfo={pokemon.abilities.find((newAbility) => {
-                    return newAbility.ability.name === ability.name;
-                  })}
-                  key={ability.name}
-                />
-              );
-            }
-            <Loading />;
+            return (
+              <AbilityDescriptionCard
+                onPress={() =>
+                  navigation.navigate("Ability", {
+                    ability: ability.name,
+                  })
+                }
+                ability={ability}
+                pokemonInfo={pokemon.abilities.find((newAbility) => {
+                  return newAbility.ability.name === ability.name;
+                })}
+                key={`${ability.name}-${pokemon.id}`}
+              />
+            );
           })}
         </ScrollView>
       ) : (

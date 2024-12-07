@@ -9,7 +9,7 @@ interface StatsValuesProps {
 }
 
 function handleWidth(stat: number) {
-  const total = 200;
+  const total = 256;
   const newValue = (stat * 100) / total;
   return newValue;
 }

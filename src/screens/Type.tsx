@@ -20,6 +20,7 @@ type RouteProps = NativeStackNavigationProp<RootStackParamList, "Type">;
 
 const Type = ({ route }: Props) => {
   const type = route.params.type;
+  // console.log("type", type);
   const { getTypeData, commonTypesPokemon, isLoading } = useTypes();
   const navigation = useNavigation<RouteProps>();
   const renderItem = useCallback(
@@ -39,7 +40,7 @@ const Type = ({ route }: Props) => {
   function handleWithTypeColor(type: string) {
     if (type in typesObjColors && type === typesObjColors[type])
       console.log("cor", typesObjColors[type]);
-    const color = shade(0.1, typesObjColors[type]);
+    const color = shade(0.3, typesObjColors[type]);
     return color;
   }
 

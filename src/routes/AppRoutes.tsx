@@ -35,8 +35,8 @@ const AppRoutes = () => {
 
   function handleWithTypeColor(type: string) {
     if (type in typesObjColors && type === typesObjColors[type])
-      console.log("cor", typesObjColors[type]);
-    return shade(0.1, typesObjColors[type]);
+      // console.log("cor", typesObjColors[type]);
+      return shade(0.3, typesObjColors[type]);
   }
 
   return (
