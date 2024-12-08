@@ -16,7 +16,7 @@ const AbilityDescriptionCard = ({
   pokemonInfo,
   ...rest
 }: AbilityDescriptionCardProps) => {
-  console.log(ability);
+  // console.log(ability);
   function handleWithStringSize(text: string) {
     if (text.length >= 150) {
       const padrao = /(\d+)\.(\d+)/g;

@@ -217,8 +217,8 @@ const EvolutionContainer = ({
                         source={{
                           uri: `${
                             shiny
-                              ? item.sprites.home.shiny
-                              : item.sprites.home.default
+                              ? item.sprites.artwork.shiny
+                              : item.sprites.artwork.default
                           }`,
                         }}
                       />
