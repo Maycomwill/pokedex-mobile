@@ -2,7 +2,11 @@ import { FlatList, Image, SafeAreaView, ScrollView, View } from "react-native";
 import React from "react";
 import { UniquePokemonData } from "../../interfaces/pokemonInterfaces";
 import Text from "../Text";
-import { MaterialIcons } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import colors from "tailwindcss/colors";
 import useEvolution from "../../hooks/useEvolution";
 import { useForms } from "../../hooks/useForms";
@@ -26,12 +30,31 @@ const AboutCard = ({ pokemon, shiny = false }: AboutCardProps) => {
       showsVerticalScrollIndicator={false}
     >
       <View className="w-full flex-row">
-        <View className="w-[30%] items-start justify-start">
-          <Text className="mb-4 text-zinc-500">Altura:</Text>
-          <Text className="mb-4 text-zinc-500">Peso:</Text>
-          <Text className="mb-4 text-zinc-500">Habilidades:</Text>
+        <View className="w-[32%] items-start justify-start">
+          <View className="mb-4 flex  items-center justify-center flex-row text-center">
+            <MaterialIcons name="height" size={20} color={colors.zinc[500]} />
+            <Text className="text-zinc-500 ml-1 text-center">Altura :</Text>
+          </View>
+          <View className="mb-4 flex items-center justify-center flex-row text-center">
+            <FontAwesome5
+              name="weight-hanging"
+              size={20}
+              color={colors.zinc[500]}
+            />
+            <Text className="ml-1 text-zinc-500 text-center ">Peso :</Text>
+          </View>
+          <View className="mb-4 flex items-center justify-center flex-row text-center">
+            <MaterialCommunityIcons
+              name="pokeball"
+              size={20}
+              color={colors.zinc[500]}
+            />
+            <Text className="ml-1 text-zinc-500 text-center">
+              Habilidades :
+            </Text>
+          </View>
         </View>
-        <View className="w-[70%] items-start justify-start pl-2">
+        <View className="w-[68%] items-start justify-start pl-2">
           <Text className="mb-4" color="BLACK">
             {(pokemon.height * 0.1).toLocaleString("pt-BR", {
               style: "decimal",
