@@ -9,6 +9,8 @@ import useEvolution from "../../hooks/useEvolution";
 import { ScreenHeight } from "../../utils/StatusBarHeight";
 import clsx from "clsx";
 import { useForms } from "../../hooks/useForms";
+import handleTrigger from "../../utils/handleTrigger";
+import handleWithRenderEvolutionChain from "../../utils/handleEvolutions";
 
 interface EvolutionContainerProps {
   pokemon: UniquePokemonData;
@@ -22,138 +24,6 @@ const EvolutionContainer = ({
   const { firstEvolution, secondEvolution, thirdEvolution } = useEvolution();
   const { forms } = useForms();
 
-  function handleTrigger(
-    evolution: Evolution,
-    trigger: { name: string; sprite?: string }
-  ) {
-    switch (trigger.name) {
-      case "level-up":
-        // console.log("level-up evolutions: ", evolution.name);
-        return (
-          <View className="flex items-center justify-center flex-row">
-            {evolution.details[0].min_level && (
-              <View className="items-center">
-                <Feather name="chevron-up" size={18} color="#141292" />
-                <Text className="text-xs mx-1">
-                  {evolution.details[0].min_level.toString()}
-                </Text>
-                {evolution.details[0].time_of_day === "day" && (
-                  <Ionicons name="sunny" size={16} color={"#ffdc17"} />
-                )}
-                {evolution.details[0].time_of_day === "night" && (
-                  <Ionicons name="moon" size={16} color={"#1b1b1b"} />
-                )}
-              </View>
-            )}
-            {evolution.details[0].min_beauty && (
-              <Ionicons name="sparkles" size={16} color={"#ffdc17"} />
-            )}
-            {evolution.details[0].min_affection && (
-              <>
-                <Ionicons name="heart" size={16} color={"#ff1f17"} />
-                <Text className="mx-1 text-xs">
-                  {evolution.details[0].min_affection.toString()}
-                </Text>
-                {evolution.details[0].time_of_day === "day" && (
-                  <Ionicons name="sunny" size={16} color={"#ffdc17"} />
-                )}
-                {evolution.details[0].time_of_day === "night" && (
-                  <Ionicons name="moon" size={16} color={"#1b1b1b"} />
-                )}
-              </>
-            )}
-            {evolution.details[0].min_happiness && (
-              <View className="justify-center flex-row items-center">
-                <Ionicons name="happy-outline" size={16} color={"#1b1b1b"} />
-                <Text className="text-xs mx-1">
-                  {evolution.details[0].min_happiness.toString()}
-                </Text>
-                {evolution.details[0].time_of_day === "day" && (
-                  <Ionicons name="sunny" size={16} color={"#ffdc17"} />
-                )}
-                {evolution.details[0].time_of_day === "night" && (
-                  <Ionicons name="moon" size={16} color={"#1b1b1b"} />
-                )}
-              </View>
-            )}
-          </View>
-        );
-      case "trade":
-        return (
-          <View className="flex rotate-90 items-center justify-center flex-row">
-            <AntDesign name="swap" size={18} color="#141292" />
-          </View>
-        );
-      case "use-item":
-        if (evolution.name === "glaceon" || evolution.name === "leafeon") {
-          return (
-            <View>
-              {trigger.sprite && (
-                <Image
-                  alt={evolution.details[3].item.name.split("-").join(" ")}
-                  source={{ uri: trigger.sprite }}
-                  width={32}
-                  height={32}
-                />
-              )}
-            </View>
-          );
-        }
-        return (
-          <View className="flex items-center justify-center flex-row">
-            {trigger.sprite && (
-              <Image
-                alt={evolution.details[0].item.name.split("-").join(" ")}
-                source={{ uri: trigger.sprite }}
-                width={32}
-                height={32}
-              />
-            )}
-          </View>
-        );
-      default:
-        return null;
-    }
-  }
-
-  function handleWithRenderEvolutionChain(evolution: Evolution[]) {
-    return evolution.map((e, i) => {
-      return (
-        <View
-          className="flex flex-row items-center justify-center"
-          key={e.name}
-        >
-          <View className="flex flex-row items-center justify-center space-y-2">
-            {evolution[0].details[0] !== undefined && (
-              <View className="flex items-center justify-center flex-col space-y-2 w-14">
-                {handleTrigger(evolution[i], e.trigger)}
-                <Feather name="chevrons-right" size={24} color="black" />
-              </View>
-            )}
-            <View className="flex flex-col items-center justify-center">
-              <Image
-                width={70}
-                height={70}
-                key={e.name}
-                source={{
-                  uri: `${shiny ? e.sprites.shiny : e.sprites.default}`,
-                }}
-              />
-              <Text
-                className={clsx("capitalize", {
-                  "pt-2": evolution[0].details[0] === undefined,
-                })}
-                size="XS"
-              >
-                {e.name}
-              </Text>
-            </View>
-          </View>
-        </View>
-      );
-    });
-  }
-
   return (
     <SafeAreaView className="flex flex-1 items-center justify-start pt-6 space-y-4">
       <Text>Evoluções</Text>
@@ -166,7 +36,8 @@ const EvolutionContainer = ({
         )}
       >
         <View className="max-w-[25%]">
-          {firstEvolution && handleWithRenderEvolutionChain(firstEvolution)}
+          {firstEvolution &&
+            handleWithRenderEvolutionChain(firstEvolution, shiny)}
         </View>
         {secondEvolution && secondEvolution.length > 1 ? (
           <ScrollView
@@ -176,16 +47,19 @@ const EvolutionContainer = ({
             }}
             showsVerticalScrollIndicator={false}
           >
-            {secondEvolution && handleWithRenderEvolutionChain(secondEvolution)}
+            {secondEvolution &&
+              handleWithRenderEvolutionChain(secondEvolution, shiny)}
           </ScrollView>
         ) : (
           <View className="max-w-[33%] ">
-            {secondEvolution && handleWithRenderEvolutionChain(secondEvolution)}
+            {secondEvolution &&
+              handleWithRenderEvolutionChain(secondEvolution, shiny)}
           </View>
         )}
 
         <View className="max-w-[25%]">
-          {thirdEvolution && handleWithRenderEvolutionChain(thirdEvolution)}
+          {thirdEvolution &&
+            handleWithRenderEvolutionChain(thirdEvolution, shiny)}
         </View>
       </View>
 

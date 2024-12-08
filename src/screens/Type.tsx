@@ -14,13 +14,14 @@ import { typesObjColors } from "../utils/typesArray";
 import { shade } from "polished";
 import { useNavigation } from "@react-navigation/native";
 import useTypes from "../hooks/useTypes";
+import { handleWithTypeColor } from "../utils/handleTypeColors";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Type">;
 type RouteProps = NativeStackNavigationProp<RootStackParamList, "Type">;
 
 const Type = ({ route }: Props) => {
   const type = route.params.type;
-  // console.log("type", type);
+  console.log("type", type);
   const { getTypeData, commonTypesPokemon, isLoading } = useTypes();
   const navigation = useNavigation<RouteProps>();
   const renderItem = useCallback(
@@ -36,13 +37,6 @@ const Type = ({ route }: Props) => {
     },
     [navigation]
   );
-
-  function handleWithTypeColor(type: string) {
-    if (type in typesObjColors && type === typesObjColors[type])
-      console.log("cor", typesObjColors[type]);
-    const color = shade(0.3, typesObjColors[type]);
-    return color;
-  }
 
   useEffect(() => {
     getTypeData(type);
