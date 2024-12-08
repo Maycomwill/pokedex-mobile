@@ -43,21 +43,21 @@ const Pokemon = ({ route }: Props) => {
     getPokemonData(String(route.params.ref));
   }, []);
 
-  const [headerOption, setHeaderOption] = useState<"STATS" | "ABOUT" | "MOVES">(
-    "ABOUT"
-  );
+  const [headerOption, setHeaderOption] = useState<
+    "STATS" | "ABOUT" | "ABILITIES"
+  >("ABOUT");
   const rotation = useSharedValue(45);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotation.value}deg` }],
   }));
-  const changeHeaderOption = (option: "STATS" | "ABOUT" | "MOVES") => {
+  const changeHeaderOption = (option: "STATS" | "ABOUT" | "ABILITIES") => {
     setHeaderOption(option);
 
     // Atualiza a rotação com base na nova opção
     const newRotationValue = {
       STATS: 0, // Rotação padrão
       ABOUT: 45, // Rotação para ABOUT
-      MOVES: -45, // Rotação para MOVES
+      ABILITIES: -45, // Rotação para ABILITIES
     }[option];
 
     rotation.value = withTiming(newRotationValue, { duration: 500 });
@@ -333,7 +333,7 @@ const Pokemon = ({ route }: Props) => {
                 </Pressable>
               </View>
               <View className="w-1/3 h-full items-center justify-center z-10 relative">
-                {headerOption === "MOVES" && (
+                {headerOption === "ABILITIES" && (
                   <LinearGradient
                     colors={handleWithTypeColors(
                       uniquePokemonData.types[0].name
@@ -344,13 +344,13 @@ const Pokemon = ({ route }: Props) => {
                 <Pressable
                   className="h-full w-full items-center justify-center p-2 px-4"
                   onPress={() => {
-                    changeHeaderOption("MOVES");
+                    changeHeaderOption("ABILITIES");
                   }}
                 >
                   <Text
                     size="SM"
-                    weight={headerOption === "MOVES" ? "BOLD" : "REGULAR"}
-                    color={headerOption === "MOVES" ? "WHITE" : "BLACK"}
+                    weight={headerOption === "ABILITIES" ? "BOLD" : "REGULAR"}
+                    color={headerOption === "ABILITIES" ? "WHITE" : "BLACK"}
                   >
                     Habilidades
                   </Text>
@@ -363,7 +363,7 @@ const Pokemon = ({ route }: Props) => {
             {headerOption === "STATS" ? (
               <StatsCard pokemon={uniquePokemonData} />
             ) : null}
-            {headerOption === "MOVES" ? (
+            {headerOption === "ABILITIES" ? (
               <AbilitiesCard pokemon={uniquePokemonData} />
             ) : null}
           </View>
