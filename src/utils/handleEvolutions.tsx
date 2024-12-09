@@ -14,7 +14,7 @@ export default function handleWithRenderEvolutionChain(
       <View className="flex flex-row items-center justify-center" key={e.name}>
         <View className="flex flex-row items-center justify-center space-y-2">
           {evolution[0].details[0] !== undefined && (
-            <View className="flex items-center justify-center flex-col space-y-2 w-14">
+            <View className="flex items-center justify-center flex-col space-y-2 w-16">
               {handleTrigger(evolution[i], e.trigger)}
               <Feather name="chevrons-right" size={24} color="black" />
             </View>

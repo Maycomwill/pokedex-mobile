@@ -6,13 +6,14 @@ import {
   MaterialIcons,
   FontAwesome5,
   MaterialCommunityIcons,
+  Feather,
 } from "@expo/vector-icons";
 import colors from "tailwindcss/colors";
 import useEvolution from "../../hooks/useEvolution";
 import { useForms } from "../../hooks/useForms";
 import handleWithRenderEvolutionChain from "../../utils/handleEvolutions";
-import { ScreenHeight } from "../../utils/StatusBarHeight";
 import { clsx } from "clsx";
+import handleTrigger from "../../utils/handleTrigger";
 
 interface AboutCardProps {
   pokemon: UniquePokemonData;
@@ -119,43 +120,30 @@ const AboutCard = ({ pokemon, shiny = false }: AboutCardProps) => {
           </View>
         </View>
 
-        <SafeAreaView className="flex flex-1 items-start text-left justify-start pt-6 space-y-4">
-          <Text weight="BOLD" size="LG">
-            Evoluções
-          </Text>
-          <View
-            className={clsx(
-              "flex flex-row w-full pb-4 max-h-[40%] justify-center space-x-2 ",
-              {
-                "flex-1 pb-0": secondEvolution && secondEvolution.length > 1,
-              }
-            )}
-          >
-            <View className="max-w-[25%]">
-              {firstEvolution &&
-                handleWithRenderEvolutionChain(firstEvolution, shiny)}
-            </View>
-            {secondEvolution && secondEvolution.length > 1 ? (
-              <ScrollView
-                className="max-w-[33%]"
-                contentContainerStyle={{
-                  paddingBottom: ScreenHeight * 0.075,
-                }}
-                showsVerticalScrollIndicator={false}
-              >
-                {secondEvolution &&
-                  handleWithRenderEvolutionChain(secondEvolution, shiny)}
-              </ScrollView>
-            ) : (
-              <View className="max-w-[33%] ">
+        <View className="flex items-center text-left justify-start">
+          <View className="w-full pt-6 space-y-4 ">
+            <Text weight="BOLD" size="LG">
+              Evoluções
+            </Text>
+            <View
+              className={clsx(
+                "flex flex-row w-full pb-4 items-center justify-center space-x-2"
+              )}
+            >
+              <View>
+                {firstEvolution &&
+                  handleWithRenderEvolutionChain(firstEvolution, shiny)}
+              </View>
+
+              <View className="">
                 {secondEvolution &&
                   handleWithRenderEvolutionChain(secondEvolution, shiny)}
               </View>
-            )}
 
-            <View className="max-w-[25%]">
-              {thirdEvolution &&
-                handleWithRenderEvolutionChain(thirdEvolution, shiny)}
+              <View>
+                {thirdEvolution &&
+                  handleWithRenderEvolutionChain(thirdEvolution, shiny)}
+              </View>
             </View>
           </View>
 
@@ -189,6 +177,8 @@ const AboutCard = ({ pokemon, shiny = false }: AboutCardProps) => {
                             uri: `${
                               shiny
                                 ? item.sprites.artwork.shiny
+                                  ? item.sprites.artwork.shiny
+                                  : item.sprites.artwork.default
                                 : item.sprites.artwork.default
                             }`,
                           }}
@@ -203,7 +193,7 @@ const AboutCard = ({ pokemon, shiny = false }: AboutCardProps) => {
               />
             </View>
           )}
-        </SafeAreaView>
+        </View>
       </View>
     </ScrollView>
   );

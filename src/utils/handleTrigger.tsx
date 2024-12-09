@@ -13,7 +13,7 @@ export default function handleTrigger(
       return (
         <View className="flex items-center justify-center flex-row">
           {evolution.details[0].min_level && (
-            <View className="items-center">
+            <View className="items-center justify-center">
               <Feather name="chevron-up" size={18} color="#141292" />
               <Text className="text-xs mx-1">
                 {evolution.details[0].min_level.toString()}
