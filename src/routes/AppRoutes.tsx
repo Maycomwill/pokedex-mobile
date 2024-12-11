@@ -11,6 +11,9 @@ import PokeList from "../screens/PokeList";
 import Ability from "../screens/Ability";
 import Pokemon from "../screens/Pokemon";
 import { handleWithTypeColor } from "../utils/handleTypeColors";
+import Text from "../components/Text";
+import { View } from "react-native";
+import { useFavorites } from "../hooks/useFavorites";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -31,6 +34,7 @@ const AppRoutes = () => {
     const newName = cap.split("-").join(" ");
     return newName;
   }
+  const { favorites } = useFavorites();
 
   return (
     <Stack.Navigator initialRouteName="Home">
@@ -152,6 +156,13 @@ const AppRoutes = () => {
               color={colors.zinc[100]}
               onPress={() => navigation.goBack()}
             />
+          ),
+          headerRight: () => (
+            <View>
+              <Text color="WHITE" weight="SEMIBOLD">
+                {favorites.length.toString()}/25
+              </Text>
+            </View>
           ),
           headerShadowVisible: false,
         })}

@@ -1,4 +1,4 @@
-import { FlatList, View } from "react-native";
+import { FlatList, SafeAreaView, View } from "react-native";
 import React, { useCallback } from "react";
 import Text from "../components/Text";
 import { useFavorites } from "../hooks/useFavorites";
@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../routes/AppRoutes";
 import PokemonCard from "../components/PokemonCard";
+import { Button } from "../components/Button";
 
 type RoutesProps = NativeStackNavigationProp<RootStackParamList, "Pokelist">;
 
@@ -29,7 +30,7 @@ const Favorites = () => {
     [favorites]
   );
   return (
-    <View className="flex-1 items-center justify-start bg-red-500">
+    <SafeAreaView className="flex-1 items-center justify-start bg-red-500">
       {favorites.length === 0 && (
         <View className="text-center items-center space-y-4 px-4">
           <View>
@@ -51,10 +52,10 @@ const Favorites = () => {
         </View>
       )}
       {favorites.length !== 0 && (
-        <View>
+        <View className="items-center space-y-2 h-[90%]">
           <Text color="WHITE">Aqui estão seus pokémon favoritos!</Text>
           <FlatList
-            className="w-full space-y-2"
+            className="w-full"
             numColumns={2}
             columnWrapperStyle={{
               justifyContent: "space-evenly",
@@ -74,12 +75,12 @@ const Favorites = () => {
           />
         </View>
       )}
-      <View className="flex-1 items-center justify-end pb-8">
+      <View className="flex-1 justify-end items-center pb-8">
         <Text color="WHITE" size="XS">
           Created by Maycom Willams with 💚
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
