@@ -1,20 +1,39 @@
 import { SafeAreaView, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StatusBarHeight } from "../../utils/StatusBarHeight";
-import { Feather } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import Text from "../Text";
 import colors from "tailwindcss/colors";
-import { TouchableWithoutFeedback } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { PokemonDataProps } from "../../interfaces/PokemonProps";
+import { useFavorites } from "../../hooks/useFavorites";
 
 interface HeaderProps {
   leftIcon?: boolean;
   title?: string;
-  rightIcon?: boolean;
+  rightIcon?: {
+    shown: boolean;
+    pokemon: PokemonDataProps;
+  };
 }
 
 const Header = ({ leftIcon, title, rightIcon }: HeaderProps) => {
   const naviagation = useNavigation();
+  const { toggleFavorite, favorites } = useFavorites();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    rightIcon.pokemon &&
+    favorites.filter((favorite) => favorite.id === rightIcon.pokemon.id)
+      .length > 0
+      ? setIsFavorite(true)
+      : setIsFavorite(false);
+  }, [favorites, rightIcon.pokemon]);
+
+  function handleFavorite() {
+    toggleFavorite(rightIcon.pokemon);
+  }
+
   // const paddingTop = {StatusBarHeight ? StatusBarHeight : 64}
   return (
     <SafeAreaView
@@ -24,28 +43,36 @@ const Header = ({ leftIcon, title, rightIcon }: HeaderProps) => {
       }}
       className="transparent w-full flex flex-row items-center justify-between px-4 mb-6"
     >
-      <TouchableOpacity
-        onPress={() => {
-          naviagation.goBack();
-        }}
-        className="w-1/4 min-h-1 items-start justify-center"
-      >
-        {leftIcon ? (
+      {leftIcon && (
+        <TouchableOpacity
+          onPress={() => {
+            naviagation.goBack();
+          }}
+          className="min-h-1 items-start justify-center"
+        >
           <Feather name="chevron-left" size={32} color={colors.zinc[100]} />
-        ) : null}
-      </TouchableOpacity>
-      <View className="w-1/2 items-center justify-center">
-        {title ? (
+        </TouchableOpacity>
+      )}
+
+      {title && (
+        <View className="w-1/2 items-center justify-center">
           <Text color="WHITE" size="LG" weight="BOLD">
             {title}
           </Text>
-        ) : null}
-      </View>
-      <View className="w-1/4 min-h-1 items-center justify-center">
-        {rightIcon ? (
-          <Feather name="chevron-left" size={32} color={colors.zinc[100]} />
-        ) : null}
-      </View>
+        </View>
+      )}
+      {rightIcon.shown && (
+        <TouchableOpacity
+          onPress={handleFavorite}
+          className="pr-1 min-h-1 items-center justify-center"
+        >
+          <AntDesign
+            name={isFavorite ? "heart" : "hearto"}
+            size={32}
+            color={colors.zinc[100]}
+          />
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };

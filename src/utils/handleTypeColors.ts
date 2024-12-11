@@ -3,7 +3,7 @@ import { typesObjColors } from "./typesArray";
 
 export function handleWithTypeColor(type: string) {
   if (type in typesObjColors) {
-    console.log("cor", typesObjColors[type]);
+    // console.log("cor", typesObjColors[type]);
     const color = shade(0.3, typesObjColors[type]);
     return color;
   }

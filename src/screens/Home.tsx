@@ -54,7 +54,6 @@ const Home = () => {
             <Button.Icon icon={"star"} />
           </Button.Root>
           <Button.Root
-            disabled
             className="bg-red-400"
             onPress={() => navigation.navigate("Favorites")}
           >

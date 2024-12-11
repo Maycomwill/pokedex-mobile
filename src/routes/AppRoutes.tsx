@@ -8,8 +8,6 @@ import MovesAndAbilities from "../screens/MovesAndAbilities";
 import Favorites from "../screens/Favorites";
 import Type from "../screens/Type";
 import PokeList from "../screens/PokeList";
-import { typesObjColors } from "../utils/typesArray";
-import { shade } from "polished";
 import Ability from "../screens/Ability";
 import Pokemon from "../screens/Pokemon";
 import { handleWithTypeColor } from "../utils/handleTypeColors";
