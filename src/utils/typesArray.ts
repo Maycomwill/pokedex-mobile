@@ -22,8 +22,8 @@ export const types = [
 export const typesObjColors: { [chave: string]: string } = {
   bug: "#8BD674",
   dark: "#6F6E78",
-  electric: "#fdd835",
   dragon: "#7383B9",
+  electric: "#fdd835",
   fairy: "#EC8FE6",
   fighting: "#FB91A3",
   fire: "#F3634E",
@@ -33,7 +33,7 @@ export const typesObjColors: { [chave: string]: string } = {
   ground: "#ffab91",
   ice: "#6DF6E5",
   normal: "#B5B9C4",
-  poison: "#B567CE",
+  poison: "#B97FC9",
   psychic: "#FA7179",
   rock: "#bcaaa4",
   steel: "#88a0b5",

@@ -1,4 +1,4 @@
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, SafeAreaView, FlatList } from "react-native";
 import React, { useCallback } from "react";
 import Text from "../Text";
 import { UniquePokemonData } from "../../interfaces/pokemonInterfaces";
@@ -6,8 +6,11 @@ import { Image } from "react-native";
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { Evolution } from "../../interfaces/evolutionInterface";
 import useEvolution from "../../hooks/useEvolution";
-import EvolutionCard from "./EvolutionCard";
-import { ScreenHeight, ScreenWidth } from "../../utils/StatusBarHeight";
+import { ScreenHeight } from "../../utils/StatusBarHeight";
+import clsx from "clsx";
+import { useForms } from "../../hooks/useForms";
+import handleTrigger from "../../utils/handleTrigger";
+import handleWithRenderEvolutionChain from "../../utils/handleEvolutions";
 
 interface EvolutionContainerProps {
   pokemon: UniquePokemonData;
@@ -19,159 +22,92 @@ const EvolutionContainer = ({
   shiny = false,
 }: EvolutionContainerProps) => {
   const { firstEvolution, secondEvolution, thirdEvolution } = useEvolution();
-  const renderItem = useCallback(
-    ({ item }: { item: Evolution }) => {
-      return <EvolutionCard data={item} shiny={shiny} />;
-    },
-    [shiny]
-  );
-
-  function handleTrigger(
-    evolution: Evolution,
-    trigger: { name: string; sprite?: string }
-  ) {
-    switch (trigger.name) {
-      case "level-up":
-        // console.log("level-up evolutions: ", evolution.name);
-        return (
-          <View className="flex items-center justify-center flex-row">
-            {evolution.details[0].min_level && (
-              <View className="items-center">
-                <Feather name="chevron-up" size={18} color="#141292" />
-                <Text size="XS">
-                  {evolution.details[0].min_level.toString()}
-                </Text>
-                {evolution.details[0].time_of_day === "day" && (
-                  <Ionicons name="sunny" size={16} color={"#ffdc17"} />
-                )}
-                {evolution.details[0].time_of_day === "night" && (
-                  <Ionicons name="moon" size={16} color={"#1b1b1b"} />
-                )}
-              </View>
-            )}
-            {evolution.details[0].min_beauty && (
-              <Ionicons name="sparkles" size={16} color={"#ffdc17"} />
-            )}
-            {evolution.details[0].min_affection && (
-              <>
-                <Ionicons name="heart" size={16} color={"#ff1f17"} />
-                <Text className="ml-1">
-                  {evolution.details[0].min_affection.toString()}
-                </Text>
-                {evolution.details[0].time_of_day === "day" && (
-                  <Ionicons name="sunny" size={16} color={"#ffdc17"} />
-                )}
-                {evolution.details[0].time_of_day === "night" && (
-                  <Ionicons name="moon" size={16} color={"#1b1b1b"} />
-                )}
-              </>
-            )}
-            {evolution.details[0].min_happiness && (
-              <View className="justify-center flex-row items-center">
-                <Ionicons name="happy-outline" size={16} color={"#1b1b1b"} />
-                <Text className="mx-1">
-                  {evolution.details[0].min_happiness.toString()}
-                </Text>
-                {evolution.details[0].time_of_day === "day" && (
-                  <Ionicons name="sunny" size={16} color={"#ffdc17"} />
-                )}
-                {evolution.details[0].time_of_day === "night" && (
-                  <Ionicons name="moon" size={16} color={"#1b1b1b"} />
-                )}
-              </View>
-            )}
-          </View>
-        );
-      case "trade":
-        return (
-          <View className="flex rotate-90 items-center justify-center flex-row">
-            <AntDesign name="swap" size={18} color="#141292" />
-          </View>
-        );
-      case "use-item":
-        if (evolution.name === "glaceon" || evolution.name === "leafeon") {
-          return (
-            <View>
-              {trigger.sprite && (
-                <Image
-                  alt={evolution.details[3].item.name.split("-").join(" ")}
-                  source={{ uri: trigger.sprite }}
-                  width={48}
-                  height={48}
-                />
-              )}
-            </View>
-          );
-        }
-        return (
-          <View className="flex items-center justify-center flex-row">
-            {trigger.sprite && (
-              <Image
-                alt={evolution.details[0].item.name.split("-").join(" ")}
-                source={{ uri: trigger.sprite }}
-                width={48}
-                height={48}
-              />
-            )}
-          </View>
-        );
-      default:
-        return null;
-    }
-  }
-
-  function handleWithRenderEvolutionChain(evolution: Evolution[]) {
-    return evolution.map((e, i) => {
-      return (
-        <View
-          className="flex flex-1 flex-row items-center justify-center space-x-4"
-          key={e.name}
-        >
-          {evolution[0].details[0] !== undefined && (
-            <View className="flex items-center justify-center flex-col space-y-2">
-              {handleTrigger(evolution[i], e.trigger)}
-              <Feather name="chevrons-right" size={24} color="black" />
-            </View>
-          )}
-          <View className="flex flex-col items-center justify-center">
-            <Image
-              width={240}
-              height={240}
-              key={e.name}
-              source={{
-                uri: `${shiny ? e.sprites.shiny : e.sprites.default}`,
-              }}
-            />
-            <Text className="capitalize">{e.name}</Text>
-          </View>
-        </View>
-      );
-    });
-  }
+  const { forms } = useForms();
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        justifyContent: "center",
-        alignItems: "center",
-        paddingStart: ScreenWidth * 0.12,
-        paddingEnd: ScreenWidth * 0.12,
-        marginTop: -48,
-      }}
-      horizontal
-    >
-      {firstEvolution && handleWithRenderEvolutionChain(firstEvolution)}
-      <ScrollView
-        contentContainerStyle={{
-          paddingBottom: ScreenHeight * 0.08,
-          paddingTop: ScreenHeight * 0.08,
-        }}
-        showsVerticalScrollIndicator={false}
+    <SafeAreaView className="flex flex-1 items-center justify-start pt-6 space-y-4">
+      <Text>Evoluções</Text>
+      <View
+        className={clsx(
+          "flex flex-row w-full pb-4 max-h-[40%] justify-center space-x-2 ",
+          {
+            "flex-1 pb-0": secondEvolution && secondEvolution.length > 1,
+          }
+        )}
       >
-        {secondEvolution && handleWithRenderEvolutionChain(secondEvolution)}
-      </ScrollView>
-      {thirdEvolution && handleWithRenderEvolutionChain(thirdEvolution)}
-    </ScrollView>
+        <View className="max-w-[25%]">
+          {firstEvolution &&
+            handleWithRenderEvolutionChain(firstEvolution, shiny)}
+        </View>
+        {secondEvolution && secondEvolution.length > 1 ? (
+          <ScrollView
+            className="max-w-[33%]"
+            contentContainerStyle={{
+              paddingBottom: ScreenHeight * 0.075,
+            }}
+            showsVerticalScrollIndicator={false}
+          >
+            {secondEvolution &&
+              handleWithRenderEvolutionChain(secondEvolution, shiny)}
+          </ScrollView>
+        ) : (
+          <View className="max-w-[33%] ">
+            {secondEvolution &&
+              handleWithRenderEvolutionChain(secondEvolution, shiny)}
+          </View>
+        )}
+
+        <View className="max-w-[25%]">
+          {thirdEvolution &&
+            handleWithRenderEvolutionChain(thirdEvolution, shiny)}
+        </View>
+      </View>
+
+      <View className="flex flex-1 items-center justify-start">
+        {forms.length > 1 && (
+          <>
+            <Text>Variações</Text>
+            <FlatList
+              data={forms}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingTop: 6,
+                paddingStart: 12,
+                paddingEnd: 128,
+                gap: 12,
+              }}
+              renderItem={({ item }) => {
+                return (
+                  <View
+                    className="flex flex-row items-start justify-center gap-4"
+                    key={item.name}
+                  >
+                    <View className="flex flex-col items-center justify-center space-y-2">
+                      <Image
+                        width={100}
+                        height={100}
+                        key={item.name}
+                        source={{
+                          uri: `${
+                            shiny
+                              ? item.sprites.artwork.shiny
+                              : item.sprites.artwork.default
+                          }`,
+                        }}
+                      />
+                      <Text className="capitalize">
+                        {item.name.split("-").join(" ")}
+                      </Text>
+                    </View>
+                  </View>
+                );
+              }}
+            />
+          </>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 

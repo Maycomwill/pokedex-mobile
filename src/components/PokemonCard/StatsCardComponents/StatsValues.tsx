@@ -9,7 +9,7 @@ interface StatsValuesProps {
 }
 
 function handleWidth(stat: number) {
-  const total = 200;
+  const total = 256;
   const newValue = (stat * 100) / total;
   return newValue;
 }
@@ -50,13 +50,10 @@ const StatsValues = ({ name, value }: StatsValuesProps) => {
             className={clsx(
               "absolute w-1/2 h-4 rounded-full bg-green-400 left-0 top-0 bottom-0",
               {
-                "bg-red-400": name === "Defesa",
-              },
-              {
-                "bg-red-400": name === "Defesa sp.",
-              },
-              {
-                "bg-red-400": name === "HP",
+                "bg-red-400":
+                  name === "defense" ||
+                  name === "special-defense" ||
+                  name === "hp",
               }
             )}
           />

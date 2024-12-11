@@ -5,19 +5,25 @@ import { RootStackParamList } from "../routes/AppRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import clsx from "clsx";
 import { typesObjColors } from "../utils/typesArray";
-import { shade } from "polished";
+import { shade, rgba } from "polished";
 import usePokedex from "../hooks/usePokedex";
 import Loading from "../components/Loading";
 import Pokeball from "../assets/Pokeball";
 import Pattern from "../assets/Pattern";
 import AboutCard from "../components/PokemonCard/AboutCard";
 import StatsCard from "../components/PokemonCard/StatsCard";
-import EvolutionContainer from "../components/PokemonCard/EvolutionContainer";
 import AbilitiesCard from "../components/PokemonCard/AbilitiesCard";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../components/Header";
 import colors from "tailwindcss/colors";
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
+import { handleWithTypeColors } from "../utils/handleTypeColors";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Pokemon">;
 
@@ -28,7 +34,7 @@ const Pokemon = ({ route }: Props) => {
   function handleWithTypeColor(type: string) {
     if (type in typesObjColors) {
       // console.log("cor", typesObjColors[type]);
-      const color = shade(0.1, typesObjColors[type]);
+      const color = shade(0.2, typesObjColors[type]);
       return color;
     }
   }
@@ -38,8 +44,25 @@ const Pokemon = ({ route }: Props) => {
   }, []);
 
   const [headerOption, setHeaderOption] = useState<
-    "STATS" | "ABOUT" | "EVOLUTION" | "MOVES"
+    "STATS" | "ABOUT" | "ABILITIES"
   >("ABOUT");
+  const rotation = useSharedValue(45);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotation.value}deg` }],
+  }));
+  const changeHeaderOption = (option: "STATS" | "ABOUT" | "ABILITIES") => {
+    setHeaderOption(option);
+
+    // Atualiza a rotação com base na nova opção
+    const newRotationValue = {
+      STATS: 0, // Rotação padrão
+      ABOUT: 45, // Rotação para ABOUT
+      ABILITIES: -45, // Rotação para ABILITIES
+    }[option];
+
+    rotation.value = withTiming(newRotationValue, { duration: 500 });
+  };
+
   setTimeout(() => {
     setIsHide(false);
   }, 2000);
@@ -102,26 +125,26 @@ const Pokemon = ({ route }: Props) => {
                       className={clsx(
                         "w-1/3 items-center rounded-full space-y-2 mt-2 py-2 ",
                         {
-                          "bg-backgroundCard-bug": type.name === "bug",
-                          "bg-backgroundCard-dark": type.name === "dark",
-                          "bg-backgroundCard-dragon": type.name === "dragon",
-                          "bg-backgroundCard-electric":
+                          "bg-boxType-bug-default": type.name === "bug",
+                          "bg-boxType-dark-default": type.name === "dark",
+                          "bg-boxType-dragon-default": type.name === "dragon",
+                          "bg-boxType-electric-default":
                             type.name === "electric",
-                          "bg-backgroundCard-fairy": type.name === "fairy",
-                          "bg-backgroundCard-fighting":
+                          "bg-boxType-fairy-default": type.name === "fairy",
+                          "bg-boxType-fighting-default":
                             type.name === "fighting",
-                          "bg-backgroundCard-fire": type.name === "fire",
-                          "bg-backgroundCard-flying": type.name === "flying",
-                          "bg-backgroundCard-ghost": type.name === "ghost",
-                          "bg-backgroundCard-grass": type.name === "grass",
-                          "bg-backgroundCard-ground": type.name === "ground",
-                          "bg-backgroundCard-ice": type.name === "ice",
-                          "bg-backgroundCard-normal": type.name === "normal",
-                          "bg-backgroundCard-poison": type.name === "poison",
-                          "bg-backgroundCard-psychic": type.name === "psychic",
-                          "bg-backgroundCard-rock": type.name === "rock",
-                          "bg-backgroundCard-steel": type.name === "steel",
-                          "bg-backgroundCard-water": type.name === "water",
+                          "bg-boxType-fire-default": type.name === "fire",
+                          "bg-boxType-flying-default": type.name === "flying",
+                          "bg-boxType-ghost-default": type.name === "ghost",
+                          "bg-boxType-grass-default": type.name === "grass",
+                          "bg-boxType-ground-default": type.name === "ground",
+                          "bg-boxType-ice-default": type.name === "ice",
+                          "bg-boxType-normal-default": type.name === "normal",
+                          "bg-boxType-poison-default": type.name === "poison",
+                          "bg-boxType-psychic-default": type.name === "psychic",
+                          "bg-boxType-rock-default": type.name === "rock",
+                          "bg-boxType-steel-default": type.name === "steel",
+                          "bg-boxType-water-default": type.name === "water",
                         }
                       )}
                     >
@@ -149,41 +172,41 @@ const Pokemon = ({ route }: Props) => {
                   activeOpacity={0.2}
                   onPress={() => setShiny(!shiny)}
                   className={clsx("text-zinc-100 p-2 rounded-full", {
-                    "bg-backgroundCard-bug":
+                    "bg-boxType-bug-default":
                       uniquePokemonData.types[0].name === "bug",
-                    "bg-backgroundCard-dark":
+                    "bg-boxType-dark-default":
                       uniquePokemonData.types[0].name === "dark",
-                    "bg-backgroundCard-dragon":
+                    "bg-boxType-dragon-default":
                       uniquePokemonData.types[0].name === "dragon",
-                    "bg-backgroundCard-electric":
+                    "bg-boxType-electric-default":
                       uniquePokemonData.types[0].name === "electric",
-                    "bg-backgroundCard-fairy":
+                    "bg-boxType-fairy-default":
                       uniquePokemonData.types[0].name === "fairy",
-                    "bg-backgroundCard-fighting":
+                    "bg-boxType-fighting-default":
                       uniquePokemonData.types[0].name === "fighting",
-                    "bg-backgroundCard-fire":
+                    "bg-boxType-fire-default":
                       uniquePokemonData.types[0].name === "fire",
-                    "bg-backgroundCard-flying":
+                    "bg-boxType-flying-default":
                       uniquePokemonData.types[0].name === "flying",
-                    "bg-backgroundCard-ghost":
+                    "bg-boxType-ghost-default":
                       uniquePokemonData.types[0].name === "ghost",
-                    "bg-backgroundCard-grass":
+                    "bg-boxType-grass-default":
                       uniquePokemonData.types[0].name === "grass",
-                    "bg-backgroundCard-ground":
+                    "bg-boxType-ground-default":
                       uniquePokemonData.types[0].name === "ground",
-                    "bg-backgroundCard-ice":
+                    "bg-boxType-ice-default":
                       uniquePokemonData.types[0].name === "ice",
-                    "bg-backgroundCard-normal":
+                    "bg-boxType-normal-default":
                       uniquePokemonData.types[0].name === "normal",
-                    "bg-backgroundCard-poison":
+                    "bg-boxType-poison-default":
                       uniquePokemonData.types[0].name === "poison",
-                    "bg-backgroundCard-psychic":
+                    "bg-boxType-psychic-default":
                       uniquePokemonData.types[0].name === "psychic",
-                    "bg-backgroundCard-rock":
+                    "bg-boxType-rock-default":
                       uniquePokemonData.types[0].name === "rock",
-                    "bg-backgroundCard-steel":
+                    "bg-boxType-steel-default":
                       uniquePokemonData.types[0].name === "steel",
-                    "bg-backgroundCard-water":
+                    "bg-boxType-water-default":
                       uniquePokemonData.types[0].name === "water",
                   })}
                 >
@@ -196,12 +219,18 @@ const Pokemon = ({ route }: Props) => {
               </View>
             </View>
           </View>
-          <View className="w-full absolute items-end justify-center bottom-96 right-0 z-0">
-            <Pokeball width={300} height={300} opacity={0.2} rotation={45} />
-          </View>
-          <View className="w-full absolute items-end justify-center -top-10 -right-10 z-0">
-            <Pokeball width={120} height={120} opacity={0.1} rotation={-70} />
-          </View>
+          <Animated.View
+            style={animatedStyle}
+            className="w-full absolute items-center justify-center top-24 z-0"
+          >
+            <Pokeball
+              className="transition-all duration-500 ease-in-out"
+              width={400}
+              height={400}
+              opacity={0.2}
+            />
+          </Animated.View>
+
           <View className="w-full absolute items-start justify-center -top-10 left-0 z-0">
             <Pattern width={120} height={120} opacity={0.2} />
           </View>
@@ -234,7 +263,7 @@ const Pokemon = ({ route }: Props) => {
               />
             )}
           </View>
-          <View className="relative z-40 bg-white flex-1 rounded-t-3xl p-4 pt-12">
+          <View className="relative z-40 bg-white flex-1 rounded-t-3xl p-4 pt-8">
             <View className="w-full absolute -bottom-40 left-0 z-0">
               <Pokeball
                 color={"#000"}
@@ -253,82 +282,88 @@ const Pokemon = ({ route }: Props) => {
                 // rotation={90}
               />
             </View>
-            <View className=" w-full flex-row items-center justify-between px-2 mb-2">
-              <Pressable
-                className="w-container p-2"
-                onPress={() => {
-                  setHeaderOption("ABOUT");
-                }}
-              >
-                <Text
-                  className={clsx("border-b-2 border-transparent", {
-                    "border-primary-500": headerOption === "ABOUT",
-                  })}
-                  size="SM"
-                  weight="REGULAR"
+            <View className="w-[80%] flex-row items-center h-10 mx-auto justify-center bg-slate-200/40 rounded-full overflow-hidden mb-6">
+              <View className="w-1/3 h-full items-center justify-center z-10 relative">
+                {headerOption === "ABOUT" && (
+                  <LinearGradient
+                    colors={handleWithTypeColors(
+                      uniquePokemonData.types[0].name
+                    )}
+                    className="absolute inset-0 w-full h-12 z-0"
+                  />
+                )}
+                <Pressable
+                  className="h-full w-full items-center justify-center p-2 px-4"
+                  onPress={() => {
+                    changeHeaderOption("ABOUT");
+                  }}
+                  style={{ elevation: headerOption === "ABOUT" ? 2 : 0 }}
                 >
-                  Sobre
-                </Text>
-              </Pressable>
-              <Pressable
-                className="w-container p-2"
-                onPress={() => {
-                  setHeaderOption("STATS");
-                }}
-              >
-                <Text
-                  size="SM"
-                  weight="REGULAR"
-                  className={clsx("border-b-2 border-transparent", {
-                    "border-primary-500": headerOption === "STATS",
-                  })}
+                  <Text
+                    size="SM"
+                    weight={headerOption === "ABOUT" ? "BOLD" : "REGULAR"}
+                    color={headerOption === "ABOUT" ? "WHITE" : "BLACK"}
+                  >
+                    Sobre
+                  </Text>
+                </Pressable>
+              </View>
+              <View className="w-1/3 h-full items-center justify-center z-10 relative">
+                {headerOption === "STATS" && (
+                  <LinearGradient
+                    colors={handleWithTypeColors(
+                      uniquePokemonData.types[0].name
+                    )}
+                    className="absolute inset-0 w-full h-12 z-0"
+                  />
+                )}
+                <Pressable
+                  className="h-full w-full items-center justify-center p-2 px-4"
+                  onPress={() => {
+                    changeHeaderOption("STATS");
+                  }}
                 >
-                  Dados
-                </Text>
-              </Pressable>
-              <Pressable
-                className="w-container p-2 "
-                onPress={() => {
-                  setHeaderOption("EVOLUTION");
-                }}
-              >
-                <Text
-                  size="SM"
-                  weight="REGULAR"
-                  className={clsx("border-b-2 border-transparent", {
-                    "border-primary-500": headerOption === "EVOLUTION",
-                  })}
+                  <Text
+                    size="SM"
+                    weight={headerOption === "STATS" ? "BOLD" : "REGULAR"}
+                    color={headerOption === "STATS" ? "WHITE" : "BLACK"}
+                  >
+                    Status
+                  </Text>
+                </Pressable>
+              </View>
+              <View className="w-1/3 h-full items-center justify-center z-10 relative">
+                {headerOption === "ABILITIES" && (
+                  <LinearGradient
+                    colors={handleWithTypeColors(
+                      uniquePokemonData.types[0].name
+                    )}
+                    className="absolute inset-0 w-full h-12 z-0"
+                  />
+                )}
+                <Pressable
+                  className="h-full w-full items-center justify-center p-2 px-4"
+                  onPress={() => {
+                    changeHeaderOption("ABILITIES");
+                  }}
                 >
-                  Evoluções
-                </Text>
-              </Pressable>
-              <Pressable
-                className="w-container p-2"
-                onPress={() => {
-                  setHeaderOption("MOVES");
-                }}
-              >
-                <Text
-                  className={clsx("border-b-2 border-transparent", {
-                    "border-primary-500": headerOption === "MOVES",
-                  })}
-                  size="SM"
-                  weight="REGULAR"
-                >
-                  Habilidades
-                </Text>
-              </Pressable>
+                  <Text
+                    size="SM"
+                    weight={headerOption === "ABILITIES" ? "BOLD" : "REGULAR"}
+                    color={headerOption === "ABILITIES" ? "WHITE" : "BLACK"}
+                  >
+                    Habilidades
+                  </Text>
+                </Pressable>
+              </View>
             </View>
             {headerOption === "ABOUT" ? (
-              <AboutCard pokemon={uniquePokemonData} />
+              <AboutCard pokemon={uniquePokemonData} shiny={shiny} />
             ) : null}
             {headerOption === "STATS" ? (
               <StatsCard pokemon={uniquePokemonData} />
             ) : null}
-            {headerOption === "EVOLUTION" ? (
-              <EvolutionContainer shiny={shiny} pokemon={uniquePokemonData} />
-            ) : null}
-            {headerOption === "MOVES" ? (
+            {headerOption === "ABILITIES" ? (
               <AbilitiesCard pokemon={uniquePokemonData} />
             ) : null}
           </View>

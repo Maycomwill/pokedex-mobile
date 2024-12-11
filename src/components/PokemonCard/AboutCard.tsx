@@ -1,24 +1,61 @@
-import { View } from "react-native";
+import { FlatList, Image, SafeAreaView, ScrollView, View } from "react-native";
 import React from "react";
 import { UniquePokemonData } from "../../interfaces/pokemonInterfaces";
 import Text from "../Text";
-import { MaterialIcons } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  FontAwesome5,
+  MaterialCommunityIcons,
+  Feather,
+} from "@expo/vector-icons";
 import colors from "tailwindcss/colors";
+import useEvolution from "../../hooks/useEvolution";
+import { useForms } from "../../hooks/useForms";
+import handleWithRenderEvolutionChain from "../../utils/handleEvolutions";
+import { clsx } from "clsx";
+import handleTrigger from "../../utils/handleTrigger";
 
 interface AboutCardProps {
   pokemon: UniquePokemonData;
+  shiny?: boolean;
 }
 
-const AboutCard = ({ pokemon }: AboutCardProps) => {
+const AboutCard = ({ pokemon, shiny = false }: AboutCardProps) => {
+  const { firstEvolution, secondEvolution, thirdEvolution } = useEvolution();
+  const { forms } = useForms();
+
   return (
-    <View className="flex-1 px-4">
+    <ScrollView
+      className="flex-1 px-4"
+      contentContainerStyle={{ paddingBottom: 72 }}
+      showsVerticalScrollIndicator={false}
+    >
       <View className="w-full flex-row">
-        <View className="w-[30%] items-start justify-start">
-          <Text className="mb-4 text-zinc-500">Altura:</Text>
-          <Text className="mb-4 text-zinc-500">Peso:</Text>
-          <Text className="mb-4 text-zinc-500">Habilidades:</Text>
+        <View className="w-[32%] items-start justify-start">
+          <View className="mb-4 flex  items-center justify-center flex-row text-center">
+            <MaterialIcons name="height" size={20} color={colors.zinc[500]} />
+            <Text className="text-zinc-500 ml-1 text-center">Altura :</Text>
+          </View>
+          <View className="mb-4 flex items-center justify-center flex-row text-center">
+            <FontAwesome5
+              name="weight-hanging"
+              size={20}
+              color={colors.zinc[500]}
+            />
+            <Text className="ml-1 text-zinc-500 text-center ">Peso :</Text>
+          </View>
+          <View className="mb-4 flex items-center justify-center flex-row text-center">
+            <MaterialCommunityIcons
+              name="pokeball"
+              size={20}
+              color={colors.zinc[500]}
+            />
+            <Text className="ml-1 text-zinc-500 text-center">
+              Habilidades :
+            </Text>
+          </View>
         </View>
-        <View className="w-[70%] items-start justify-start pl-2">
+        <View className="w-[68%] items-start justify-start pl-2">
           <Text className="mb-4" color="BLACK">
             {(pokemon.height * 0.1).toLocaleString("pt-BR", {
               style: "decimal",
@@ -82,11 +119,83 @@ const AboutCard = ({ pokemon }: AboutCardProps) => {
             </View>
           </View>
         </View>
-        <Text className="mt-12 text-zinc-600" size="SM">
-          Em breve mais informações ...
-        </Text>
+
+        <View className="flex items-center text-left justify-start">
+          <View className="w-full pt-6 space-y-4 ">
+            <Text weight="BOLD" size="LG">
+              Evoluções
+            </Text>
+            <View
+              className={clsx(
+                "flex flex-row w-full pb-4 items-center justify-center space-x-2"
+              )}
+            >
+              <View>
+                {firstEvolution &&
+                  handleWithRenderEvolutionChain(firstEvolution, shiny)}
+              </View>
+
+              <View className="">
+                {secondEvolution &&
+                  handleWithRenderEvolutionChain(secondEvolution, shiny)}
+              </View>
+
+              <View>
+                {thirdEvolution &&
+                  handleWithRenderEvolutionChain(thirdEvolution, shiny)}
+              </View>
+            </View>
+          </View>
+
+          {forms.length > 1 && (
+            <View className="flex flex-1 items-start justify-start space-y-4">
+              <Text weight="BOLD" size="LG">
+                Variações
+              </Text>
+              <FlatList
+                data={forms}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingTop: 6,
+                  paddingStart: 12,
+                  paddingEnd: 128,
+                  gap: 12,
+                }}
+                renderItem={({ item }) => {
+                  return (
+                    <View
+                      className="flex flex-row items-start justify-center gap-4"
+                      key={item.name}
+                    >
+                      <View className="flex flex-col items-center justify-center space-y-2">
+                        <Image
+                          width={100}
+                          height={100}
+                          key={item.name}
+                          source={{
+                            uri: `${
+                              shiny
+                                ? item.sprites.artwork.shiny
+                                  ? item.sprites.artwork.shiny
+                                  : item.sprites.artwork.default
+                                : item.sprites.artwork.default
+                            }`,
+                          }}
+                        />
+                        <Text className="capitalize">
+                          {item.name.split("-").join(" ")}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                }}
+              />
+            </View>
+          )}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

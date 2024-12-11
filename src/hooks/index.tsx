@@ -5,6 +5,7 @@ import { GenerationContextProvider } from "../context/GenerationContext";
 import { MovesContextProvider } from "../context/MovesContext";
 import { AbilityContextProvider } from "../context/AbilitiesContext";
 import { EvolutionContextProvider } from "../context/EvolutionContext";
+import { FormContextProvider } from "../context/FormsContext";
 
 interface AppProviderProps {
   children: ReactNode;
@@ -13,15 +14,17 @@ interface AppProviderProps {
 function AppProvider({ children }: AppProviderProps) {
   return (
     <EvolutionContextProvider>
-      <PokedexContextProvider>
-        <GenerationContextProvider>
-          <TypesContextProvider>
-            <AbilityContextProvider>
-              <MovesContextProvider>{children}</MovesContextProvider>
-            </AbilityContextProvider>
-          </TypesContextProvider>
-        </GenerationContextProvider>
-      </PokedexContextProvider>
+      <FormContextProvider>
+        <PokedexContextProvider>
+          <GenerationContextProvider>
+            <TypesContextProvider>
+              <AbilityContextProvider>
+                <MovesContextProvider>{children}</MovesContextProvider>
+              </AbilityContextProvider>
+            </TypesContextProvider>
+          </GenerationContextProvider>
+        </PokedexContextProvider>
+      </FormContextProvider>
     </EvolutionContextProvider>
   );
 }

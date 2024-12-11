@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import colors, { transparent } from "tailwindcss/colors";
+import colors from "tailwindcss/colors";
 import { Feather } from "@expo/vector-icons";
 import Home from "../screens/Home";
 import Regions from "../screens/Regions";
@@ -9,9 +9,10 @@ import Favorites from "../screens/Favorites";
 import Type from "../screens/Type";
 import PokeList from "../screens/PokeList";
 import { typesObjColors } from "../utils/typesArray";
-import { shade, transparentize } from "polished";
+import { shade } from "polished";
 import Ability from "../screens/Ability";
 import Pokemon from "../screens/Pokemon";
+import { handleWithTypeColor } from "../utils/handleTypeColors";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -31,12 +32,6 @@ const AppRoutes = () => {
     const cap = string.charAt(0).toUpperCase() + string.slice(1);
     const newName = cap.split("-").join(" ");
     return newName;
-  }
-
-  function handleWithTypeColor(type: string) {
-    if (type in typesObjColors && type === typesObjColors[type])
-      console.log("cor", typesObjColors[type]);
-    return shade(0.1, typesObjColors[type]);
   }
 
   return (

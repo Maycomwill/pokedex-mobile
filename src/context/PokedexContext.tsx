@@ -13,6 +13,7 @@ import { NamedAPIResource } from "../interfaces/apiInterfaces";
 import { pokeapi } from "../lib/axios";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
 import { useToast } from "../components/Toast";
+import { useForms } from "../hooks/useForms";
 
 //Interface do Provedor
 export interface PokedexContextDataProps {
@@ -35,6 +36,7 @@ export function PokedexContextProvider({ children }: PokedexProviderProps) {
   let rawPokemonData: PokemonDataProps[] = [];
   let genTypeFilter: PokemonDataProps[] = [];
   const { getEvolutionChainData } = useEvolution();
+  const { getForms } = useForms();
   const [isLoading, setIsLoading] = useState(false);
   const [pokemonData, setPokemonData] = useState<PokemonDataProps[]>([]);
   const [uniquePokemonData, setUniquePokemonData] =
@@ -128,6 +130,7 @@ export function PokedexContextProvider({ children }: PokedexProviderProps) {
       // console.log("dados extra: ", extra_result.data);
 
       getEvolutionChainData(extra_result.data.evolution_chain.url);
+      getForms(extra_result.data.varieties);
       const evolutionData = await pokeapi.get(
         extra_result.data.evolution_chain.url
       );

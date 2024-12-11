@@ -24,37 +24,37 @@ const PokemonCard: React.FC<Data> = React.memo(({ pokemon, ...rest }: Data) => {
       className={clsx(
         "w-[45%] h-36 p-2 items-start px-4 relative justify-start rounded-lg overflow-hidden flex-col z-10 my-2",
         {
-          "bg-backgroundCard-bug": pokemon.types[0].name === "bug",
-          "bg-backgroundCard-dark": pokemon.types[0].name === "dark",
-          "bg-backgroundCard-dragon": pokemon.types[0].name === "dragon",
-          "bg-backgroundCard-electric": pokemon.types[0].name === "electric",
-          "bg-backgroundCard-fairy": pokemon.types[0].name === "fairy",
-          "bg-backgroundCard-fighting": pokemon.types[0].name === "fighting",
-          "bg-backgroundCard-fire": pokemon.types[0].name === "fire",
-          "bg-backgroundCard-flying": pokemon.types[0].name === "flying",
-          "bg-backgroundCard-ghost": pokemon.types[0].name === "ghost",
-          "bg-backgroundCard-grass": pokemon.types[0].name === "grass",
-          "bg-backgroundCard-ground": pokemon.types[0].name === "ground",
-          "bg-backgroundCard-ice": pokemon.types[0].name === "ice",
-          "bg-backgroundCard-normal": pokemon.types[0].name === "normal",
-          "bg-backgroundCard-poison": pokemon.types[0].name === "poison",
-          "bg-backgroundCard-psychic": pokemon.types[0].name === "psychic",
-          "bg-backgroundCard-rock": pokemon.types[0].name === "rock",
-          "bg-backgroundCard-steel": pokemon.types[0].name === "steel",
-          "bg-backgroundCard-water": pokemon.types[0].name === "water",
+          "bg-boxType-bug-default": pokemon.types[0].name === "bug",
+          "bg-boxType-dark-default": pokemon.types[0].name === "dark",
+          "bg-boxType-dragon-default": pokemon.types[0].name === "dragon",
+          "bg-boxType-electric-default": pokemon.types[0].name === "electric",
+          "bg-boxType-fairy-default": pokemon.types[0].name === "fairy",
+          "bg-boxType-fighting-default": pokemon.types[0].name === "fighting",
+          "bg-boxType-fire-default": pokemon.types[0].name === "fire",
+          "bg-boxType-flying-default": pokemon.types[0].name === "flying",
+          "bg-boxType-ghost-default": pokemon.types[0].name === "ghost",
+          "bg-boxType-grass-default": pokemon.types[0].name === "grass",
+          "bg-boxType-ground-default": pokemon.types[0].name === "ground",
+          "bg-boxType-ice-default": pokemon.types[0].name === "ice",
+          "bg-boxType-normal-default": pokemon.types[0].name === "normal",
+          "bg-boxType-poison-default": pokemon.types[0].name === "poison",
+          "bg-boxType-psychic-default": pokemon.types[0].name === "psychic",
+          "bg-boxType-rock-default": pokemon.types[0].name === "rock",
+          "bg-boxType-steel-default": pokemon.types[0].name === "steel",
+          "bg-boxType-water-default": pokemon.types[0].name === "water",
           "bg-slate-950": pokemon.types[0].name === undefined,
         }
       )}
       {...rest}
     >
-      <View className="absolute -right-5 -bottom-2 items-center justify-center z-0 opacity-10 -rotate-45">
+      <View className="absolute -right-5 -bottom-2 items-center justify-center z-0 opacity-20 -rotate-45">
         <Pokeball width={102} height={102} />
       </View>
-      <View className="absolute left-0 -top-2 items-center justify-center z-0 opacity-10 -rotate-90">
+      <View className="absolute left-0 -top-2 items-center justify-center z-0 opacity-20 -rotate-90">
         <Pattern width={102} height={102} />
       </View>
       <View className="w-full items-end">
-        <Text size="XS" weight="BOLD" className="opacity-50">
+        <Text size="XS" weight="BOLD" className="opacity-70">
           #{pokemon.id.toString().padStart(3, "0")}
         </Text>
       </View>
@@ -73,24 +73,32 @@ const PokemonCard: React.FC<Data> = React.memo(({ pokemon, ...rest }: Data) => {
             <View
               key={type.name}
               className={clsx("w-fit rounded-full space-y-2 mt-2 px-2", {
-                "bg-boxType-bug": pokemon.types[index].name === "bug",
-                "bg-boxType-dark": pokemon.types[index].name === "dark",
-                "bg-boxType-dragon": pokemon.types[index].name === "dragon",
-                "bg-boxType-electric": pokemon.types[index].name === "electric",
-                "bg-boxType-fairy": pokemon.types[index].name === "fairy",
-                "bg-boxType-fighting": pokemon.types[index].name === "fighting",
-                "bg-boxType-fire": pokemon.types[index].name === "fire",
-                "bg-boxType-flying": pokemon.types[index].name === "flying",
-                "bg-boxType-ghost": pokemon.types[index].name === "ghost",
-                "bg-boxType-grass": pokemon.types[index].name === "grass",
-                "bg-boxType-ground": pokemon.types[index].name === "ground",
-                "bg-boxType-ice": pokemon.types[index].name === "ice",
-                "bg-boxType-normal": pokemon.types[index].name === "normal",
-                "bg-boxType-poison": pokemon.types[index].name === "poison",
-                "bg-boxType-psychic": pokemon.types[index].name === "psychic",
-                "bg-boxType-rock": pokemon.types[index].name === "rock",
-                "bg-boxType-steel": pokemon.types[index].name === "steel",
-                "bg-boxType-water": pokemon.types[index].name === "water",
+                "bg-boxType-bug-dark": pokemon.types[index].name === "bug",
+                "bg-boxType-dark-dark": pokemon.types[index].name === "dark",
+                "bg-boxType-dragon-dark":
+                  pokemon.types[index].name === "dragon",
+                "bg-boxType-electric-dark":
+                  pokemon.types[index].name === "electric",
+                "bg-boxType-fairy-dark": pokemon.types[index].name === "fairy",
+                "bg-boxType-fighting-dark":
+                  pokemon.types[index].name === "fighting",
+                "bg-boxType-fire-dark": pokemon.types[index].name === "fire",
+                "bg-boxType-flying-dark":
+                  pokemon.types[index].name === "flying",
+                "bg-boxType-ghost-dark": pokemon.types[index].name === "ghost",
+                "bg-boxType-grass-dark": pokemon.types[index].name === "grass",
+                "bg-boxType-ground-dark":
+                  pokemon.types[index].name === "ground",
+                "bg-boxType-ice-dark": pokemon.types[index].name === "ice",
+                "bg-boxType-normal-dark":
+                  pokemon.types[index].name === "normal",
+                "bg-boxType-poison-dark":
+                  pokemon.types[index].name === "poison",
+                "bg-boxType-psychic-dark":
+                  pokemon.types[index].name === "psychic",
+                "bg-boxType-rock-dark": pokemon.types[index].name === "rock",
+                "bg-boxType-steel-dark": pokemon.types[index].name === "steel",
+                "bg-boxType-water-dark": pokemon.types[index].name === "water",
               })}
             >
               <Text color="WHITE" transform="CAP" size="XS">
