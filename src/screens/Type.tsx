@@ -5,13 +5,10 @@ import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
-import usePokedex from "../hooks/usePokedex";
 import { PokemonDataProps } from "../interfaces/PokemonProps";
 import PokemonCard from "../components/PokemonCard";
 import Loading from "../components/Loading";
 import Text from "../components/Text";
-import { typesObjColors } from "../utils/typesArray";
-import { shade } from "polished";
 import { useNavigation } from "@react-navigation/native";
 import useTypes from "../hooks/useTypes";
 import { handleWithTypeColor } from "../utils/handleTypeColors";
@@ -21,7 +18,7 @@ type RouteProps = NativeStackNavigationProp<RootStackParamList, "Type">;
 
 const Type = ({ route }: Props) => {
   const type = route.params.type;
-  console.log("type", type);
+  // console.log("type", type);
   const { getTypeData, commonTypesPokemon, isLoading } = useTypes();
   const navigation = useNavigation<RouteProps>();
   const renderItem = useCallback(

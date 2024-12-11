@@ -4,8 +4,6 @@ import Text from "../components/Text";
 import { RootStackParamList } from "../routes/AppRoutes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import clsx from "clsx";
-import { typesObjColors } from "../utils/typesArray";
-import { shade, rgba } from "polished";
 import usePokedex from "../hooks/usePokedex";
 import Loading from "../components/Loading";
 import Pokeball from "../assets/Pokeball";
@@ -18,12 +16,16 @@ import Header from "../components/Header";
 import colors from "tailwindcss/colors";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { handleWithTypeColors } from "../utils/handleTypeColors";
+import {
+  handleWithTypeColor,
+  handleWithTypeColors,
+} from "../utils/handleTypeColors";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { useFavorites } from "../hooks/useFavorites";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Pokemon">;
 
@@ -31,13 +33,8 @@ const Pokemon = ({ route }: Props) => {
   const navigation = useNavigation();
   const [shiny, setShiny] = useState(false);
   const [isHide, setIsHide] = useState(true);
-  function handleWithTypeColor(type: string) {
-    if (type in typesObjColors) {
-      // console.log("cor", typesObjColors[type]);
-      const color = shade(0.2, typesObjColors[type]);
-      return color;
-    }
-  }
+
+  const { favorites } = useFavorites();
   const { getPokemonData, uniquePokemonData, isLoading } = usePokedex();
   useEffect(() => {
     getPokemonData(String(route.params.ref));
@@ -107,7 +104,18 @@ const Pokemon = ({ route }: Props) => {
         {}
       )}
     >
-      <Header leftIcon />
+      <Header
+        leftIcon
+        rightIcon={{
+          shown: true,
+          pokemon: {
+            id: uniquePokemonData?.id,
+            name: uniquePokemonData?.name,
+            sprites: uniquePokemonData?.sprites,
+            types: uniquePokemonData?.types,
+          },
+        }}
+      />
       {uniquePokemonData ? (
         <View className="w-full h-full">
           <View className="flex-row px-4 h-[40%] w-full justify-between items-start z-20">
