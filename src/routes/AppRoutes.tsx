@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import colors from "tailwindcss/colors";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import Home from "../screens/Home";
 import Regions from "../screens/Regions";
 import Types from "../screens/Types";
@@ -126,6 +126,14 @@ const AppRoutes = () => {
           headerStyle: {
             backgroundColor: `${colors.sky[500]}`,
           },
+          headerRight: () => (
+            <Ionicons
+              name="home"
+              size={32}
+              color={colors.zinc[100]}
+              onPress={() => navigation.navigate("Home")}
+            />
+          ),
           headerLeft: () => (
             <Feather
               name="chevron-left"
@@ -180,6 +188,14 @@ const AppRoutes = () => {
           headerStyle: {
             backgroundColor: `${handleWithTypeColor(route.params.type)}`,
           },
+          headerRight: () => (
+            <Ionicons
+              name="home"
+              size={32}
+              color={colors.zinc[100]}
+              onPress={() => navigation.navigate("Home")}
+            />
+          ),
           headerLeft: () => (
             <Feather
               name="chevron-left"
@@ -203,6 +219,14 @@ const AppRoutes = () => {
           headerStyle: {
             backgroundColor: `${colors.orange[500]}`,
           },
+          headerRight: () => (
+            <Ionicons
+              name="home"
+              size={32}
+              color={colors.zinc[100]}
+              onPress={() => navigation.navigate("Home")}
+            />
+          ),
           headerLeft: () => (
             <Feather
               name="chevron-left"
