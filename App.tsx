@@ -1,5 +1,4 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView } from "react-native";
 import Routes from "./src/routes/index.routes";
 import {
   useFonts,
@@ -9,9 +8,10 @@ import {
   Inter_800ExtraBold,
 } from "@expo-google-fonts/inter";
 import Loading from "./src/components/Loading";
-import { StatusBarHeight } from "./src/utils/StatusBarHeight";
+
 import AppProvider from "./src/hooks";
 import { ToastProvider } from "./src/components/Toast";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,7 +25,7 @@ export default function App() {
     return <Loading />;
   } else {
     return (
-      <SafeAreaView className="flex-1 w-full">
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <ToastProvider position="bottom">
           <AppProvider>
             <Routes />
@@ -36,7 +36,7 @@ export default function App() {
             />
           </AppProvider>
         </ToastProvider>
-      </SafeAreaView>
+      </GestureHandlerRootView>
     );
   }
 }
