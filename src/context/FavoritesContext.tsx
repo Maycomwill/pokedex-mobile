@@ -50,6 +50,7 @@ export function FavoritesContextProvider({
   const clearFavorites = async () => {
     try {
       await AsyncStorage.removeItem("favorites");
+      setFavorites([]);
     } catch (error) {
       return;
     }
