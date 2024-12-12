@@ -1,5 +1,5 @@
-import { FlatList, SafeAreaView, View } from "react-native";
-import React, { useCallback } from "react";
+import { FlatList, SafeAreaView, TouchableOpacity, View } from "react-native";
+import { useCallback, useState } from "react";
 import Text from "../components/Text";
 import { useFavorites } from "../hooks/useFavorites";
 
@@ -8,12 +8,18 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../routes/AppRoutes";
 import PokemonCard from "../components/PokemonCard";
-import { Button } from "../components/Button";
+import { Feather } from "@expo/vector-icons";
+import BottomSheet from "../components/BottomSheet";
 
 type RoutesProps = NativeStackNavigationProp<RootStackParamList, "Pokelist">;
 
 const Favorites = () => {
   const { favorites } = useFavorites();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSheet = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   const navigation = useNavigation<RoutesProps>();
   const renderItem = useCallback(
@@ -30,7 +36,7 @@ const Favorites = () => {
     [favorites]
   );
   return (
-    <SafeAreaView className="flex-1 items-center justify-start bg-red-500">
+    <SafeAreaView className="flex-1 relative items-center justify-start bg-red-500">
       {favorites.length === 0 && (
         <View className="text-center items-center space-y-4 px-4">
           <View>
@@ -52,7 +58,7 @@ const Favorites = () => {
         </View>
       )}
       {favorites.length !== 0 && (
-        <View className="items-center space-y-2 h-[90%]">
+        <View className="items-center space-y-2">
           <Text color="WHITE">Aqui estão seus pokémon favoritos!</Text>
           <FlatList
             className="w-full"
@@ -73,13 +79,14 @@ const Favorites = () => {
             renderItem={renderItem}
             keyExtractor={(item) => `${item.id}`}
           />
+          <View className="flex-1 justify-end items-center pb-8">
+            <TouchableOpacity onPress={toggleSheet}>
+              <Feather name="trash-2" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
+          {isOpen && <BottomSheet onClose={toggleSheet} />}
         </View>
       )}
-      <View className="flex-1 justify-end items-center pb-8">
-        <Text color="WHITE" size="XS">
-          Created by Maycom Willams with 💚
-        </Text>
-      </View>
     </SafeAreaView>
   );
 };
