@@ -52,18 +52,18 @@ const Type = ({ route }: Props) => {
   return (
     <View
       style={{ backgroundColor: handleWithTypeColor(type) }}
-      className="w-full items-center justify-start flex-1 px-4 pt-2"
+      className="w-full items-center justify-start flex-1 pt-2"
     >
       <Text color="WHITE" align="CENTER" className="w-full">
         Aqui estão os pokemon do que possuem o tipo {type}
       </Text>
-      <View className="w-full flex-1">
+      <View className="w-full flex-1 pt-2">
         {commonTypesPokemon && commonTypesPokemon.length !== 0 ? (
           <FlatList
-            className="w-full space-y-2"
+            className="w-screen px-4"
             numColumns={2}
             columnWrapperStyle={{
-              justifyContent: "space-evenly",
+              justifyContent: "center",
               alignItems: "center",
               columnGap: 4,
               rowGap: 2,

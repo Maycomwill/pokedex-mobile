@@ -76,19 +76,19 @@ const BottomSheet = ({ onClose }: BottomSheetProps) => {
       <Animated.View
         entering={SlideInDown.springify().damping(15)}
         exiting={SlideOutDown}
-        className="w-full items-center bg-gray-700"
+        className="w-full items-center bg-gray-50 rounded-t-lg"
         style={[styles.container, translateY]}
       >
         <MaterialCommunityIcons
           name="drag-horizontal"
           size={24}
-          color={"white"}
+          color={"black"}
         />
-        <Text size="LG" weight="SEMIBOLD" color="WHITE">
+        <Text size="LG" weight="SEMIBOLD" color="BLACK">
           Limpar favoritos
         </Text>
         <View className="w-full space-y-4 pt-2">
-          <Text align="CENTER" color="WHITE">
+          <Text align="CENTER" color="BLACK">
             Você deseja limpar a sua lista de favoritos?
           </Text>
           <View className="flex-row w-full space-x-4 items-center justify-center">
@@ -104,9 +104,11 @@ const BottomSheet = ({ onClose }: BottomSheetProps) => {
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={closeSheet}
-              className="bg-gray-100 p-2 px-4 rounded-lg"
+              className="bg-red-400 p-2 px-4 rounded-lg"
             >
-              <Text weight="SEMIBOLD">Cancelar</Text>
+              <Text weight="SEMIBOLD" color="WHITE">
+                Cancelar
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
