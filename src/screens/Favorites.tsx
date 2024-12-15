@@ -10,7 +10,6 @@ import { RootStackParamList } from "../routes/AppRoutes";
 import PokemonCard from "../components/PokemonCard";
 import { Feather } from "@expo/vector-icons";
 import BottomSheet from "../components/BottomSheet";
-import formatData from "../utils/formatData";
 
 type RoutesProps = NativeStackNavigationProp<RootStackParamList, "Pokelist">;
 

@@ -129,6 +129,7 @@ const AppRoutes = () => {
           headerRight: () => (
             <Ionicons
               name="home"
+              className="items-center justify-center"
               size={32}
               color={colors.zinc[100]}
               onPress={() => navigation.navigate("Home")}
@@ -166,7 +167,7 @@ const AppRoutes = () => {
             />
           ),
           headerRight: () => (
-            <View>
+            <View className="items-center justify-center">
               <Text color="WHITE" weight="SEMIBOLD">
                 {favorites.length.toString()}/25
               </Text>
@@ -193,6 +194,7 @@ const AppRoutes = () => {
               name="home"
               size={32}
               color={colors.zinc[100]}
+              className="items-center justify-center"
               onPress={() => navigation.navigate("Home")}
             />
           ),
@@ -224,6 +226,7 @@ const AppRoutes = () => {
               name="home"
               size={32}
               color={colors.zinc[100]}
+              className="items-center justify-center"
               onPress={() => navigation.navigate("Home")}
             />
           ),

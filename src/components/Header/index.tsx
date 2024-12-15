@@ -48,6 +48,7 @@ const Header = ({ leftIcon, title, rightIcon }: HeaderProps) => {
           onPress={() => {
             naviagation.goBack();
           }}
+          activeOpacity={0.7}
           className="min-h-1 items-start justify-center"
         >
           <Feather name="chevron-left" size={32} color={colors.zinc[100]} />
@@ -64,7 +65,8 @@ const Header = ({ leftIcon, title, rightIcon }: HeaderProps) => {
       {rightIcon.shown && (
         <TouchableOpacity
           onPress={handleFavorite}
-          className="pr-1 min-h-1 items-center justify-center"
+          activeOpacity={0.7}
+          className="items-center h-8 justify-center"
         >
           <AntDesign
             name={isFavorite ? "heart" : "hearto"}

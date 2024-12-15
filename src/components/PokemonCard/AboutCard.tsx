@@ -26,12 +26,12 @@ const AboutCard = ({ pokemon, shiny = false }: AboutCardProps) => {
 
   return (
     <ScrollView
-      className="flex-1 px-4"
+      className="flex-1 "
       contentContainerStyle={{ paddingBottom: 72 }}
       showsVerticalScrollIndicator={false}
     >
       <View className="w-full flex-row">
-        <View className="w-[32%] items-start justify-start">
+        <View className="w-[35%] items-start justify-start">
           <View className="mb-4 flex  items-center justify-center flex-row text-center">
             <MaterialIcons name="height" size={20} color={colors.zinc[500]} />
             <Text className="text-zinc-500 ml-1 text-center">Altura :</Text>
@@ -55,7 +55,7 @@ const AboutCard = ({ pokemon, shiny = false }: AboutCardProps) => {
             </Text>
           </View>
         </View>
-        <View className="w-[68%] items-start justify-start pl-2">
+        <View className="w-[65%] items-start justify-start pl-2">
           <Text className="mb-4" color="BLACK">
             {(pokemon.height * 0.1).toLocaleString("pt-BR", {
               style: "decimal",
