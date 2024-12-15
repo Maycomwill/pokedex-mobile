@@ -42,10 +42,10 @@ const BottomSheet = ({ onClose }: BottomSheetProps) => {
       offset.value = offsetDelta > 0 ? offsetDelta : withSpring(clamp);
     })
     .onFinalize(() => {
-      if (offset.value < SHEET_HEIGHT / 3) {
+      if (offset.value < SHEET_HEIGHT / 2) {
         offset.value = withSpring(0);
       } else {
-        offset.value = withTiming(SHEET_HEIGHT, {}, () => {
+        offset.value = withTiming(SHEET_HEIGHT, { duration: 1000 }, () => {
           runOnJS(closeSheet)();
         });
       }

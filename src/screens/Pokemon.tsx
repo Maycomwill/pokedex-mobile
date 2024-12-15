@@ -233,8 +233,8 @@ const Pokemon = ({ route }: Props) => {
           >
             <Pokeball
               className="transition-all duration-500 ease-in-out"
-              width={400}
-              height={400}
+              width={350}
+              height={350}
               opacity={0.2}
             />
           </Animated.View>
@@ -290,7 +290,7 @@ const Pokemon = ({ route }: Props) => {
                 // rotation={90}
               />
             </View>
-            <View className="w-[80%] flex-row items-center h-10 mx-auto justify-center bg-slate-200/40 rounded-full overflow-hidden mb-6">
+            <View className="w-[95%] flex-row items-center h-10 mx-auto justify-center bg-slate-200/40 rounded-full overflow-hidden mb-6">
               <View className="w-1/3 h-full items-center justify-center z-10 relative">
                 {headerOption === "ABOUT" && (
                   <LinearGradient
