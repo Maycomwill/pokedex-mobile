@@ -22,7 +22,7 @@ const PokemonCard: React.FC<Data> = React.memo(({ pokemon, ...rest }: Data) => {
       activeOpacity={0.4}
       key={pokemon.id}
       className={clsx(
-        "w-[45%] h-36 p-2 items-start px-4 relative justify-start rounded-lg overflow-hidden flex-col z-10 my-2",
+        "h-36 p-2 flex-1 max-w-[45%] items-start px-4 relative justify-start rounded-lg overflow-hidden flex-col z-10 my-2",
         {
           "bg-boxType-bug-default": pokemon.types[0].name === "bug",
           "bg-boxType-dark-default": pokemon.types[0].name === "dark",

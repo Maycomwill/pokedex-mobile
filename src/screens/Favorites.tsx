@@ -10,6 +10,7 @@ import { RootStackParamList } from "../routes/AppRoutes";
 import PokemonCard from "../components/PokemonCard";
 import { Feather } from "@expo/vector-icons";
 import BottomSheet from "../components/BottomSheet";
+import formatData from "../utils/formatData";
 
 type RoutesProps = NativeStackNavigationProp<RootStackParamList, "Pokelist">;
 
@@ -61,10 +62,10 @@ const Favorites = () => {
         <View className="items-center space-y-2">
           <Text color="WHITE">Aqui estão seus pokémon favoritos!</Text>
           <FlatList
-            className="w-full"
+            className="w-screen px-4"
             numColumns={2}
             columnWrapperStyle={{
-              justifyContent: "space-evenly",
+              justifyContent: "center",
               alignItems: "center",
               columnGap: 4,
               rowGap: 2,

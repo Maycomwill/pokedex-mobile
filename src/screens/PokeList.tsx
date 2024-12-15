@@ -52,18 +52,13 @@ const PokeList = ({ route }: Props) => {
         // (console.log(pokemonData[0]),
         // (
         <FlatList
-          className="w-full space-y-2"
           numColumns={2}
+          className="w-screen px-4"
           columnWrapperStyle={{
-            justifyContent: "space-evenly",
+            justifyContent: "center",
             alignItems: "center",
             columnGap: 4,
             rowGap: 2,
-          }}
-          contentContainerStyle={{
-            paddingBottom: 64,
-            gap: 12,
-            width: "100%",
           }}
           showsVerticalScrollIndicator={false}
           data={pokemonData}

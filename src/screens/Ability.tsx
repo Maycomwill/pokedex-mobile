@@ -41,9 +41,9 @@ const Ability = ({ route }: Props) => {
   return (
     <View className="w-full flex-1 bg-sky-500">
       {abilityInfo?.flavor.flavor_text !== "" ? (
-        <View className="flex-1 w-full items-center justify-start px-4 pt-2">
+        <View className="flex-1 w-full items-center justify-start pt-2">
           {abilityInfo && abilityInfo.flavor ? (
-            <View className="w-full items-center justify-center">
+            <View className="w-full items-center justify-center px-4">
               <Text weight="BOLD" size="LG" align="JUSTIFY" color="WHITE">
                 {abilityInfo.flavor.flavor_text.split("\n").join(" ")}
               </Text>
@@ -58,10 +58,10 @@ const Ability = ({ route }: Props) => {
           <View className="w-full flex-1 pt-4">
             {commonAbilityPokemon && commonAbilityPokemon.length !== 0 ? (
               <FlatList
-                className="w-full space-y-2"
+                className="w-screen px-4"
                 numColumns={2}
                 columnWrapperStyle={{
-                  justifyContent: "space-evenly",
+                  justifyContent: "center",
                   alignItems: "center",
                   columnGap: 4,
                   rowGap: 2,
